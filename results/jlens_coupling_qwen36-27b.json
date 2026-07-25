@@ -1,0 +1,54 @@
+{
+  "model": "Qwen/Qwen3.6-27B",
+  "layer": 29,
+  "results": {
+    "afraid": {
+      "jlens_inject": -12.139412079734363,
+      "logit_inject": -11.251474950505399,
+      "jlens_none": -12.07121178199505,
+      "logit_none": -11.243734129543963,
+      "jlens_coupling": -0.06820029773931324,
+      "logit_coupling": -0.0077408209614358015
+    },
+    "happy": {
+      "jlens_inject": -12.566731705062692,
+      "logit_inject": -12.109826756619858,
+      "jlens_none": -12.545559356952536,
+      "logit_none": -12.128810027550006,
+      "jlens_coupling": -0.02117234811015578,
+      "logit_coupling": 0.018983270930148066
+    },
+    "sad": {
+      "jlens_inject": -12.692460728787827,
+      "logit_inject": -11.228418174831347,
+      "jlens_none": -12.695231437683105,
+      "logit_none": -11.218721291114544,
+      "jlens_coupling": 0.0027707088952784176,
+      "logit_coupling": -0.009696883716802773
+    },
+    "angry": {
+      "jlens_inject": -12.437830026122345,
+      "logit_inject": -11.793518625456711,
+      "jlens_none": -12.467872027693124,
+      "logit_none": -11.824075435769968,
+      "jlens_coupling": 0.030042001570778964,
+      "logit_coupling": 0.030556810313257188
+    },
+    "calm": {
+      "jlens_inject": -12.343537308703894,
+      "logit_inject": -11.268780445230417,
+      "jlens_none": -12.458506617052802,
+      "logit_none": -11.29909482495538,
+      "jlens_coupling": 0.11496930834890762,
+      "logit_coupling": 0.030314379724963203
+    },
+    "desperate": {
+      "jlens_inject": -12.652207549961133,
+      "logit_inject": -11.523423929324096,
+      "jlens_none": -12.719506691242087,
+      "logit_none": -11.527752284345956,
+      "jlens_coupling": 0.06729914128095338,
+      "logit_coupling": 0.00432835502186002
+    }
+  }
+}

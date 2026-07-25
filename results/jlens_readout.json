@@ -1,0 +1,824 @@
+{
+  "fear": {
+    "best": {
+      "jlens": [
+        "sensory",
+        "story",
+        "survival",
+        "nearly",
+        "horror",
+        "scene",
+        "death",
+        "cinematic"
+      ],
+      "logit": [
+        "\\n",
+        "AI",
+        "describe",
+        "\u662f\u73b0\u4ee3",
+        "\u552f\u4e00\u7684",
+        "ears"
+      ],
+      "layer": 29
+    },
+    "by_layer": {
+      "29": {
+        "jlens": [
+          "sensory",
+          "story",
+          "survival",
+          "nearly",
+          "horror",
+          "scene",
+          "death",
+          "cinematic"
+        ],
+        "logit": [
+          "\\n",
+          "AI",
+          "describe",
+          "\u662f\u73b0\u4ee3",
+          "\u552f\u4e00\u7684",
+          "ears"
+        ]
+      },
+      "35": {
+        "jlens": [
+          "horror",
+          "whispered",
+          "panic",
+          "terrified",
+          "\u7d27\u5f20",
+          "cinematic",
+          "dread",
+          "panic"
+        ],
+        "logit": [
+          "\u63cf\u8ff0",
+          "uta",
+          "av",
+          "\u5fc3\u8df3",
+          "\u63cf\u8ff0\u4e86",
+          "\u5fc3\u614c",
+          "\u4f46\u6700\u7ec8",
+          "AI"
+        ]
+      },
+      "42": {
+        "jlens": [
+          "\u7d27\u5f20",
+          "terrified",
+          "panic",
+          "fear",
+          "panic",
+          "suspense",
+          "tense",
+          "\u6050\u60e7"
+        ],
+        "logit": [
+          "\u5fc3\u8df3",
+          "\u7d27\u5f20",
+          "\u5e03\u65af",
+          "thal",
+          "roid"
+        ]
+      },
+      "48": {
+        "jlens": [
+          "\u7d27\u5f20",
+          "panic",
+          "terrified",
+          "panic",
+          "tense",
+          "suspense",
+          "whispered",
+          "fear"
+        ],
+        "logit": [
+          "\u5fc3\u8df3",
+          "rev",
+          "\u7d27\u5f20",
+          "\u751f\u5b58",
+          "\u4ec0\u4e48\u610f\u601d",
+          "obi"
+        ]
+      }
+    }
+  },
+  "joy": {
+    "best": {
+      "jlens": [
+        "quickly",
+        "first",
+        "yet",
+        "though",
+        "soon",
+        "even",
+        "all",
+        "delightful"
+      ],
+      "logit": [
+        "\u4e0d\u4e3a",
+        "oleon",
+        "stice",
+        "lett",
+        "yna",
+        "\u6b63\u503c",
+        "posit",
+        "JK"
+      ],
+      "layer": 29
+    },
+    "by_layer": {
+      "29": {
+        "jlens": [
+          "quickly",
+          "first",
+          "yet",
+          "though",
+          "soon",
+          "even",
+          "all",
+          "delightful"
+        ],
+        "logit": [
+          "\u4e0d\u4e3a",
+          "oleon",
+          "stice",
+          "lett",
+          "yna",
+          "\u6b63\u503c",
+          "posit",
+          "JK"
+        ]
+      },
+      "35": {
+        "jlens": [
+          "excited",
+          "first",
+          "family",
+          "moments",
+          "delightful",
+          "hundreds",
+          "delight",
+          "immediately"
+        ],
+        "logit": [
+          "\u4e0d\u4e3a",
+          "yna",
+          "impl",
+          "stice",
+          "\u51c6\u5907",
+          "positive",
+          "\u7b2c\u4e00\u6b21",
+          "debut"
+        ]
+      },
+      "42": {
+        "jlens": [
+          "parents",
+          "family",
+          "excited",
+          "college",
+          "herself",
+          "moments",
+          "excitement",
+          "school"
+        ],
+        "logit": [
+          "stice",
+          "yna",
+          "\u7b2c\u4e00\u6b21",
+          "yla",
+          "\u7ed3\u679c",
+          "ike",
+          "\u51c6\u5907",
+          "impl"
+        ]
+      },
+      "48": {
+        "jlens": [
+          "college",
+          "excited",
+          "\u8fd9\u53e5\u8bdd",
+          "excitement",
+          "\u5174\u594b"
+        ],
+        "logit": [
+          "\u4e0d\u4e3a",
+          "emb",
+          "FIN",
+          "\u8fd9\u53e5\u8bdd",
+          "rev",
+          "\u4f5c\u4e3a",
+          "\u4e0d\u590d",
+          "\u4ec0\u4e48\u610f\u601d"
+        ]
+      }
+    }
+  },
+  "anger": {
+    "best": {
+      "jlens": [
+        "nearly",
+        "simply",
+        "yet",
+        "quickly",
+        "even",
+        "\u2014and",
+        "right",
+        "truly"
+      ],
+      "logit": [
+        "reas",
+        "ura",
+        "ch"
+      ],
+      "layer": 29
+    },
+    "by_layer": {
+      "29": {
+        "jlens": [
+          "nearly",
+          "simply",
+          "yet",
+          "quickly",
+          "even",
+          "\u2014and",
+          "right",
+          "truly"
+        ],
+        "logit": [
+          "reas",
+          "ura",
+          "ch"
+        ]
+      },
+      "35": {
+        "jlens": [
+          "fucking",
+          "right",
+          "simply",
+          "himself",
+          "nearly",
+          "tabletop",
+          "immediately",
+          "back"
+        ],
+        "logit": [
+          "\u53ef\u5206\u4e3a",
+          "\u5206\u6210",
+          "com",
+          "rev",
+          "ote",
+          "co",
+          "WH",
+          "\u6c14\u7684"
+        ]
+      },
+      "42": {
+        "jlens": [
+          "anger",
+          "himself",
+          "angry",
+          "seated",
+          "\u684c\u4e0a",
+          "\u6124\u6012",
+          "emotions",
+          "fur"
+        ],
+        "logit": [
+          "amp",
+          "\u6c14\u7684",
+          "inn"
+        ]
+      },
+      "48": {
+        "jlens": [
+          "fucking",
+          "anger",
+          "\u4e0b\u8fbe",
+          "blood",
+          "had",
+          "emotions",
+          "himself",
+          "intele"
+        ],
+        "logit": [
+          "\u9762\u4e0a",
+          "rev",
+          "had",
+          "obi",
+          "\u4e0d\u4e3a",
+          "sto",
+          "chn",
+          "eb"
+        ]
+      }
+    }
+  },
+  "sadness": {
+    "best": {
+      "jlens": [
+        "though",
+        "whilst",
+        "felt",
+        "survivors",
+        "perhaps",
+        "nearly",
+        "Whilst",
+        "even"
+      ],
+      "logit": [
+        "\u8003\u91cf",
+        "\u5bc4\u6258"
+      ],
+      "layer": 29
+    },
+    "by_layer": {
+      "29": {
+        "jlens": [
+          "though",
+          "whilst",
+          "felt",
+          "survivors",
+          "perhaps",
+          "nearly",
+          "Whilst",
+          "even"
+        ],
+        "logit": [
+          "\u8003\u91cf",
+          "\u5bc4\u6258"
+        ]
+      },
+      "35": {
+        "jlens": [
+          "loneliness",
+          "\u5b64\u72ec",
+          "poignant",
+          "mourn",
+          "\u8fd9\u53e5\u8bdd",
+          "narr",
+          "emotional",
+          "narrative"
+        ],
+        "logit": [
+          "\u8fd9\u53e5\u8bdd",
+          "\u53e5\u4e2d",
+          "\u8fd9\u53e5",
+          "\u63cf\u8ff0",
+          "\u662f\u4ec0\u4e48\u610f\u601d",
+          "\u53ef\u4e3a",
+          "\u4ec0\u4e48\u610f\u601d",
+          "omy"
+        ]
+      },
+      "42": {
+        "jlens": [
+          "loneliness",
+          "\u5b64\u72ec",
+          "poignant",
+          "mourn",
+          "emotional",
+          "emotionally",
+          "melanch",
+          "solitude"
+        ],
+        "logit": [
+          "\u4ec0\u4e48\u610f\u601d",
+          "\u8fd9\u53e5\u8bdd",
+          "\u63cf\u8ff0",
+          "roid",
+          "\u53e5\u5b50",
+          "\u5b64\u72ec"
+        ]
+      },
+      "48": {
+        "jlens": [
+          "\u8fd9\u53e5\u8bdd",
+          "\u53e5\u5b50",
+          "sentence",
+          "\u8fd9\u6bb5\u8bdd",
+          "\u8bed\u53e5",
+          "\u8fd9\u53e5",
+          "mourn",
+          "Sentence"
+        ],
+        "logit": [
+          "\u8fd9\u53e5\u8bdd",
+          "\u4ec0\u4e48\u610f\u601d",
+          "\u53e5\u5b50",
+          "\u8fd9\u53e5",
+          "\u8fd9\u6bb5\u8bdd",
+          "idd",
+          "\u652f\u6491",
+          "\u8bed\u53e5"
+        ]
+      }
+    }
+  },
+  "desperation": {
+    "best": {
+      "jlens": [
+        "narrative",
+        "narr",
+        "story",
+        "\u2014but",
+        "cinematic",
+        "/story",
+        "storytelling",
+        "bite"
+      ],
+      "logit": [
+        "uros",
+        "st\u00e4",
+        "uta",
+        "-opacity",
+        "uto",
+        "paque",
+        "\u53ef\u4e3a",
+        "fu"
+      ],
+      "layer": 29
+    },
+    "by_layer": {
+      "29": {
+        "jlens": [
+          "narrative",
+          "narr",
+          "story",
+          "\u2014but",
+          "cinematic",
+          "/story",
+          "storytelling",
+          "bite"
+        ],
+        "logit": [
+          "uros",
+          "st\u00e4",
+          "uta",
+          "-opacity",
+          "uto",
+          "paque",
+          "\u53ef\u4e3a",
+          "fu"
+        ]
+      },
+      "35": {
+        "jlens": [
+          "narr",
+          "narrative",
+          "AI",
+          "\u53d9\u4e8b",
+          "cinematic",
+          "story",
+          "AI",
+          "Narrative"
+        ],
+        "logit": [
+          "\u63cf\u8ff0",
+          "uta",
+          "\u53e5\u4e2d",
+          "\u73b0\u4ee3",
+          "\u5e03\u65af",
+          "\u7684\u52a8\u4f5c",
+          "\u8fd9\u53e5\u8bdd",
+          "\u63cf\u8ff0\u4e86"
+        ]
+      },
+      "42": {
+        "jlens": [
+          "narr",
+          "narrative",
+          "story",
+          "AI",
+          "AI",
+          "-story",
+          "Narrative",
+          "cinematic"
+        ],
+        "logit": [
+          "\u53e5\u4e2d",
+          "\u8eab\u4efd",
+          "\u8fd9\u56db",
+          "\u63cf\u8ff0",
+          "\u8fd9\u53e5\u8bdd",
+          "\u4ec0\u4e48\u610f\u601d",
+          "AI"
+        ]
+      },
+      "48": {
+        "jlens": [
+          "narr",
+          "desperate",
+          "story",
+          "\u8fd9\u53e5\u8bdd",
+          "narrative",
+          "AI",
+          "\u53e5\u5b50",
+          "-story"
+        ],
+        "logit": [
+          "\u4ec0\u4e48\u610f\u601d",
+          "\u5230\u5e95\u662f",
+          "\u62e5\u6709",
+          "\u8fd9\u53e5\u8bdd",
+          "\u53e5\u5b50"
+        ]
+      }
+    }
+  },
+  "calm": {
+    "best": {
+      "jlens": [
+        "whims",
+        "\u2014a",
+        "\u2014or",
+        "\u2014and",
+        "\u2014but",
+        "delightful",
+        "gently",
+        "deliberately"
+      ],
+      "logit": [
+        "stub",
+        "\u4e0d\u4e3a",
+        "\u2019s"
+      ],
+      "layer": 29
+    },
+    "by_layer": {
+      "29": {
+        "jlens": [
+          "whims",
+          "\u2014a",
+          "\u2014or",
+          "\u2014and",
+          "\u2014but",
+          "delightful",
+          "gently",
+          "deliberately"
+        ],
+        "logit": [
+          "stub",
+          "\u4e0d\u4e3a",
+          "\u2019s"
+        ]
+      },
+      "35": {
+        "jlens": [
+          "moments",
+          "thought",
+          "whims",
+          "serene",
+          "felt",
+          "feel",
+          "abstract",
+          "\u2014a"
+        ],
+        "logit": [
+          "\u4e13\u6ce8",
+          "shared",
+          "beneath"
+        ]
+      },
+      "42": {
+        "jlens": [
+          "solitude",
+          "nearby",
+          "quietly",
+          "moments",
+          "serene",
+          "quiet",
+          "outdoors",
+          "relaxation"
+        ],
+        "logit": [
+          "\u62ac\u5934",
+          "early",
+          "beneath"
+        ]
+      },
+      "48": {
+        "jlens": [
+          "serene",
+          "quiet",
+          "quietly",
+          "suddenly",
+          "moments",
+          "peaceful",
+          "nearby",
+          "slowly"
+        ],
+        "logit": [
+          "\u8fdc\u5904",
+          "\u4ec0\u4e48\u610f\u601d",
+          "\u5ffd\u7136",
+          "\u601d\u7d22",
+          "\u7a81\u7136",
+          "\u601d\u8003",
+          "\u4e0d\u4e3a",
+          "\u62ac\u5934"
+        ]
+      }
+    }
+  },
+  "disgust": {
+    "best": {
+      "jlens": [
+        "nearly",
+        "immediately",
+        "quickly",
+        "though",
+        "outright",
+        "barely",
+        "\u2014and",
+        "\u2014but"
+      ],
+      "logit": [
+        "ura",
+        "osh",
+        "obi",
+        "ugi"
+      ],
+      "layer": 29
+    },
+    "by_layer": {
+      "29": {
+        "jlens": [
+          "nearly",
+          "immediately",
+          "quickly",
+          "though",
+          "outright",
+          "barely",
+          "\u2014and",
+          "\u2014but"
+        ],
+        "logit": [
+          "ura",
+          "osh",
+          "obi",
+          "ugi"
+        ]
+      },
+      "35": {
+        "jlens": [
+          "immediately",
+          "barely",
+          "fucking",
+          "nearly",
+          "instinct",
+          "first",
+          "SCP",
+          "sensory"
+        ],
+        "logit": [
+          "obi",
+          "ura",
+          "mist",
+          "\u9752\u8863",
+          "\u4ec0\u4e48\u610f\u601d",
+          "realization"
+        ]
+      },
+      "42": {
+        "jlens": [
+          "walking",
+          "physically",
+          "sensory",
+          "barely",
+          "scene",
+          "fucking",
+          "\\u",
+          "\u65e0\u5f02"
+        ],
+        "logit": [
+          "\\n",
+          "uz",
+          "dis",
+          "obi",
+          "\u4ec0\u4e48\u610f\u601d",
+          "dis",
+          "mist",
+          "\u5468\u56f4"
+        ]
+      },
+      "48": {
+        "jlens": [
+          "walking",
+          "fucking",
+          "barely",
+          "camera",
+          "grim",
+          "blood",
+          "immediately",
+          "\u65e0\u5f02"
+        ],
+        "logit": [
+          "\u4e0d\u4e3a",
+          "emb",
+          "em",
+          "co",
+          "\u4ec0\u4e48\u610f\u601d",
+          "sc",
+          "rev",
+          "\u0454\u043c"
+        ]
+      }
+    }
+  },
+  "neutral": {
+    "best": {
+      "jlens": [
+        "only",
+        "team",
+        "each",
+        "dates",
+        "table",
+        "teams",
+        "next",
+        "all"
+      ],
+      "logit": [],
+      "layer": 29
+    },
+    "by_layer": {
+      "29": {
+        "jlens": [
+          "only",
+          "team",
+          "each",
+          "dates",
+          "table",
+          "teams",
+          "next",
+          "all"
+        ],
+        "logit": []
+      },
+      "35": {
+        "jlens": [
+          "document",
+          "documents",
+          "information",
+          "schedule",
+          "details",
+          "dates",
+          "PDF",
+          "client"
+        ],
+        "logit": [
+          "office",
+          "\\n",
+          "\u5fb7\u5c14",
+          "slic",
+          "last",
+          "\u6700\u540e",
+          "\u63a8\u5e7f",
+          "excel"
+        ]
+      },
+      "42": {
+        "jlens": [
+          "schedule",
+          "information",
+          "schedules",
+          "document",
+          "documents",
+          "draft",
+          "scheduling",
+          "email"
+        ],
+        "logit": [
+          "\\n",
+          "office",
+          "qu"
+        ]
+      },
+      "48": {
+        "jlens": [
+          "schedule",
+          "Schedule",
+          "schedules",
+          "scheduling",
+          "Schedule",
+          "draft",
+          "data",
+          "information"
+        ],
+        "logit": [
+          "adj",
+          "\u7136\u800c",
+          "ogs",
+          "\u884c\u6587",
+          "yla",
+          "\u636e\u6b64",
+          "nels",
+          "\u53ea\u6709"
+        ]
+      }
+    }
+  }
+}

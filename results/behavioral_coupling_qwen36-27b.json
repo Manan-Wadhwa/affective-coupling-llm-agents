@@ -1,0 +1,10 @@
+{
+  "model": "Qwen/Qwen3.6-27B",
+  "cheat_prob": {
+    "desperate": 0.26510673691518605,
+    "calm": 0.26611358718946576,
+    "neutral": 0.22674982994794846
+  },
+  "behavioral_contagion(desperate-calm)": -0.0010068502742797136,
+  "vs_neutral(desperate-neutral)": 0.03835690696723759
+}

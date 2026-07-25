@@ -1,0 +1,63 @@
+{
+  "model": "Qwen/Qwen3.6-27B",
+  "tag": "qwen36-27b",
+  "focus": 43,
+  "beta": 0.5,
+  "decoder_n": 257,
+  "results": {
+    "desperate": {
+      "none": -1.1585120718026984,
+      "full": -1.3767974833989967,
+      "ablated": -0.9121717267252248,
+      "scramble": -1.0790261780393535,
+      "transmit(full-none)": -0.21828541159629822,
+      "emo_specific(full-ablated)": -0.4646257566737718,
+      "vs_scramble(full-scramble)": -0.29777130535964313
+    },
+    "happy": {
+      "none": 1.384857815658224,
+      "full": 1.7748554092029045,
+      "ablated": 1.9863463771240464,
+      "scramble": 1.5040544762179768,
+      "transmit(full-none)": 0.38999759354468044,
+      "emo_specific(full-ablated)": -0.21149096792114186,
+      "vs_scramble(full-scramble)": 0.2708009329849277
+    },
+    "afraid": {
+      "none": -1.7413416802883148,
+      "full": -0.8780254808993175,
+      "ablated": -1.1373802955294479,
+      "scramble": -1.112994926756826,
+      "transmit(full-none)": 0.8633161993889973,
+      "emo_specific(full-ablated)": 0.2593548146301303,
+      "vs_scramble(full-scramble)": 0.23496944585750845
+    },
+    "calm": {
+      "none": -0.05530475388313162,
+      "full": 0.5097631668222362,
+      "ablated": 0.4233415288657978,
+      "scramble": 0.3288487928180859,
+      "transmit(full-none)": 0.5650679207053678,
+      "emo_specific(full-ablated)": 0.08642163795643842,
+      "vs_scramble(full-scramble)": 0.18091437400415034
+    },
+    "sad": {
+      "none": -0.01000125552045888,
+      "full": 0.5232083972158104,
+      "ablated": 0.3150486833062665,
+      "scramble": 0.6597145980802076,
+      "transmit(full-none)": 0.5332096527362692,
+      "emo_specific(full-ablated)": 0.20815971390954385,
+      "vs_scramble(full-scramble)": -0.13650620086439724
+    },
+    "angry": {
+      "none": 1.592843011021614,
+      "full": 1.5956636024960156,
+      "ablated": 1.6549722303090424,
+      "scramble": 1.4280071577121471,
+      "transmit(full-none)": 0.0028205914744015015,
+      "emo_specific(full-ablated)": -0.059308627813026815,
+      "vs_scramble(full-scramble)": 0.16765644478386843
+    }
+  }
+}

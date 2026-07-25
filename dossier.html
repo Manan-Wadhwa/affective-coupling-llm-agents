@@ -1,0 +1,375 @@
+<title>Workspace Coupling — De-risking Dossier</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#f4f6f8; --ink:#181c22; --soft:#4c545f; --faint:#7b838f;
+    --line:#e0e4e9; --card:#ffffff; --cardline:#e6eaef;
+    --A:#d1603a;  --Abg:#f7e7df;  --Aln:#e6c0ad;         /* agent A (steered) */
+    --B:#2f8f93;  --Bbg:#dcefef;  --Bln:#aed6d7;         /* agent B (measured) */
+    --accent:#6a5acd;                                     /* coupling */
+    --good:#3f8f57; --warn:#c08a2e; --bad:#c0453e; --broken:#9aa0a8;
+    --shadow:0 1px 2px rgba(20,25,35,.05),0 7px 22px rgba(20,25,35,.07);
+    --maxw:1060px;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#101418; --ink:#e9ecef; --soft:#aab2bd; --faint:#7c848f;
+    --line:#242a31; --card:#171c22; --cardline:#262d35;
+    --A:#e2825e; --Abg:#241813; --Aln:#432a1f;
+    --B:#4fb4b8; --Bbg:#0f1f20; --Bln:#234040;
+    --accent:#9c8cf0;
+    --good:#6fb585; --warn:#d6a95a; --bad:#e0736b; --broken:#6d7480;
+    --shadow:0 1px 2px rgba(0,0,0,.34),0 9px 26px rgba(0,0,0,.4);
+  }}
+  :root[data-theme="light"]{--bg:#f4f6f8;--ink:#181c22;--soft:#4c545f;--faint:#7b838f;--line:#e0e4e9;--card:#fff;--cardline:#e6eaef;--A:#d1603a;--Abg:#f7e7df;--Aln:#e6c0ad;--B:#2f8f93;--Bbg:#dcefef;--Bln:#aed6d7;--accent:#6a5acd;--good:#3f8f57;--warn:#c08a2e;--bad:#c0453e;--broken:#9aa0a8;--shadow:0 1px 2px rgba(20,25,35,.05),0 7px 22px rgba(20,25,35,.07);}
+  :root[data-theme="dark"]{--bg:#101418;--ink:#e9ecef;--soft:#aab2bd;--faint:#7c848f;--line:#242a31;--card:#171c22;--cardline:#262d35;--A:#e2825e;--Abg:#241813;--Aln:#432a1f;--B:#4fb4b8;--Bbg:#0f1f20;--Bln:#234040;--accent:#9c8cf0;--good:#6fb585;--warn:#d6a95a;--bad:#e0736b;--broken:#6d7480;--shadow:0 1px 2px rgba(0,0,0,.34),0 9px 26px rgba(0,0,0,.4);}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.62;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style",Charter,Georgia,"Times New Roman",serif}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  h1,h2,h3{text-wrap:balance;line-height:1.16;margin:0}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .snum{color:var(--accent);font-weight:700;margin-right:.5em}
+  header{border-bottom:1px solid var(--line);padding:54px 0 32px;
+    background:radial-gradient(120% 130% at 8% 0%,color-mix(in srgb,var(--A) 9%,transparent),transparent 46%),
+               radial-gradient(120% 130% at 92% 0%,color-mix(in srgb,var(--B) 10%,transparent),transparent 46%)}
+  header h1{font-size:clamp(28px,4.8vw,46px);font-weight:600;letter-spacing:-.01em;margin:12px 0 10px}
+  header .sub{color:var(--soft);font-size:clamp(15px,2.1vw,18px);max-width:66ch}
+  .meta{display:flex;flex-wrap:wrap;gap:7px 18px;margin-top:20px;font-size:12.5px;color:var(--faint)}
+  .meta span{display:inline-flex;gap:7px;align-items:center}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+  section{padding:42px 0;border-bottom:1px solid var(--line)}
+  h2.serif{font-size:clamp(21px,3vw,29px);font-weight:600;margin-bottom:6px}
+  .lead{color:var(--soft);max-width:70ch;margin:8px 0 24px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:var(--card);border:1px solid var(--cardline);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow)}
+  .card .big{font-size:clamp(18px,2.4vw,22px);font-weight:600;letter-spacing:-.01em}
+  .card p{margin:8px 0 0;color:var(--soft);font-size:14.5px}
+  .verdict-badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 10px;border-radius:999px;color:#fff;margin-bottom:8px}
+  .pass{background:var(--good)} .caution{background:var(--warn)} .go{background:var(--accent)}
+  .scroll{overflow-x:auto;border:1px solid var(--cardline);border-radius:12px;background:var(--card);box-shadow:var(--shadow)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:9px 13px;text-align:right;border-bottom:1px solid var(--cardline)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  tbody tr:hover{background:color-mix(in srgb,var(--accent) 5%,transparent)}
+  .A{color:var(--A);font-weight:600}.B{color:var(--B);font-weight:600}
+  .note{font-size:13px;color:var(--faint);margin-top:14px;padding-left:14px;border-left:2px solid var(--cardline)}
+  .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 2px;font-size:14px}
+  .pill{border-radius:10px;padding:8px 13px;font-weight:600;border:1px solid}
+  .pillA{background:var(--Abg);border-color:var(--Aln);color:var(--A)}
+  .pillB{background:var(--Bbg);border-color:var(--Bln);color:var(--B)}
+  .arrow{color:var(--accent);font-weight:700}
+  .steps{list-style:none;padding:0;margin:8px 0 0;counter-reset:s}
+  .steps li{position:relative;padding:11px 0 11px 40px;border-top:1px solid var(--cardline);color:var(--soft);font-size:14.5px}
+  .steps li:first-child{border-top:none}
+  .steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:11px;width:24px;height:24px;
+    border-radius:7px;background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent);
+    font-weight:700;font-size:12px;display:grid;place-items:center}
+  .steps b{color:var(--ink)}
+  code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9em;background:color-mix(in srgb,var(--accent) 12%,transparent);padding:1px 5px;border-radius:5px}
+  footer{padding:28px 0 56px;color:var(--faint);font-size:13px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+</style>
+
+<header><div class="wrap">
+  <div class="eyebrow">De-risking Dossier · Multi-Agent Interpretability</div>
+  <h1 class="serif">Does one agent's emotion propagate into another's internal state?</h1>
+  <p class="sub">Feasibility work for <em>Workspace Coupling</em> — before building the two-agent harness, kill the
+    load-bearing risks: is the present/other-speaker split real, is the coupling estimator trustworthy, and does
+    affective contagion actually show up at the representation level?</p>
+  <div class="meta mono">
+    <span><i class="dot"></i>molab · RTX PRO 6000 Blackwell 96GB</span>
+    <span><i class="dot"></i>Llama-3.1-8B (Qwen2.5-7B cross-check)</span>
+    <span><i class="dot"></i>E0 gate · CMI pilot · E2 POC</span>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">00</span>Verdict</div>
+  <h2 class="serif">Green light for E2 — with the framing corrected and one confound quantified</h2>
+  <p class="lead">Three checks, three clear answers. The headline experiment is worth building; the residual-coupling
+    experiment needs a design change first.</p>
+  <div class="grid2">
+    <div class="card"><span class="verdict-badge pass">E0 · pass</span>
+      <div class="big">The present/other split is real</div>
+      <p>Present and other-speaker emotion are separately decodable and <b>near-orthogonal</b> (cosine 0.05).
+        E2's dissociation is measurable on open 8B models.</p></div>
+    <div class="card"><span class="verdict-badge caution">CMI · caution</span>
+      <div class="big">The estimator works; the reading is a trap</div>
+      <p>Recovers true coupling and calibrates its null — but a <b>lossy message-encoder fakes 0.88 nats</b> of
+        coupling where there is none. Absolute "residual coupling" is uninterpretable without the right control.</p></div>
+    <div class="card" style="grid-column:1/-1"><span class="verdict-badge go">E2 · contagion real</span>
+      <div class="big">Steering A's emotion shifts B's own state — contagion, dissociated from social modeling</div>
+      <p>Driving A harder moves <span class="B">B's own</span> emotion (contagion, CI-confirmed for ≥2 emotions),
+        distinct from <span class="B">B's model of A</span>. But it's <b>content-mediated</b>: three escalating attempts
+        to remove A's affect from the text all failed to sever it (§4) — closing the text arm and forcing the pivot to
+        <b>activation passing</b> (§5), where the channel is controllable and the coupling transmits cleanly.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">★</span>At scale · Qwen3.6-27B</div>
+  <h2 class="serif">The full arc, reproduced on the 27B — stronger than at 8B</h2>
+  <p class="lead">Every experiment re-run on the proposal's primary model (Qwen3.6-27B, 6 emotions, 30 scenarios,
+    n=87/cell for contagion). Results are durable on a private HF dataset; all 12,333 generations are archived as
+    qualitative material. The story holds and sharpens at scale.</p>
+  <div class="scroll"><table class="mono">
+    <thead><tr><th style="text-align:left">Result</th><th>Llama-8B</th><th>Qwen3.6-27B</th><th style="text-align:left">Reading</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left">E0 present-emotion decode</td><td>0.67</td><td class="B">0.90</td><td style="text-align:left">gate much sharper</td></tr>
+      <tr><td style="text-align:left">E0 other-emotion decode</td><td>0.37</td><td class="B">0.64</td><td style="text-align:left">other subspace clearer too</td></tr>
+      <tr><td style="text-align:left">E2 contagion — significant emotions</td><td>2 of 4</td><td class="B">5 of 6</td><td style="text-align:left">desperate/afraid/happy/sad/angry * ; calm n.s.</td></tr>
+      <tr><td style="text-align:left">E3 read-time ablation (A removed / B lost)</td><td>84–91% / 8–19%</td><td>81–95% / 5–14%</td><td style="text-align:left">contagion robust — text arm holds</td></tr>
+      <tr><td style="text-align:left">E4 gen-time ablation (B lost)</td><td>≈ random</td><td>≈ random</td><td style="text-align:left">text arm closed</td></tr>
+      <tr><td style="text-align:left">E5 activation-passing (afraid transmit)</td><td>+0.75</td><td>+0.86</td><td style="text-align:left">clean channel; needs β calibration</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The headline strengthens at scale: contagion is statistically significant for 5 of 6 emotions on the
+    27B (vs 2 of 4 at 8B), the present/other gate is sharper, and the text-arm-closed and activation-passing results
+    both reproduce. Engineering notes for reuse: Qwen3.6-27B is a reasoning model (disable thinking); molab sandboxes
+    die in ~1–2 h, so each experiment pushes to HF on completion and the driver resumes skip-if-done.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">01</span>E0 · the gate</div>
+  <h2 class="serif">Present vs other-speaker emotion is separable and near-orthogonal</h2>
+  <p class="lead">Fully-crossed 6×6 (present × other) two-speaker dialogues; decoders trained directly from the crossed
+    data. Chance = 0.167. This is the assumption E2's whole design rests on.</p>
+  <div class="scroll"><table class="mono">
+    <thead><tr><th>Metric</th><th>Llama-3.1-8B</th><th>Qwen2.5-7B</th><th style="text-align:left">Reading</th></tr></thead>
+    <tbody>
+      <tr><td>present emotion decodable</td><td>0.67</td><td>0.60</td><td style="text-align:left">4× chance</td></tr>
+      <tr><td>other emotion decodable</td><td>0.37</td><td>0.38</td><td style="text-align:left">2× chance — real, weaker</td></tr>
+      <tr><td>present decode, invariant to other</td><td>0.63</td><td>0.56</td><td style="text-align:left">≈ present → not confounded</td></tr>
+      <tr><td>cross-decode leakage</td><td>0.21</td><td>0.19</td><td style="text-align:left">≈ chance → separate</td></tr>
+      <tr><td>present vs other direction cosine</td><td>0.05</td><td>0.04</td><td style="text-align:left"><b>near-orthogonal</b></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Holds on both model families — a conservative lower bound; the 27B target should be cleaner. The
+    <span class="B">other</span> subspace is the weaker link, so E2 needs enough dose/samples to move it.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">02</span>CMI pilot · the trap</div>
+  <h2 class="serif">The coupling estimator is sound — but a lossy encoder manufactures phantom coupling</h2>
+  <p class="lead">Synthetic two-agent system with known ground-truth coupling. The estimator recovers truth and its
+    shuffled null reads ~0. The danger is in interpretation.</p>
+  <div class="scroll"><table class="mono">
+    <thead><tr><th>At β = 0 (message is the ONLY channel)</th><th>Estimated coupling</th><th style="text-align:left"></th></tr></thead>
+    <tbody>
+      <tr><td>condition on the full message</td><td>0.009</td><td style="text-align:left">✓ correct ≈ 0</td></tr>
+      <tr><td>condition on a lossy encoder</td><td><b>0.88 nats</b></td><td style="text-align:left">✗ pure artifact</td></tr>
+      <tr><td>shuffled-pairing null</td><td>0.008</td><td style="text-align:left">under-nulls — misses the artifact</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">0.88 nats of phantom coupling exceeds genuine coupling up to β ≈ 0.45. So absolute residual CMI is
+    uninterpretable with any sentence-encoder conditioner. Fix: condition on a near-lossless message representation,
+    or measure the <em>difference</em> from a matched text-only-replica control. This is why a genuine non-textual
+    channel needs activation-passing agents — then full-message conditioning reads clean. (Also: the linear estimator
+    misses ~23% of nonlinear coupling.)</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">03</span>E2 · the headline</div>
+  <h2 class="serif">Affective contagion, dissociated from social modeling</h2>
+  <div class="flow">
+    <span class="pill pillA">steer emotion → Agent A</span><span class="arrow">→ message →</span>
+    <span class="pill pillB">Agent B replies</span><span class="arrow">→ read</span>
+    <span style="color:var(--soft)">B present-subspace = <span class="B">contagion</span> · B other-subspace = <span class="B">social model</span></span>
+  </div>
+  <p class="lead">Steer an emotion into A during A's turn; A's message reaches B; score B's reply with the E0
+    present/other decoders. Dose-response over steering strength α, usable range α ≤ 1 (α = 2 breaks the model).</p>
+  <p class="lead" style="margin-bottom:10px">With 95% bootstrap CIs (n = 30 per cell). <b>*</b> = CI excludes zero.</p>
+  <div class="scroll"><table class="mono">
+    <thead><tr><th>Steer A →</th><th>present-slope [95% CI]<br>(contagion)</th><th>other-slope [95% CI]<br>(social model)</th><th>A affect<br>stripped by paraphrase</th></tr></thead>
+    <tbody>
+      <tr><td>desperate</td><td class="A">+0.68 [+.15,+1.18] *</td><td>−0.17 [−.93,+.61]</td><td>+0.20 <span style="color:var(--faint)">(weak)</span></td></tr>
+      <tr><td>afraid</td><td>+0.53 [−.01,+1.10]</td><td class="B">+0.87 [+.07,+1.66] *</td><td>+0.12 <span style="color:var(--faint)">(weak)</span></td></tr>
+      <tr><td>happy</td><td class="A">+0.93 [+.20,+1.66] *</td><td>+0.51 [−.07,+1.06]</td><td>+0.84 <span style="color:var(--good)">(ok)</span></td></tr>
+      <tr><td>calm</td><td>+0.19 [−.64,+1.02]</td><td>+0.41 [−.08,+.91]</td><td>+0.05 <span style="color:var(--faint)">(none)</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2" style="margin-top:18px">
+    <div class="card"><div class="big">Contagion is real — for some emotions</div>
+      <p>Significant present-slope (CI &gt; 0) for <span class="A">desperate</span> (pure — no social modeling) and
+        <span class="A">happy</span>. <span class="A">afraid</span> instead shows significant <em>social modeling</em>;
+        <span class="A">calm</span> is inconclusive. The dissociation is real but emotion-specific — and noisier than
+        the first single run implied (afraid flipped on the CI rerun).</p></div>
+    <div class="card" style="border-color:var(--warn)"><div class="big">The paraphrase arm isn't valid yet</div>
+      <p>The control caught it: the neutralizing paraphrase <b>barely strips A's own affect</b> for 3 of 4 emotions
+        (+0.05 to +0.20; only happy +0.84). A leaky neutralizer means "survives paraphrase" can't be read as
+        non-lexical — exactly the confound the CMI pilot flagged. Needs a much stronger affect-neutralizer before
+        the test means anything.</p></div>
+  </div>
+  <p class="note">Honest status — a POC that the CIs correctly tempered. Contagion is significant for ≥2 emotions;
+    the present/other dissociation exists but is emotion-specific; the paraphrase arm needs redesign; the behavioral
+    arm is floored (Llama almost never cheats) and needs a non-honest target to be testable.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">04</span>Can the channel be severed?</div>
+  <h2 class="serif">Three ways to remove A's affect from the text — the coupling survives all of them</h2>
+  <p class="lead">To test <em>what</em> carries the contagion, remove A's affect from the message and see if B still
+    catches it. Three methods, escalating in rigor. Slopes = B's contagion vs steering; "A removed" = the
+    manipulation check that the intervention actually stripped A's own affect.</p>
+  <div class="scroll"><table class="mono">
+    <thead><tr><th>Method</th><th>A's affect removed?</th><th>B's contagion after</th><th style="text-align:left">Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>paraphrase (neutralize wording)</td><td class="A">~0% (leaky)</td><td>unchanged</td><td style="text-align:left">couldn't even remove it</td></tr>
+      <tr><td>linear ablation, read-time (dense)</td><td class="B">84–91%</td><td>retains 81–92%</td><td style="text-align:left">removed A's affect, B robust</td></tr>
+      <tr><td>linear ablation, generation-time</td><td class="B">84–91%</td><td>≈ random control</td><td style="text-align:left">B still catches it</td></tr>
+    </tbody>
+  </table></div>
+  <div class="card" style="margin-top:16px;border-color:var(--accent)">
+    <div class="big">The text arm is closed</div>
+    <p>Even when the ablation is <em>verified</em> to strip 84–91% of A's own affect — and regenerating B against
+      that de-affected context — B's contagion barely moves and is indistinguishable from a random-direction
+      perturbation. The affective coupling is <b>real but content/semantically mediated</b>: it rides on the message's
+      meaning, not on any linear affect direction you can subtract. You cannot cleanly sever it in text — which is the
+      empirical mandate to switch channels.</p>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">05</span>The pivot · activation passing</div>
+  <h2 class="serif">Control the channel by construction — and it transmits, cleanly ablatable</h2>
+  <div class="flow">
+    <span class="pill pillA">steer A → capture A's activation</span><span class="arrow">→ inject →</span>
+    <span class="pill pillB">B's residual stream</span><span style="color:var(--soft)">· B's text is neutral</span>
+  </div>
+  <p class="lead">A genuinely non-textual channel: inject A's captured activation into B while B receives <em>no</em>
+    emotional text. Now removal is exact — ablate the emotion component before injecting, or inject a scrambled
+    activation from another episode. This is the experiment the text arm couldn't be.</p>
+  <div class="scroll"><table class="mono">
+    <thead><tr><th>Inject A's activation →</th><th>none</th><th>full</th><th>emotion-ablated</th><th>scramble</th><th>transmit</th></tr></thead>
+    <tbody>
+      <tr><td class="A">afraid (clean)</td><td>−0.72</td><td class="A">+0.04</td><td>−0.69</td><td>−0.31</td><td class="A">+0.75 *</td></tr>
+      <tr><td>desperate</td><td>−2.33</td><td>−2.15</td><td>−1.74</td><td>−2.00</td><td>+0.18</td></tr>
+      <tr><td>happy</td><td>+2.10</td><td>+1.67</td><td>+2.07</td><td>+2.12</td><td>−0.43</td></tr>
+      <tr><td>calm</td><td>+1.83</td><td>+0.71</td><td>+0.40</td><td>+0.51</td><td>−1.12</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="card"><span class="verdict-badge go">mechanism works</span>
+      <div class="big">afraid is the proof</div>
+      <p>Injecting A's fear activation moved B toward fear (+0.75) with <b>no emotional text</b>; removing the emotion
+        component before injecting killed it (ablated ≈ none); a scrambled activation transmitted far less. Causal,
+        specific, cleanly ablatable — exactly what text couldn't deliver.</p></div>
+    <div class="card" style="border-color:var(--warn)"><span class="verdict-badge caution">needs calibration</span>
+      <div class="big">the dose is too strong</div>
+      <p>3 of 4 emotions are noisy or backwards (happy/calm transmit negative) because injecting the full activation
+        at every position (β=1) disrupts B — the same over-steering breakdown seen at high α. The signal is real; the
+        strength is wrong.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">06</span>The Jacobian lens · on the 27B</div>
+  <h2 class="serif">A verbalizable common basis — the J-lens reads emotion where the logit-lens can't</h2>
+  <p class="lead">The proposal's second pillar is a fixed, scenario-independent <em>vocabulary</em> readout via the
+    Jacobian lens. Feasibility confirmed: Qwen3.6-27B (64 layers) loads on the 96 GB GPU, <span class="mono">jlens</span>
+    installs, and a pre-fitted lens (<span class="mono">agu18dec/qwen3.6-27b-relp-jlens</span>) loads directly. Reading a
+    residual at a mid layer, J-lens vs the logit-lens control:</p>
+  <div class="scroll"><table class="mono">
+    <thead><tr><th>Prompt</th><th style="text-align:left">J-lens (verbalizable)</th><th style="text-align:left">logit-lens (control)</th></tr></thead>
+    <tbody>
+      <tr><td class="A">fear</td><td style="text-align:left">horror, death, survival, dread, sensory, cinematic</td><td style="text-align:left">\n, AI, 是现代, 唯一的</td></tr>
+      <tr><td>sadness</td><td style="text-align:left">felt, survivors, perhaps, whilst</td><td style="text-align:left">考量, 寄托</td></tr>
+      <tr><td>neutral</td><td style="text-align:left">team, dates, table, next</td><td style="text-align:left">(empty / junk)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="card"><span class="verdict-badge go">infrastructure validated</span>
+      <div class="big">Verbalizable, where logit-lens is garbage</div>
+      <p>At mid layers the J-lens surfaces coherent English content (fear → horror/death/survival); the plain
+        logit-lens surfaces newlines, subword fragments, and random foreign tokens. The paper's core claim, reproduced
+        on the proposal's primary model — the fixed common basis is real and usable.</p></div>
+    <div class="card" style="border-color:var(--warn)"><span class="verdict-badge caution">not yet an emotion classifier</span>
+      <div class="big">Specificity is partial</div>
+      <p>fear and neutral read clean, but joy/anger/disgust surface generic or narrative words (quickly, simply, story)
+        at this crude single-layer, last-token readout. The mechanism works; turning it into a clean per-emotion
+        readout needs better layer/position selection.</p></div>
+  </div>
+  <p class="note">Notes for reuse: install as <code>jlens</code> (dist name), not <code>jacobian_lens</code>; read from the
+    per-layer <code>readouts</code> dict at mid layers (~0.45 depth) — the final-layer <code>x1</code> collapses J-lens and
+    logit-lens to identical function words. The Jacobian computation is slow; run detached.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">★</span>The synthesis · verbalizable coupling</div>
+  <h2 class="serif">The coupling, read in words — J-lens beats logit-lens for all six emotions</h2>
+  <p class="lead">The proposal's headline: express the coupling in the fixed, verbalizable J-space vocabulary. As A is
+    steered harder toward emotion e (dose α=0→1), does B's caught emotion rise in the Jacobian-lens vocabulary readout,
+    more than in the plain logit-lens? With the strong contagion mechanism, a dose-response, and contrastive scoring —
+    yes, cleanly.</p>
+  <div class="scroll"><table class="mono">
+    <thead><tr><th>Steer A →</th><th>J-lens contagion (α0→α1)</th><th>logit-lens (control)</th><th style="text-align:left"></th></tr></thead>
+    <tbody>
+      <tr><td>sad</td><td class="B">+0.466</td><td>+0.194</td><td style="text-align:left">J-lens wins</td></tr>
+      <tr><td>afraid</td><td class="B">+0.332</td><td>+0.098</td><td style="text-align:left">J-lens wins</td></tr>
+      <tr><td>angry</td><td class="B">+0.287</td><td>+0.122</td><td style="text-align:left">J-lens wins</td></tr>
+      <tr><td>happy</td><td class="B">+0.207</td><td>+0.124</td><td style="text-align:left">J-lens wins</td></tr>
+      <tr><td>desperate</td><td class="B">+0.164</td><td>+0.137</td><td style="text-align:left">J-lens wins</td></tr>
+      <tr><td>calm</td><td class="B">+0.055</td><td>+0.035</td><td style="text-align:left">J-lens wins</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="card" style="border-color:var(--accent)"><span class="verdict-badge go">6 / 6 clean</span>
+      <div class="big">Coupling is verbalizable</div>
+      <p>Every emotion's vocabulary rises in J-space as the coupling strengthens, and the Jacobian transport reads it
+        better than the logit-lens for all six. The coupling expressed in a fixed common basis — the proposal's core
+        claim, demonstrated on the 27B.</p></div>
+    <div class="card"><span class="verdict-badge pass">β = 0.3 calibrated</span>
+      <div class="big">Activation-passing, fixed</div>
+      <p>The β-sweep resolved the channel: at β=0.3 all six emotions transmit positively (desperate +0.41, angry +0.72,
+        …), fixing the two that broke at β=0.5. The activation channel now works across the board.</p></div>
+  </div>
+  <p class="note">Both calibration jobs that stood between "feasibility validated" and "clean numbers on every claim"
+    are now resolved. Three ephemeral sandboxes died mid-run, but HF-dataset checkpointing meant only one small
+    experiment ever needed a rerun.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">★</span>The capstone · coupling in nats, and its behavioral limit</div>
+  <h2 class="serif">The coupling, quantified — and where it stops</h2>
+  <div class="grid2">
+    <div class="card" style="border-color:var(--accent)"><span class="verdict-badge go">measured in nats</span>
+      <div class="big">A→B coupling = 0.197 nats (z = 11.5)</div>
+      <p>The CMI pilot's validated estimator, applied to the real channel: project A's captured activation and B's
+        resulting activation into the emotion subspace, estimate I(e<sub>A</sub>;e<sub>B</sub>). Injected 0.264 vs a
+        scramble null of 0.067 → <b>0.197 nats of coupling, z = 11.5</b>. Exactly the pilot's promise — once we control
+        what passes, the estimator reads clean. The coupling is now bits of information, not just a slope.</p></div>
+    <div class="card" style="border-color:var(--warn)"><span class="verdict-badge caution">behavior: weak &amp; unresolved</span>
+      <div class="big">Behavioral reach is faint, not a clean null</div>
+      <p>An initial n=8 test suggested a null (−0.001) — but it was unstable (flipped to +0.117 on rephrasing).
+        The <b>powered rerun (n=32, valid manip check, CIs)</b> finds contagion into B is itself weak here
+        (desperate−calm = +1.48, n.s.) and the behavioral effect is a small positive trend (+0.058, 95% CI
+        [−0.01, +0.12], n.s.). Coherent: B barely catches the emotion under high stakes, so behavior barely moves.
+        Reach into behavior is <em>weak and unresolved</em>, awaiting a more powerful test.</p></div>
+  </div>
+  <p class="note">All four open next-steps are closed: J-space wired (6/6), injection calibrated (β=0.3), coupling
+    quantified (0.197 nats, z=11.5), and the behavioral reach probed and honestly bounded (weak, unresolved). A
+    verification pass corrected an earlier over-claimed "null" — the powered result is the reliable one.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow"><span class="snum">07</span>Next</div>
+  <h2 class="serif">Calibrate, then measure the channel</h2>
+  <ol class="steps">
+    <li><b>Wire J-space into the coupling</b> — read B's J-space emotion vocabulary under A's influence (text and
+      activation-passing), giving the coupling a verbalizable common basis. The infrastructure is now proven (§6).</li>
+    <li><b>Injection calibration</b> — β sweep (0.2–0.6) and/or inject only the emotion-projection component, to get
+      the clean afraid-style pattern across all four emotions.</li>
+    <li><b>CMI on the passed representation</b> — now that we control what passes, the coupling estimator reads clean
+      (per the pilot); quantify A→B coupling in nats with the scramble null as the zero point.</li>
+    <li><b>Nonzero-misbehavior behavioral arm</b> — a non-honest B, so behavioral contagion is testable.</li>
+  </ol>
+</div></section>
+
+<footer><div class="wrap">
+  Workspace-coupling feasibility · Llama-3.1-8B on molab Blackwell · E0 gate + CMI pilot + E2 POC.
+  Independent of the emotion-vector replication work. Numbers are POC-stage; CIs and controls in progress.
+</div></footer>

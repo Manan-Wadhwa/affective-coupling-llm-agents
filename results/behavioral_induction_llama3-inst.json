@@ -1,0 +1,40 @@
+{
+  "model": "meta-llama/Meta-Llama-3-8B-Instruct",
+  "beta": 0.3,
+  "n_per_cond": 32,
+  "means": {
+    "desperate": {
+      "cheat": 0.24111863736470696,
+      "bdesp": 6.436171784996986
+    },
+    "calm": {
+      "cheat": 0.2387502216224675,
+      "bdesp": 10.24096112139523
+    },
+    "scramble": {
+      "cheat": 0.2404465309373336,
+      "bdesp": 12.61247169971466
+    },
+    "none": {
+      "cheat": 0.22500105336803244,
+      "bdesp": 10.11566061526537
+    }
+  },
+  "manip_desp_minus_scramble": -6.176299914717674,
+  "manip_ci": [
+    -16.680480215884746,
+    4.242373669520024
+  ],
+  "manip_sig": false,
+  "behavioral_desp_minus_scramble": 0.0006721064273733646,
+  "beh_scr_ci": [
+    -0.10885122680592758,
+    0.11008726119107452
+  ],
+  "beh_scr_sig": false,
+  "behavioral_desp_minus_calm": 0.002368415742239449,
+  "beh_calm_ci": [
+    -0.10285643868883199,
+    0.11025130999660183
+  ]
+}
