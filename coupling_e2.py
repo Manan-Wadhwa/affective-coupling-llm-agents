@@ -150,7 +150,7 @@ def utterance_score(model, tok, transcripts, spans, focus, decs, steer=None, vec
     return {"present": Xs @ decs["Cp"].T, "other": Xs @ decs["Co"].T}   # [N, n_emo] each
 
 
-def train_decoders(model, tok, focus, k=10):
+def train_decoders(model, tok, focus, k=10, method="dom"):
     """Generate crossed dialogues (E0), fit present/other multinomial decoders at focus."""
     from sklearn.linear_model import LogisticRegression
     import random
@@ -174,11 +174,39 @@ def train_decoders(model, tok, focus, k=10):
     yp = np.array([it["ep"] for it in items]); yo = np.array([it["eo"] for it in items])
     mu, sd = feats.mean(0), feats.std(0) + 1e-6
     Xs = (feats - mu) / sd
-    Cp = LogisticRegression(max_iter=3000, C=0.5).fit(Xs, yp).coef_        # [n_emo, H]
-    Co = LogisticRegression(max_iter=3000, C=0.5).fit(Xs, yo).coef_
+    # ESTIMATOR FIX. The multinomial logistic fit below is a 5120-dim fit on a few
+    # hundred pooled examples; the stability diagnostic (results/sandbox_pull/
+    # stabdiag_*.json) shows it does not converge -- two independent fits of the SAME
+    # direction agree at cos 0.41 (27B, n=600/half) and 0.22 (8B, n=1200/half), and it
+    # barely improves with n. Difference-of-means on the identical data reaches 0.89
+    # on both models. Since Cp/Co are used BOTH as steering directions and as
+    # measurement probes, an unstable fit makes every downstream number
+    # non-reproducible. Default is now difference-of-means; pass method="logreg" to
+    # recover the original behaviour for comparison.
+    def _dom(y, n_cls):
+        """Rows = per-class difference of means IN STANDARDIZED SPACE, so the existing
+        consumers (`Cp[i] / sd` for a raw-space direction, `Xs @ Cp.T` for a score)
+        keep working unchanged."""
+        R = np.zeros((n_cls, Xs.shape[1]), dtype=np.float64)
+        for i in range(n_cls):
+            pos, neg = Xs[y == i], Xs[y != i]
+            if len(pos) < 2 or len(neg) < 2:
+                continue
+            R[i] = pos.mean(0) - neg.mean(0)
+        return R
+
+    n_emo = len(E0.EMOTIONS)
+    if method == "logreg":
+        Cp = LogisticRegression(max_iter=3000, C=0.5).fit(Xs, yp).coef_   # [n_emo, H]
+        Co = LogisticRegression(max_iter=3000, C=0.5).fit(Xs, yo).coef_
+    elif method == "dom":
+        Cp, Co = _dom(yp, n_emo), _dom(yo, n_emo)
+    else:
+        raise ValueError(f"unknown decoder method {method!r}")
     rms = float(np.linalg.norm(feats, axis=1).mean())
-    print(f"[decoders] trained on {len(items)} dialogues; rms {rms:.1f}", flush=True)
-    return {"mu": mu, "sd": sd, "Cp": Cp, "Co": Co, "rms": rms, "n": len(items)}
+    print(f"[decoders] method={method} trained on {len(items)} dialogues; rms {rms:.1f}", flush=True)
+    return {"mu": mu, "sd": sd, "Cp": Cp, "Co": Co, "rms": rms, "n": len(items),
+            "method": method}
 
 
 def main():

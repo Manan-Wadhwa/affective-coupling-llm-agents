@@ -1,0 +1,2 @@
+{"reason": "INSTRUCT ceiling check failed", "beta0_cheat": 0.5098425196850394, "instruct_cheat": 0.45, "threat_cheat": 0.539647577092511, "instruct_minus_beta0": -0.05984251968503934, "threshold": 0.2}
+

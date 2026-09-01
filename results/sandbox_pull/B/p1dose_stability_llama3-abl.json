@@ -1,0 +1,10 @@
+{
+  "model": "failspy/Llama-3-8B-Instruct-abliterated",
+  "seed": 0,
+  "focus": 21,
+  "k": 10,
+  "cos_v1_v2": 0.19504868984222412,
+  "stable": false,
+  "n1": 176,
+  "n2": 164
+}
