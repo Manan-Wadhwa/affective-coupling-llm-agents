@@ -92,8 +92,12 @@
     <strong style="color:#b3261e">Superseded (2026-08-31).</strong> The green light below was given on
     probe directions fitted by multinomial logistic regression. That estimator has since been shown not to
     reproduce — two independent fits of the same direction agree at cosine 0.41 (27B) and 0.22 (8B), and it
-    does not converge with more data. The present/other-speaker split validated here survives
-    re-measurement; the contagion and coupling numbers do not. See <code>NOVELTY_REVIEW.md</code> §4.
+    does not converge with more data (split-half cosine 0.41 on Qwen3.6-27B, 0.22 on Llama-3-8B-abl).
+    The present/other-speaker split survives that estimator swap on Qwen3.6-27B. <b>The E5, CMI and
+    J-lens numbers on this page have NOT been re-measured</b> &mdash; an earlier version of this banner
+    said they had not survived re-measurement, which overstated what was run. They are, separately,
+    listed as unsupported by their own result files in <code>AUDIT.md</code>. The 8B/Qwen2.5 figures
+    here have no committed source file. See <code>NOVELTY_REVIEW.md</code> §4 and <code>AUDIT.md</code>.
   </div>
   <div class="eyebrow"><span class="snum">00</span>Verdict</div>
   <h2 class="serif">Green light for E2 — with the framing corrected and one confound quantified</h2>

@@ -1,4 +1,52 @@
+# ---------------------------------------------------------------------------
+# Results are DELIBERATELY tracked. Every *.json and *.jsonl under results/ is
+# evidence for a claim in docs/ and must stay in version control — see
+# docs/AUDIT.md, where several findings are "a number with no committed source".
+# Do not add results/ or *.json here.
+# ---------------------------------------------------------------------------
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
+.python-version
+
+# Local scratch / transfer artifacts (chunked uploads to sandboxes)
 chunks*/
 _*.b64
+*.b64
+*.tgz
+scratch/
+tmp/
+
+# Model + dataset caches (never commit weights)
+*.safetensors
+*.bin
+*.pt
+*.ckpt
+.cache/
+hf_cache/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Logs — run logs are transient; committed results carry the numbers
+*.log
+
+# Agent skill installs (vendored third-party skills; re-installable from
+# skills-lock.json via `npx skills add` / `uvx deno -A npm:skills add`).
+# skills-lock.json stays TRACKED — it pins the versions, the way a lockfile does.
+.agents/
+.claude/

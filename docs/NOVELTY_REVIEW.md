@@ -98,8 +98,8 @@ Logistic regression **does not improve with n** (8B: 0.126 → 0.219 across an 8
 increase). Difference of means converges cleanly on both models. Ratio ≈ 2.2–2.3× at
 every sample size.
 
-At the sample sizes the published runs actually used (`decoder_n` 257–395), the
-steering vector in one run overlaps the next run's at roughly **0.2–0.35**.
+At the sample sizes the published runs actually used (`decoder_n` 257–395 *dialogues*, split-half n ≈ 130–200), measured
+agreement is **0.13–0.30**.
 
 **Swapping the estimator moves the stability gate from failing to passing:**
 27B 0.427 → **0.967**; 8B 0.195 → **0.965**.
@@ -131,30 +131,29 @@ logistic objective. But **within-present cross-emotion** similarity nearly doubl
 (0.189 → 0.328), i.e. the estimator *was* inflating how distinct the six emotions look
 from one another.
 
-### 4.3 The contagion table does not reproduce
+### 4.3 The contagion signs reproduce — an earlier version of this section was wrong
 
-Contagion dose-response, same battery. Slope magnitudes are **not** comparable across
-estimators (readout scales differ; steering doses are identical, both unit-normalised)
-— signs and present-vs-other ratios are.
+A previous draft stated the contagion table does not reproduce and that desperate flips
+sign. That conclusion was an artifact of the dose grid: `dual_estimator_battery.py` swept
+α ∈ {0, 0.5, 1, 2}, while `coupling_e2_ci.py` caps α at 1.0 and says so in its own
+docstring — *"drop the model-breaking alpha=2 regime"*. The α=2 cell collapses (happy:
+2.37 → 3.67 → 3.55 → 0.44). On the matched grid **all six emotions are positive under both
+estimators** (desperate +0.62 logreg / +95 dom). Table 2's signs reproduce.
 
-| emotion | logreg present | dom present | |
-|---|---|---|---|
-| desperate | −0.058 | +34.6 | **sign flip** |
-| afraid | +1.30 | +101.4 | same |
-| happy | −1.15 | −23.4 | same |
-| calm | −0.44 | −52.3 | same |
-| sad | +0.85 | +29.5 | same |
-| angry | +1.46 | +31.0 | same |
+What is *not* established is that any particular slope value is reproducible, since the
+fitted direction itself moves between runs (§4.1).
 
-`paper.html` Table 2 reports **desperate +1.27, significant**. A fresh fit with the
-*same estimator* gives ≈ 0. Same code, same model, different sample — the instability
-in action. `paper.html` also reports happy +1.07 significant; both estimators here give
-negative.
+**What genuinely does not survive is §5's dissociation.** The paper claims B's *present*
+shift exceeds its *other* shift — "B's own state moves". In `e2ci_qwen36-27b.json` that
+holds for **1 of 6** emotions (angry); for the other five, B's model of A moves more. No
+test of the difference is run anywhere. Under difference-of-means on the matched grid it
+holds for **5 of 6**. The load-bearing claim is contradicted under the estimator used and
+supported under the stable one — the sharpest available demonstration that estimator
+choice changes conclusions.
 
-**What survives:** under the stable estimator, desperate / afraid / sad / angry all
-show positive contagion with present-slope > other-slope — the dissociation the claim
-rests on. Happy and calm go negative on both estimators. Four-of-six with a coherent
-valence pattern, rather than five-of-six with mixed signs.
+**Provenance:** the post-fix stability figures (27B 0.967, 8B 0.965) were observed in run
+logs whose result files were lost when the sandbox leases expired. Not verifiable from
+this repo; re-measure before use.
 
 ### 4.4 The behavioral instrument has no headroom on saturated scenarios
 

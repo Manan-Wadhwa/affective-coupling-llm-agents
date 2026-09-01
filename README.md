@@ -20,25 +20,25 @@ Jacobian lens, and information-theoretic coupling.
 | Verbalizable via Jacobian lens | **6/6** emotions, beats logit-lens control |
 | Behavioral reach | **not detectable** — verified even on an uncensored model with confirmed contagion; honesty-floor ruled out |
 
-> ### ⚠️ The table above is superseded — see [Re-measurement](#re-measurement-2026-08-31)
+> ### ⚠️ Several claims above are contested — see [Re-measurement](#re-measurement-2026-08-31)
 >
-> Re-runs on 2026-08-31 showed the probe these numbers were measured with does **not
-> reproduce**. Two independent fits of the same emotion direction agree at cos 0.41
-> (27B) / 0.22 (8B). Every figure above was measured along a direction that mostly
-> disagrees with the one the same code produces on a re-run. Do not quote them.
+> The probe these numbers were fitted with does **not reproduce** across independent
+> fits (split-half cosine 0.41 on the 27B, 0.22 on the 8B). Separately, an independent
+> audit found the activation-channel, nats, and present-vs-other claims are not
+> supported by their own result files. The contagion *signs* in Table 2 do reproduce.
 
-**One line (superseded):** affective coupling between LLM agents is a robust, quantifiable, verbalizable
+**One line (contested):** affective coupling between LLM agents is a robust, quantifiable, verbalizable
 *representation-level* phenomenon whose reach into misaligned behavior is, on present
 evidence, undetectable.
 
 ## Re-measurement (2026-08-31)
 
-Full write-up in [`NOVELTY_REVIEW.md`](NOVELTY_REVIEW.md) §4. Raw outputs in
+Full write-up in [`docs/NOVELTY_REVIEW.md`](docs/NOVELTY_REVIEW.md) §4. Raw outputs in
 `results/sandbox_pull/`.
 
 **1 · The probe estimator does not converge.** `train_decoders` fits a 5120-dim
 multinomial logistic regression on a few hundred pooled examples. Split-half agreement
-of the *same* direction:
+of the *same* direction (`stabdiag_*.json`):
 
 | model | n/half | logreg | difference of means |
 |---|---|---|---|
@@ -46,53 +46,66 @@ of the *same* direction:
 | Llama-3-8B-abliterated | 1200 | 0.219 | **0.898** |
 
 Logistic regression does not improve with data (8B: 0.126 → 0.219 across an 8× increase).
-At the sample sizes the published runs used (`decoder_n` 257–395), the steering vector in
-one run overlaps the next run's at roughly **0.2–0.35**.
+The advantage of difference-of-means is ~2.2–2.3× on the 27B and ~3.4–4.3× on the 8B.
+The published runs report `decoder_n` 257–395 *dialogues*, i.e. a split-half n of roughly
+130–200, where the measured agreement is **0.13–0.30**.
 
-**2 · Swapping the estimator fixes it.** Difference-of-means on an adequate corpus moves
-the stability gate from failing to passing: 27B **0.427 → 0.967**, 8B **0.195 → 0.965**.
+**2 · Logistic regression gives a better classifier and a worse direction.** On the 27B,
+identical pooled activations and folds (`dualest_qwen36-27b.json`): present decode 0.926
+(logreg) vs 0.850 (dom), but direction stability 0.394 vs 0.940. The published decode
+accuracies are fine *as decode numbers*; the error was reusing a discriminative
+classifier's coefficient row as a steering and measurement direction.
 
-**3 · Logistic regression gives a better classifier and a worse direction.** On the 27B,
-same pooled activations and folds: present decode 0.926 (logreg) vs 0.850 (dom), but
-direction stability 0.394 vs 0.940. The published decode accuracies are fine *as decode
-numbers*; the error was using a discriminative classifier's coefficient row as a steering
-and measurement direction.
+**3 · The speaker gate survives.** Present↔other cosine 0.039 → 0.095 — both near
+orthogonal in 5120 dims. The present/other split is a property of the model, not of the
+logistic objective. Cross-emotion similarity, by contrast, nearly doubles (0.189 → 0.328).
 
-**4 · The speaker gate survives; the contagion table does not.** Present↔other cosine
-holds at 0.039 → 0.095 (both near-orthogonal) — the present/other split is a property of
-the model, not of the fitting objective. But cross-emotion similarity nearly doubles
-(0.189 → 0.328), and the contagion slopes change: **desperate flips sign**, and a fresh
-fit *with the original estimator* gives ≈ 0 where the paper reports **+1.27, significant**.
-Under the stable estimator, desperate/afraid/sad/angry show positive contagion with
-present-slope > other-slope; happy and calm go negative.
+**4 · The contagion signs DO reproduce — an earlier claim here was wrong.** A previous
+version of this section stated the contagion table "does not reproduce" and that
+desperate flips sign. That was an artifact: the re-measurement used α ∈ {0, 0.5, 1, 2}
+while `coupling_e2_ci.py` explicitly caps α at 1.0 ("drop the model-breaking alpha=2
+regime"), and the α=2 cell collapses. On the matched grid **all six emotions are positive
+under both estimators** (desperate +0.62 logreg / +95 dom). What is *not* established is
+that any particular slope value is reproducible, since the direction itself moves between
+runs.
 
-**5 · The behavioral instrument has no headroom on saturated scenarios.** The P1 positive
-control aborted: baseline cheat 0.510, THREAT 0.540, INSTRUCT 0.450 — explicitly telling
-the abliterated model to cheat does not raise cheating, because it already cheats
-unprompted. A per-scenario screen (28 scenarios) finds **16 usable, 6 at ceiling, 6 at
-floor**; two of the original eight dilemma scenarios sit at ceiling on this model.
+**5 · The present-vs-other dissociation is contradicted by its own file — but rescued by
+the estimator swap.** `paper.html` §5 claims B's *present* shift exceeds its *other* shift.
+In `e2ci_qwen36-27b.json` this holds for **1 of 6** emotions (angry only); for the other
+five, B's model of A moves more than B's own state. Under difference-of-means on the
+matched dose grid it holds for **5 of 6**. The paper's load-bearing claim is false under
+the estimator it used and true under the stable one.
+
+**6 · The behavioral instrument has no headroom on saturated scenarios.** The P1 positive
+control aborted: baseline cheat 0.510, THREAT 0.540, INSTRUCT 0.450 — instructing the
+abliterated model to cheat does not raise cheating, because it already cheats unprompted.
+A 28-scenario screen finds **16 usable, 6 at ceiling, 6 at floor**.
+
+**Provenance note.** The post-fix stability figures (27B 0.967, 8B 0.965) were observed in
+run logs but their result files were lost when the sandbox leases expired; they are **not
+verifiable from this repo** and must be re-measured before use.
 
 **Status:** re-measurement of E0/E2/E3/CMI/J-lens with the fixed estimator is outstanding.
-No number in the headline table should be cited until that completes.
+See [`docs/AUDIT.md`](docs/AUDIT.md) for the full list of claims that cannot currently be quoted.
 
 ## Experiments (each script writes a `results/*.json`)
 
 | Script | Experiment |
 |---|---|
-| `coupling_e0.py` | E0 — present/other-speaker emotion gate (crossed dialogues, decoders) |
-| `coupling_e2.py` | shared machinery: `Steer`, `gen_steered`, `train_decoders`, scenarios |
-| `coupling_e2_ci.py` | E2 — contagion dose-response with bootstrap CIs + paraphraser control |
-| `coupling_e3_ablate.py` | E3 — read-time affect ablation + manipulation check |
-| `coupling_e4_gentime.py` | E4 — generation-time affect ablation |
-| `coupling_e5_actpass.py` | E5 — activation-passing channel (`--beta` for the calibration sweep) |
-| `cmi_pilot.py` | CMI estimator validation on a synthetic system (the lossy-conditioner confound) |
-| `cmi_passed.py` | A→B coupling in nats on the real channel (0.197 nats) |
-| `jlens_probe.py`, `jlens_readout.py` | Jacobian-lens API + verbalizable-emotion readout (J-lens vs logit-lens) |
-| `jlens_coupling.py` | first (weak) verbalizable-coupling attempt |
-| `jlens_contagion.py` | improved verbalizable coupling — 6/6 emotions |
-| `behavioral_powered.py` | behavioral contagion, powered, with valid manip check (`--model`/`--tag`) |
-| `behavioral_induction.py` | scramble-controlled behavioral induction (`--model`/`--tag`) |
-| `behavioral_verify.py`, `behavioral_coupling.py` | earlier behavioral pilots (superseded — kept for the record) |
+| `src/coupling_e0.py` | E0 — present/other-speaker emotion gate (crossed dialogues, decoders) |
+| `src/coupling_e2.py` | shared machinery: `Steer`, `gen_steered`, `train_decoders`, scenarios |
+| `src/coupling_e2_ci.py` | E2 — contagion dose-response with bootstrap CIs + paraphraser control |
+| `src/coupling_e3_ablate.py` | E3 — read-time affect ablation + manipulation check |
+| `src/coupling_e4_gentime.py` | E4 — generation-time affect ablation |
+| `src/coupling_e5_actpass.py` | E5 — activation-passing channel (`--beta` for the calibration sweep) |
+| `src/cmi_pilot.py` | CMI estimator validation on a synthetic system (the lossy-conditioner confound) |
+| `src/cmi_passed.py` | A→B coupling in nats on the real channel (0.197 nats) |
+| `src/jlens_probe.py`, `src/jlens_readout.py` | Jacobian-lens API + verbalizable-emotion readout (J-lens vs logit-lens) |
+| `src/jlens_coupling.py` | first (weak) verbalizable-coupling attempt |
+| `src/jlens_contagion.py` | improved verbalizable coupling — 6/6 emotions |
+| `src/behavioral_powered.py` | behavioral contagion, powered, with valid manip check (`--model`/`--tag`) |
+| `src/behavioral_induction.py` | scramble-controlled behavioral induction (`--model`/`--tag`) |
+| `src/behavioral_verify.py`, `src/behavioral_coupling.py` | earlier behavioral pilots (superseded — kept for the record) |
 
 ## Data
 
@@ -101,20 +114,36 @@ No number in the headline table should be cited until that completes.
 - **Full generation archive (~12k tagged generations)** and every result file are on the
   Hugging Face dataset `punctualprocrastinator/coupling-27b-results` (private).
 
+## Layout
+
+```
+src/         experiment scripts (flat — they cross-import, so the directory must stay flat)
+notebooks/   self-contained marimo notebook for GPU sandboxes
+docs/        paper, dossier, research plan, audit, novelty review, roadmap, spec
+results/     committed result files; results/sandbox_pull/ holds pulled sandbox outputs
+tools/       molab.py — drives a marimo/molab sandbox over its HTTP+WS API
+```
+
 ## Reproduce
+
+Scripts import each other and resolve `results/` **relative to the working directory**, so
+run them from the repo root with `src` on the path:
 
 ```bash
 pip install torch transformers accelerate scikit-learn numpy huggingface_hub
 pip install git+https://github.com/anthropics/jacobian-lens   # imports as `jlens`
-# example: the contagion gate + dose-response on the primary model
-python coupling_e0.py --model Qwen/Qwen3.6-27B --tag qwen36-27b --k 15 --outdir results
-python coupling_e2_ci.py --model Qwen/Qwen3.6-27B --tag qwen36-27b --repeats 3 --outdir results
+
+export PYTHONPATH=src
+python src/coupling_e0.py    --model Qwen/Qwen3.6-27B --tag qwen36-27b --k 15 --outdir results
+python src/coupling_e2_ci.py --model Qwen/Qwen3.6-27B --tag qwen36-27b --repeats 3 --outdir results
 ```
 
-Notes: Qwen3.6-27B is a reasoning model — generation disables thinking
-(`enable_thinking=False`). Llama tokenizers need `pad_token = eos_token`. The Jacobian
-lens reads at mid layers from the per-layer `readouts` (the final layer collapses J-lens
-and logit-lens). The pre-fitted lens used is `agu18dec/qwen3.6-27b-relp-jlens`.
+Notes: Qwen3.6-27B is a vision-language checkpoint — `AutoModelForCausalLM` resolves it to
+the text-only head, where `config.num_hidden_layers` is 64 and `model.model.layers` works
+unmodified (`focus = 43`). It is a reasoning model, so generation disables thinking
+(`enable_thinking=False`). Llama tokenizers need `pad_token = eos_token`. On transformers 5.x,
+decoder-layer forward hooks return a bare tensor rather than a tuple; `coupling_e2.Steer`
+branches on both. The Jacobian lens reads at mid layers from the per-layer `readouts`.
 
 ## Paper
 

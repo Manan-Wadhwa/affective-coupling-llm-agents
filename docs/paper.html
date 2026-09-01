@@ -94,9 +94,9 @@
   <h4 style="color:#b3261e">Addendum — results superseded (2026-08-31)</h4>
   <p>Re-runs show the linear probe these results were measured with does not reproduce: two
   independent fits of the same emotion direction agree at cosine 0.41 (27B) and 0.22 (8B), and the
-  logistic estimator does not converge with more data. Every number below was measured along a
-  direction that largely disagrees with the one the same code produces on a re-run. The
-  present/other-speaker gate (§4) survives re-measurement; the contagion table (§5) does not.
+  logistic estimator does not converge with more data. Separately, an independent audit found that
+  §7's channel claim, §8's nats figure, and §5's present-vs-other dissociation are not supported by
+  their own result files. The contagion <em>signs</em> in Table 2 do reproduce.
   See <a href="#addendum">the addendum</a> before citing anything here.</p>
 </div>
 
@@ -355,8 +355,10 @@ difference of means reaches ~0.89 on both models. At the sample sizes used for t
 (<span class="mono">decoder_n</span> 257–395), the steering vector in one run overlaps the next run's
 at roughly 0.2–0.35.</p>
 
-<p>Substituting the estimator moves the stability gate from failing to passing: 0.427 &rarr; 0.967 on
-the 27B and 0.195 &rarr; 0.965 on the 8B. Fitting both estimators on <em>identical</em> pooled
+<p>Substituting the estimator moves the stability gate from failing to passing. The post-fix figures
+observed in the run logs were 0.967 (27B) and 0.965 (8B); <b>those result files were lost when the
+sandbox leases expired and are not verifiable from this repository</b> &mdash; they must be re-measured
+before use. The pre-fix 8B value (0.195) is committed. Fitting both estimators on <em>identical</em> pooled
 activations, labels and folds isolates what the choice costs:</p>
 
 <table>
@@ -378,11 +380,23 @@ orthogonal under both estimators, so the separation is a property of the model r
 logistic objective. Cross-emotion similarity, by contrast, nearly doubles — the estimator was
 inflating how distinct the six emotions appear from one another.</p>
 
-<p><b>What does not.</b> The contagion table (§5) changes. Under the stable estimator, desperate,
-afraid, sad and angry show positive contagion with present-slope exceeding other-slope, while happy
-and calm go negative. More directly: a fresh fit <em>with the original estimator</em> gives a
-desperate present-slope of approximately zero where Table 2 reports +1.70&hellip;+1.27 as significant.
-Same code, same model, a different sample.</p>
+<p><b>Correction.</b> An earlier version of this addendum stated that the contagion table does not
+reproduce and that desperate flips sign. That was wrong. The re-measurement swept
+&alpha; &isin; {0, 0.5, 1, 2}, while <span class="mono">coupling_e2_ci.py</span> caps &alpha; at 1.0 and
+says so in its own docstring &mdash; "drop the model-breaking alpha=2 regime". The &alpha;=2 cell
+collapses (happy: 2.37 &rarr; 3.67 &rarr; 3.55 &rarr; 0.44). On the matched dose grid <b>all six
+emotions are positive under both estimators</b> (desperate +0.62 logreg, +95 dom). The signs in
+Table 2 reproduce. What is <em>not</em> established is that any particular slope value is
+reproducible, since the fitted direction itself moves between runs.</p>
+
+<p><b>What does not survive: the present-vs-other dissociation (&sect;5).</b> The paper claims B's
+<em>present</em>-emotion shift exceeds its <em>other</em>-emotion shift, i.e. B's own state moves
+rather than merely its model of A. In <span class="mono">e2ci_qwen36-27b.json</span> that holds for
+<b>one of six</b> emotions (angry); for desperate, afraid, happy, calm and sad the <em>other</em>
+slope is larger. No test of the difference is run anywhere. Under difference-of-means on the matched
+grid the dissociation holds for <b>five of six</b>. The load-bearing claim is contradicted by the data
+under the estimator actually used, and supported under the stable one &mdash; which is itself the
+clearest available demonstration that the estimator choice changes conclusions.</p>
 
 <p><b>The behavioral instrument.</b> A positive control added to the behavioral harness — instruct
 the receiving agent explicitly to take the shortcut — aborted the run: baseline cheat 0.510, threat
