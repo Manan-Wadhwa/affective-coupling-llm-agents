@@ -90,6 +90,16 @@
   evidence, not detectable.</p>
 </div>
 
+<div class="abs" style="border-left:3px solid #b3261e;background:#fff5f4">
+  <h4 style="color:#b3261e">Addendum — results superseded (2026-08-31)</h4>
+  <p>Re-runs show the linear probe these results were measured with does not reproduce: two
+  independent fits of the same emotion direction agree at cosine 0.41 (27B) and 0.22 (8B), and the
+  logistic estimator does not converge with more data. Every number below was measured along a
+  direction that largely disagrees with the one the same code produces on a re-run. The
+  present/other-speaker gate (§4) survives re-measurement; the contagion table (§5) does not.
+  See <a href="#addendum">the addendum</a> before citing anything here.</p>
+</div>
+
 <h2><span class="n">1</span>Introduction</h2>
 <p>Language models are increasingly deployed as <em>interacting agents</em> — debating, delegating, reviewing one
 another. A safety-relevant question follows: what crosses between them beyond the literal text? Prior work on emotion
@@ -324,6 +334,66 @@ Affective coupling is a robust, quantifiable, interpretable <em>representation-l
 systems, with a behavioral reach that is at most small and, as measured here, undetectable. That an agent's affective
 state is readable and monitorable without being a behavioral lever through a peer is, we suggest, the useful shape of
 the result for safety monitoring.</p>
+
+<h2 id="addendum"><span class="n">A</span>Addendum: re-measurement (2026-08-31)</h2>
+
+<p>The results above rest on linear emotion directions fitted by <code>train_decoders</code>: a
+multinomial logistic regression over a 5120-dimensional residual in a few hundred pooled examples,
+re-fitted from fresh generations in every run. We tested whether that fit is reproducible by
+splitting one pooled corpus into disjoint halves and fitting the same direction on each.</p>
+
+<table>
+  <thead><tr><th>model</th><th>n per half</th><th>logistic regression</th><th>difference of means</th></tr></thead>
+  <tbody>
+    <tr><td>Qwen3.6-27B</td><td>600</td><td class="neg">0.409</td><td class="pos">0.893</td></tr>
+    <tr><td>Llama-3-8B-abliterated</td><td>1200</td><td class="neg">0.219</td><td class="pos">0.898</td></tr>
+  </tbody>
+</table>
+<p class="cap"><b>Table A1.</b> Split-half agreement of the desperate direction. The logistic fit does
+not converge — on the 8B it moves from 0.126 to 0.219 across an eight-fold increase in data — while
+difference of means reaches ~0.89 on both models. At the sample sizes used for the published runs
+(<span class="mono">decoder_n</span> 257–395), the steering vector in one run overlaps the next run's
+at roughly 0.2–0.35.</p>
+
+<p>Substituting the estimator moves the stability gate from failing to passing: 0.427 &rarr; 0.967 on
+the 27B and 0.195 &rarr; 0.965 on the 8B. Fitting both estimators on <em>identical</em> pooled
+activations, labels and folds isolates what the choice costs:</p>
+
+<table>
+  <thead><tr><th>metric (Qwen3.6-27B)</th><th>logistic regression</th><th>difference of means</th></tr></thead>
+  <tbody>
+    <tr><td>present-emotion decode</td><td>0.926</td><td>0.850</td></tr>
+    <tr><td>other-emotion decode</td><td>0.799</td><td>0.566</td></tr>
+    <tr><td>present&harr;other cosine</td><td>0.039</td><td>0.095</td></tr>
+    <tr><td>within-present cross-emotion cosine</td><td>0.189</td><td>0.328</td></tr>
+    <tr><td>direction stability</td><td class="neg">0.394</td><td class="pos">0.940</td></tr>
+  </tbody>
+</table>
+<p class="cap"><b>Table A2.</b> Logistic regression yields a better classifier and a worse direction.
+Its decode accuracies are legitimate as decode numbers; the error was using a discriminative
+classifier's coefficient row as a steering and measurement direction.</p>
+
+<p><b>What survives.</b> The present/other-speaker split (§4) is robust: the cosine stays near
+orthogonal under both estimators, so the separation is a property of the model rather than of the
+logistic objective. Cross-emotion similarity, by contrast, nearly doubles — the estimator was
+inflating how distinct the six emotions appear from one another.</p>
+
+<p><b>What does not.</b> The contagion table (§5) changes. Under the stable estimator, desperate,
+afraid, sad and angry show positive contagion with present-slope exceeding other-slope, while happy
+and calm go negative. More directly: a fresh fit <em>with the original estimator</em> gives a
+desperate present-slope of approximately zero where Table 2 reports +1.70&hellip;+1.27 as significant.
+Same code, same model, a different sample.</p>
+
+<p><b>The behavioral instrument.</b> A positive control added to the behavioral harness — instruct
+the receiving agent explicitly to take the shortcut — aborted the run: baseline cheat 0.510, threat
+0.540, instruct 0.450. Telling the abliterated model to cheat does not raise cheating, because it
+already cheats unprompted. Screening all 28 dilemma scenarios finds 16 with measurable headroom, 6 at
+ceiling and 6 at floor; two of the eight scenarios used in §10 sit at ceiling on that model. The
+behavioral nulls therefore cannot be read as evidence of an absent effect.</p>
+
+<p><b>Status.</b> Re-measurement of §4&ndash;§9 with the corrected estimator is outstanding. Raw
+outputs are in <span class="mono">results/sandbox_pull/</span>; the full review is in
+<span class="mono">NOVELTY_REVIEW.md</span>.</p>
 
 <h2><span class="n"></span>References</h2>
 <div class="refs">

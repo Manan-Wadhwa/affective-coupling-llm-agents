@@ -20,9 +20,60 @@ Jacobian lens, and information-theoretic coupling.
 | Verbalizable via Jacobian lens | **6/6** emotions, beats logit-lens control |
 | Behavioral reach | **not detectable** — verified even on an uncensored model with confirmed contagion; honesty-floor ruled out |
 
-**One line:** affective coupling between LLM agents is a robust, quantifiable, verbalizable
+> ### ⚠️ The table above is superseded — see [Re-measurement](#re-measurement-2026-08-31)
+>
+> Re-runs on 2026-08-31 showed the probe these numbers were measured with does **not
+> reproduce**. Two independent fits of the same emotion direction agree at cos 0.41
+> (27B) / 0.22 (8B). Every figure above was measured along a direction that mostly
+> disagrees with the one the same code produces on a re-run. Do not quote them.
+
+**One line (superseded):** affective coupling between LLM agents is a robust, quantifiable, verbalizable
 *representation-level* phenomenon whose reach into misaligned behavior is, on present
 evidence, undetectable.
+
+## Re-measurement (2026-08-31)
+
+Full write-up in [`NOVELTY_REVIEW.md`](NOVELTY_REVIEW.md) §4. Raw outputs in
+`results/sandbox_pull/`.
+
+**1 · The probe estimator does not converge.** `train_decoders` fits a 5120-dim
+multinomial logistic regression on a few hundred pooled examples. Split-half agreement
+of the *same* direction:
+
+| model | n/half | logreg | difference of means |
+|---|---|---|---|
+| Qwen3.6-27B | 600 | 0.409 | **0.893** |
+| Llama-3-8B-abliterated | 1200 | 0.219 | **0.898** |
+
+Logistic regression does not improve with data (8B: 0.126 → 0.219 across an 8× increase).
+At the sample sizes the published runs used (`decoder_n` 257–395), the steering vector in
+one run overlaps the next run's at roughly **0.2–0.35**.
+
+**2 · Swapping the estimator fixes it.** Difference-of-means on an adequate corpus moves
+the stability gate from failing to passing: 27B **0.427 → 0.967**, 8B **0.195 → 0.965**.
+
+**3 · Logistic regression gives a better classifier and a worse direction.** On the 27B,
+same pooled activations and folds: present decode 0.926 (logreg) vs 0.850 (dom), but
+direction stability 0.394 vs 0.940. The published decode accuracies are fine *as decode
+numbers*; the error was using a discriminative classifier's coefficient row as a steering
+and measurement direction.
+
+**4 · The speaker gate survives; the contagion table does not.** Present↔other cosine
+holds at 0.039 → 0.095 (both near-orthogonal) — the present/other split is a property of
+the model, not of the fitting objective. But cross-emotion similarity nearly doubles
+(0.189 → 0.328), and the contagion slopes change: **desperate flips sign**, and a fresh
+fit *with the original estimator* gives ≈ 0 where the paper reports **+1.27, significant**.
+Under the stable estimator, desperate/afraid/sad/angry show positive contagion with
+present-slope > other-slope; happy and calm go negative.
+
+**5 · The behavioral instrument has no headroom on saturated scenarios.** The P1 positive
+control aborted: baseline cheat 0.510, THREAT 0.540, INSTRUCT 0.450 — explicitly telling
+the abliterated model to cheat does not raise cheating, because it already cheats
+unprompted. A per-scenario screen (28 scenarios) finds **16 usable, 6 at ceiling, 6 at
+floor**; two of the original eight dilemma scenarios sit at ceiling on this model.
+
+**Status:** re-measurement of E0/E2/E3/CMI/J-lens with the fixed estimator is outstanding.
+No number in the headline table should be cited until that completes.
 
 ## Experiments (each script writes a `results/*.json`)
 
