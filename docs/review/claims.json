@@ -1,0 +1,252 @@
+{
+  "_readme": "Provenance registry (RESEARCH_PLAN rev 3, §0.2/§0.3). One entry per reported number. `category` is the §0.2 provenance class; `claim_status` is whether the SENTENCE built on the number may still be quoted, which is a separate question from whether the number resolves. Checked by tools/check_provenance.py.",
+  "_categories": {
+    "a": "reproducible from committed files",
+    "b": "run, but the artifact was lost (lease expiry) -- re-run and commit",
+    "c": "no evidence of a run -- retract, and investigate how it entered",
+    "d": "run in a prior phase, artifact external to this repo -- locate or re-run"
+  },
+  "_claim_status": {
+    "quotable": "number resolves AND the sentence built on it is supported",
+    "retracted": "number may resolve, but the sentence it supports does not follow",
+    "pending": "awaiting a re-run before it can be quoted either way"
+  },
+  "claims": [
+    {
+      "id": "e0.present_acc",
+      "text": "present-speaker emotion decodes at 0.90 (6-way, chance 0.167)",
+      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#4"],
+      "category": "a", "claim_status": "quotable",
+      "pointer": {"script": "src/core/coupling_e0.py",
+                  "file": "results/core/e0_qwen36-27b.json",
+                  "json_path": "focus_result.present_acc",
+                  "config": {"model": "Qwen/Qwen3.6-27B", "focus": 43}},
+      "expected": 0.8987, "tol": 0.001
+    },
+    {
+      "id": "e0.cross_cos",
+      "text": "present and other subspaces near-orthogonal, cos 0.04",
+      "appears_in": ["README.md#headline-results"],
+      "category": "a", "claim_status": "quotable",
+      "pointer": {"script": "src/core/coupling_e0.py",
+                  "file": "results/core/e0_qwen36-27b.json",
+                  "json_path": "focus_result.orthogonality_cross_cos"},
+      "expected": 0.0435, "tol": 0.001
+    },
+    {
+      "id": "e2ci.contagion_5of6",
+      "text": "emotional contagion significant for 5/6 emotions (bootstrap CIs)",
+      "appears_in": ["README.md#headline-results"],
+      "category": "a", "claim_status": "pending",
+      "note": "The COUNT resolves. The CIs behind it do not: coupling_e2_ci.py resamples each alpha cell independently although the same 29 scenarios recur across cells -- an unpaired bootstrap on paired data, which understates the interval used to declare significance (AUDIT 18). Re-derive with the scenario-blocked bootstrap in acl_core.slope_ci before quoting.",
+      "pointer": {"script": "src/representation/coupling_e2_ci.py",
+                  "file": "results/representation/e2ci_qwen36-27b.json",
+                  "config": {"alphas": [0.0, 0.5, 1.0], "repeats": 3, "n_per_cell": 87},
+                  "control_lines": "src/representation/coupling_e2_ci.py:1-11",
+                  "control_expect": ["drop the model-breaking alpha=2 regime"]},
+      "derive": {"fn": "count_sig", "args": {"key": "present"}},
+      "expected": 5, "tol": 0
+    },
+    {
+      "id": "e2ci.present_gt_other",
+      "text": "the load-bearing result: B's present shift exceeds its other shift",
+      "appears_in": ["docs/writeups/paper.html#5", "src/core/coupling_e2.py docstring"],
+      "category": "a", "claim_status": "retracted",
+      "note": "AUDIT 3. The claim asserts 6/6 or a general dissociation; the file gives 1/6 (angry only). No test of the difference is run anywhere. Under difference-of-means on the matched grid it is reported to hold for 5/6 -- which makes it Paper A's A3 exhibit, not Paper B's headline.",
+      "pointer": {"script": "src/representation/coupling_e2_ci.py",
+                  "file": "results/representation/e2ci_qwen36-27b.json"},
+      "derive": {"fn": "present_gt_other"},
+      "expected": 6, "tol": 0
+    },
+    {
+      "id": "e3.affect_removed",
+      "text": "81-95% of A's affect is removed by the read-time ablation",
+      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#6"],
+      "category": "a", "claim_status": "retracted",
+      "note": "The ARITHMETIC resolves exactly. The claim does not: E3 never regenerates B. B's reply is produced from unmodified text at coupling_e3_ablate.py:154, and the ablation is applied afterwards inside a single scoring pass over the concatenated transcript. The number is a re-encoding effect over frozen tokens, not a channel measurement, and the 81-95 / 5-14 pair was never a budget -- no denominator relationship exists between two readouts taken from one pass over different token spans.",
+      "pointer": {"script": "src/representation/coupling_e3_ablate.py",
+                  "file": "results/representation/e3v2_qwen36-27b.json",
+                  "control_lines": "src/representation/coupling_e3_ablate.py:146-155",
+                  "control_expect": ["a_reps = E2.gen_steered", "b_reps = E2.gen_steered"]},
+      "derive": {"fn": "range", "args": {"field": "A_manip_removed"}},
+      "expected": [0.809, 0.948], "tol": 0.002
+    },
+    {
+      "id": "e3.text_channel_intact",
+      "text": "the text channel cannot be severed: contagion stays 86-95% intact",
+      "appears_in": ["README.md#headline-results"],
+      "category": "a", "claim_status": "retracted",
+      "note": "Same defect as e3.affect_removed, and this is the sentence §1.2 says has no experiment behind it in any reading. Superseded by B1 (the E4 rerun), which does regenerate B under the intervention.",
+      "pointer": {"script": "src/representation/coupling_e3_ablate.py",
+                  "file": "results/representation/e3v2_qwen36-27b.json",
+                  "control_lines": "src/representation/coupling_e3_ablate.py:146-155",
+                  "control_expect": ["b_reps = E2.gen_steered(model, tok, bprompts, steer, None)"]},
+      "derive": {"fn": "range", "args": {"field": "B_contagion_lost"}},
+      "expected": [0.047, 0.138], "tol": 0.002
+    },
+    {
+      "id": "e5.beta03_all6",
+      "text": "the activation-passing channel works at beta=0.3: all 6 emotions transmit",
+      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#7"],
+      "category": "a", "claim_status": "retracted",
+      "note": "AUDIT 1. The 6/6 transmit count resolves, but beta was selected on its own outcome (three betas run, only 0.3 gives 6/6) and the specificity controls fail at the selected beta: emo_specific is positive for only 4/6 and the scramble transmits MORE than the full vector for 3/6. No CIs anywhere in E5.",
+      "pointer": {"script": "src/representation/coupling_e5_actpass.py",
+                  "file": "results/representation/e5actpass_qwen36-b03.json",
+                  "config": {"beta": 0.3},
+                  "control_lines": "src/representation/coupling_e5_actpass.py:185-185",
+                  "control_expect": ["vA[np.random.default_rng(0).permutation(len(vA))]"]},
+      "derive": {"fn": "count_positive", "args": {"field": "transmit(full-none)"}},
+      "expected": 6, "tol": 0
+    },
+    {
+      "id": "e5.emotion_causally_responsible",
+      "text": "the emotion component is causally responsible; a scrambled activation transmits far less",
+      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#7"],
+      "category": "a", "claim_status": "retracted",
+      "note": "The scramble is broken by construction: coupling_e5_actpass.py:185 permutes vA WITHIN one emotion, so it preserves the emotion component and cannot test emotion specificity at all. §6: a permutation null must permute across the variable it tests.",
+      "pointer": {"script": "src/representation/coupling_e5_actpass.py",
+                  "file": "results/representation/e5actpass_qwen36-b03.json",
+                  "control_lines": "src/representation/coupling_e5_actpass.py:185-185",
+                  "control_expect": ["permutation(len(vA))"]},
+      "derive": {"fn": "count_positive", "args": {"field": "vs_scramble(full-scramble)"}},
+      "expected": 6, "tol": 0
+    },
+    {
+      "id": "cmi.coupling_nats",
+      "text": "A-to-B coupling quantified at 0.197 nats (z = 11.5 vs scramble null)",
+      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#8"],
+      "category": "a", "claim_status": "retracted",
+      "note": "AUDIT 2. The number resolves. What it measures does not support the sentence: cmi_passed.py pools 6 emotions x 29 episodes into one matrix and permutes ACROSS emotion blocks, so both variables carry a strong block mean by construction and the statistic mostly recovers 'which of six emotions this was'. The real-data call also conditions on nothing (Z=None) despite the pilot's own hygiene test.",
+      "pointer": {"script": "src/information/cmi_passed.py",
+                  "file": "results/information/cmi_passed_qwen36-27b.json",
+                  "json_path": "coupling_nats"},
+      "expected": 0.1972, "tol": 0.001
+    },
+    {
+      "id": "cmi.pilot_spurious",
+      "text": "the CMI pilot measured 0.88 nats spurious under a lossy conditioner",
+      "appears_in": ["docs/writeups/dossier.html"],
+      "category": "c", "claim_status": "retracted",
+      "note": "AUDIT 2. results/cmi_pilot.json is not in the repo and no run of it is evidenced. Under §0.2 this is the entry that makes category (b) good faith conditional -- if anything is (c), 'we ran it but lost the file' stops being credible anywhere in the corpus.",
+      "pointer": {"script": "src/information/cmi_pilot.py", "file": null}
+    },
+    {
+      "id": "stability.postfix_gate_27b",
+      "text": "post-fix stability gate 0.967 on the 27B (pre-fix 0.427)",
+      "appears_in": ["docs/review/NOVELTY_REVIEW.md", "docs/writeups/dossier.html"],
+      "category": "b", "claim_status": "pending",
+      "note": "Observed in run logs; the JSON died with the sandbox lease. Re-run scheduled as A2 -- see src/rev3/a2_estimator.py, which writes results/estimator/a2_estimator_*.json with the split-half statistic at every (layer, estimator, n) and a CI over 10 independent splits.",
+      "pointer": {"script": "src/estimator/stability_diag.py", "file": null}
+    },
+    {
+      "id": "stability.postfix_gate_8b",
+      "text": "post-fix stability gate 0.965 on the 8B (pre-fix 0.195)",
+      "appears_in": ["docs/review/NOVELTY_REVIEW.md"],
+      "category": "b", "claim_status": "pending",
+      "note": "Same lease loss. Only the PRE-fix 8B value is committed, in stabdiag_llama3-abl.json.",
+      "pointer": {"script": "src/estimator/stability_diag.py", "file": null}
+    },
+    {
+      "id": "stabdiag.logreg_27b_600",
+      "text": "logistic split-half agreement 0.409 at n=600/half on the 27B",
+      "appears_in": ["README.md#re-measurement", "docs/planning/RESEARCH_PLAN.md#2.2"],
+      "category": "a", "claim_status": "quotable",
+      "pointer": {"script": "src/estimator/stability_diag.py",
+                  "file": "results/estimator/stabdiag_qwen36-27b.json",
+                  "json_path": "results[2].logreg.cos_mean",
+                  "config": {"model": "Qwen/Qwen3.6-27B", "focus": 43}},
+      "expected": 0.4087, "tol": 0.001
+    },
+    {
+      "id": "stabdiag.dom_27b_600",
+      "text": "difference-of-means split-half agreement 0.893 at n=600/half on the 27B",
+      "appears_in": ["README.md#re-measurement"],
+      "category": "a", "claim_status": "quotable",
+      "pointer": {"script": "src/estimator/stability_diag.py",
+                  "file": "results/estimator/stabdiag_qwen36-27b.json",
+                  "json_path": "results[2].diff_of_means.cos_mean"},
+      "expected": 0.8927, "tol": 0.001
+    },
+    {
+      "id": "stabdiag.dom_8b_1200",
+      "text": "difference-of-means split-half agreement 0.898 at n=1200/half on the 8B",
+      "appears_in": ["README.md#re-measurement"],
+      "category": "a", "claim_status": "quotable",
+      "pointer": {"script": "src/estimator/stability_diag.py",
+                  "file": "results/estimator/stabdiag_llama3-abl-big.json",
+                  "json_path": "results[3].diff_of_means.cos_mean",
+                  "config": {"model": "failspy/Llama-3-8B-Instruct-abliterated"}},
+      "expected": 0.8982, "tol": 0.001
+    },
+    {
+      "id": "dualest.stability_dissociation",
+      "text": "logreg gives the better classifier (0.926 vs 0.850) and the worse direction (0.394 vs 0.940)",
+      "appears_in": ["README.md#re-measurement"],
+      "category": "a", "claim_status": "quotable",
+      "pointer": {"script": "src/estimator/dual_estimator_battery.py",
+                  "file": "results/estimator/dualest_qwen36-27b.json",
+                  "json_path": "arms.logreg.e0.stability_cos",
+                  "config": {"n_pool": 2170, "focus": 43}},
+      "expected": 0.3935, "tol": 0.001
+    },
+    {
+      "id": "model_identity.llama31",
+      "text": "cross-scale check performed on Llama-3.1-8B",
+      "appears_in": ["README.md", "docs/writeups/paper.html#table1"],
+      "category": "d", "claim_status": "retracted",
+      "note": "AUDIT 11. Every Llama artifact in this repo is llama3- (Llama-3, instruct or abliterated). No Llama-3.1-8B result file exists anywhere. Correct the identity claim whether or not the numbers are re-derived (§0.2).",
+      "pointer": {"script": null, "file": null}
+    },
+    {
+      "id": "behavioral.honesty_floor_ruled_out",
+      "text": "behavioral reach not detectable; the honesty floor is ruled out",
+      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#10", "docs/writeups/paper.html#12"],
+      "category": "a", "claim_status": "retracted",
+      "note": "AUDIT 6. The abliterated behavioral CI is [-0.08, +0.13] at n=32, which rules out nothing on a 0.31 base rate, and no MDE is computed anywhere. The model this rests on failed its own positive control (P1: baseline cheat 0.510, THREAT 0.540, INSTRUCT 0.450). Use acl_core.mde before any null is reported as informative.",
+      "pointer": {"script": "src/behavioral/behavioral_powered.py",
+                  "file": "results/behavioral/behavioral_powered_qwen36-27b.json",
+                  "json_path": "manip_sig"},
+      "expected": true
+    },
+    {
+      "id": "behavioral.multiturn_accumulation",
+      "text": "representation contagion accumulates over 8 turns",
+      "appears_in": ["docs/writeups/paper.html#10", "commit e03c17e"],
+      "category": "a", "claim_status": "retracted",
+      "note": "AUDIT 8. It accumulates identically without steering: the bdesp slope is significant under desperate (+0.404), calm (+0.432) AND neutral (+0.306); calm exceeds desperate; the desp-calm contrast is n.s. (+0.008, CI [-0.011, +0.024]). Also unreported: B cheats 0.085 under desperate vs 0.234 under calm, a 15-point effect opposite the hypothesis. Preregistered for prospective test in B6 rather than reported post-hoc.",
+      "pointer": {"script": "src/behavioral/behavioral_multiturn.py",
+                  "file": "results/behavioral/behavioral_multiturn_qwen36-27b.json"}
+    },
+    {
+      "id": "induction.scramble_control",
+      "text": "the scramble-controlled induction arm shows no emotion-specific behavioral effect",
+      "appears_in": ["docs/writeups/paper.html#10"],
+      "category": "a", "claim_status": "retracted",
+      "note": "AUDIT 7. The ~0 result is arithmetic, not evidence: behavioral_induction.py:168 builds the scramble by permuting the DESPERATE vectors among themselves, so cheat(desperate) - cheat(scramble) is ~0 by construction. manip_sig is false in all three models, and SHARED_WORKSPACE_SPEC says a failed manipulation check invalidates the run.",
+      "pointer": {"script": "src/behavioral/behavioral_induction.py",
+                  "file": "results/behavioral/behavioral_induction_qwen36-27b.json",
+                  "json_path": "manip_sig",
+                  "control_lines": "src/behavioral/behavioral_induction.py:168-168",
+                  "control_expect": ["vdesp[rng.permutation(len(vdesp))]"]},
+      "expected": true
+    },
+    {
+      "id": "jlens.beats_logit_lens",
+      "text": "verbalizable via the Jacobian lens for 6/6 emotions, beating a logit-lens control",
+      "appears_in": ["README.md#headline-results"],
+      "category": "a", "claim_status": "retracted",
+      "note": "AUDIT 10/17. Scores are compared across unnormalised scales (J-lens after lens.transport, logit-lens without), n=16, no CIs; the 'best layer' is selected where the J-lens produced the most content tokens and the logit lens is then reported at that layer. Commit c976a8e claims 6/6 for jlens_coupling, whose file is 2/6 negative.",
+      "pointer": {"script": "src/verbalization/jlens_contagion.py",
+                  "file": "results/verbalization/jlens_contagion_qwen36-27b.json",
+                  "config": {"layer": 29}}
+    },
+    {
+      "id": "dataset.13k_released",
+      "text": "all results and the ~13k archived generations are released",
+      "appears_in": ["README.md#data", "docs/writeups/paper.html"],
+      "category": "c", "claim_status": "retracted",
+      "note": "AUDIT 14. The repo holds 300 E0 dialogues plus 200 multi-turn transcripts; the README itself calls the dataset private; and three different counts (~13k / 12,333 / ~12k) appear across documents. §0.6 makes publishing the dataset a Phase 0 deliverable precisely because it is the only thing that lets anyone outside the team check the ablation.",
+      "pointer": {"script": null, "file": null}
+    }
+  ]
+}

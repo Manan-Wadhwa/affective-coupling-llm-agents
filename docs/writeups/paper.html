@@ -61,6 +61,23 @@
 </style>
 
 <div class="wrap">
+<div style="border:2px solid #b3261e;border-radius:10px;background:rgba(179,38,30,.07);padding:16px 18px;margin:0 0 26px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14.5px;line-height:1.55">
+<div style="font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px;color:#b3261e;margin-bottom:7px">Retraction notice &mdash; do not quote this document</div>
+<p style="margin:0 0 9px">An independent claims audit (<code>docs/review/AUDIT.md</code>, eighteen findings) established that several load-bearing claims below are not supported by their own result files. This draft is retained as a record of what was believed, <strong>not</strong> as a statement of what is established. The repaired record is <code>README.md</code>; the per-number status is <code>docs/review/claims.json</code>, checkable with <code>python tools/check_provenance.py</code>.</p>
+<p style="margin:0 0 5px"><strong>Specifically retracted:</strong></p>
+<ul style="margin:0 0 9px;padding-left:20px">
+<li><strong>&sect;5, the &ldquo;load-bearing result&rdquo;</strong> &mdash; that B&rsquo;s <em>present</em> shift exceeds its <em>other</em> shift. It holds for <strong>1 of 6</strong> emotions in the file cited, and no test of the difference is run.</li>
+<li><strong>&sect;6, &ldquo;the text channel cannot be severed&rdquo;</strong> &mdash; E3 never regenerates B. B&rsquo;s reply is written from unmodified text and the ablation is applied afterwards inside one scoring pass, so the number is a re-encoding effect over frozen tokens. The 81&ndash;95&thinsp;/&thinsp;5&ndash;14 pair was never a budget.</li>
+<li><strong>&sect;7, the activation-passing channel</strong> &mdash; &beta; was selected on its own outcome, and the specificity controls fail at the selected &beta;. The scramble permutes <em>within</em> one emotion, so it preserves the emotion component and cannot test specificity at all.</li>
+<li><strong>&sect;8, &ldquo;0.197 nats&rdquo;</strong> &mdash; the estimator pools six emotions into one matrix and permutes across emotion blocks; the statistic mostly recovers which of six emotions a trial was.</li>
+<li><strong>&sect;10/&sect;12, &ldquo;honesty floor ruled out&rdquo;</strong> &mdash; CI [&minus;0.08, +0.13] at n&thinsp;=&thinsp;32 on a 0.31 base rate rules out nothing, and no MDE is computed. The model it rests on failed its own positive control.</li>
+<li><strong>&sect;10, multi-turn accumulation</strong> &mdash; the neutral arm accumulates too, calm&rsquo;s slope exceeds desperate&rsquo;s, and the contrast is not significant.</li>
+<li><strong>The Jacobian-lens comparison</strong> &mdash; unnormalised scales, n&thinsp;=&thinsp;16, no CIs, and the layer selected on the J-lens&rsquo;s own output.</li>
+<li><strong>Every Llama-3.1 and Qwen2.5 number</strong> &mdash; no such artifact exists in the repository. All Llama results are Llama-3.</li>
+</ul>
+<p style="margin:0">Two figures quoted here have <em>no committed source</em> and are pending re-measurement: the post-fix stability gates (27B&nbsp;0.967, 8B&nbsp;0.965).</p>
+</div>
+
 
 <h1>Affective Coupling Between Language-Model Agents: Emotion Propagates in Representation and Vocabulary, but Not Detectably in Behavior</h1>
 <div class="authors sans">Anonymous Author(s)</div>
