@@ -50,3 +50,8 @@ Thumbs.db
 # skills-lock.json stays TRACKED — it pins the versions, the way a lockfile does.
 .agents/
 .claude/
+
+# Sandbox pull staging: keep the pools and response logs (the only copies), not the
+# multi-hundred-MB feature caches or the duplicates of promoted result files
+results/rev3/inflight_*/*.npz
+results/rev3/inflight_*/*.json
