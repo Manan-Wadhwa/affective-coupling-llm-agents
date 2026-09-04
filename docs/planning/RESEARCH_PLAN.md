@@ -659,7 +659,7 @@ or a run, never a sentence.
 | 0.7 Demote *Subliminal Learning* | ✅ | README "Corrections of fact" |
 | Phase 0 exit gate | ❌ not met | (c) non-empty; and §12 lists sentences the repo asserted that its own files contradict, now corrected in place |
 | §1 E3 analysis | ✅ | §1.1–1.2; `e3.*` retracted in registry; report 03 |
-| §1.3 B1 — E4 rerun + follow-up | ✅ both complete | Follow-up (`b1_followup_qwen36-27b.json`, 17:20Z): all 30 ablated layers gated ≥ 0.88; sign-aware verdict `mixed` (afraid 25%, sad 37% blocked; 3 nulls admit 0–35%; calm untestable); ceiling arm ≈ emo arm (residual ablation caps at partial blocking); text arm cuts B's slope for 4/6. Five `b1f.*` entries quotable. §1.3's three outcomes were mis-specified — see §13.5 | `results/rev3/b1_e4rerun_qwen36-27b.json` (07:57Z, provenance-stamped): gate 0.907 at layer 43, MC 6/6 (4/6 separated), emo − rand significant 3/6 (afraid, sad reduce; **happy increases**), pre-declared rule → `not_blocking`. Registry: four `b1.*` entries quotable. Not yet licensed: any sentence about *where* affect travels — needs the token-level and ceiling arms (§1.3 ⟨2026-09-04⟩), seeded B generation, gating at the ablated layers, an MDE |
+| §1.3 B1 — E4 rerun + follow-up + **B1c (pre-registered)** | ✅ all three complete; B1c verdict **H1** ⟨2026-09-04 22:05Z⟩ | Follow-up (`b1_followup_qwen36-27b.json`, 17:20Z): all 30 ablated layers gated ≥ 0.88; sign-aware verdict `mixed` (afraid 25%, sad 37% blocked; 3 nulls admit 0–35%; calm untestable); ceiling arm ≈ emo arm (residual ablation caps at partial blocking); text arm cuts B's slope for 4/6. Five `b1f.*` entries quotable. §1.3's three outcomes were mis-specified — see §13.5 | `results/rev3/b1_e4rerun_qwen36-27b.json` (07:57Z, provenance-stamped): gate 0.907 at layer 43, MC 6/6 (4/6 separated), emo − rand significant 3/6 (afraid, sad reduce; **happy increases**), pre-declared rule → `not_blocking`. Registry: four `b1.*` entries quotable. Not yet licensed: any sentence about *where* affect travels — needs the token-level and ceiling arms (§1.3 ⟨2026-09-04⟩), seeded B generation, gating at the ablated layers, an MDE |
 | A0 prior art | ✅ | `docs/review/A0_PRIOR_ART.md` — survives, narrowed (RAPTOR cited; disjoint-half reproducibility, non-convergence with n, logreg-vs-dom stability, published-flip remain open) |
 | A1 generalise | ⬜ | |
 | A2 characterise regime + follow-up | ✅ both models complete · ✅ follow-up on the 27B (layers 16, 43) | 27B: `a2_estimator_qwen36-27b.json` (dom 0.974 / logreg 0.566 at n=2000, focus 43). 8B: `a2_estimator_llama3-abl.json` (dom 0.941 / logreg 0.286 at n=1200, focus 21). Eight `a2*.focus_*` entries quotable. The n/d anomaly reproduces on one pipeline (`a2_8b.nd_anomaly_reproduces`). Open: tuned-C arm (a2_followup, launching), std-space cosine, per-fit λ |
@@ -715,6 +715,7 @@ what they added and where the plan now covers it. "In place" = an edit marked �
 | 27 | 8B A2 delta: the logistic decline with n is significant (10/10 seeds) and survives stronger regularisation — the 27B's fixed-C explanation does not transfer; matched-n comparison required (0.286 vs 0.568 at n = 1200); retention 49% vs 74%; "n/d is not the mechanism" overstated; geometry candidate untested; under dom the 8B's present↔other cosine is 0.89 of within-present — the near-orthogonal-speaker result fails under dom on the 8B | 19 | §2.1, §2.2 | §2.1 item 2 rewritten; registry texts corrected; Paper B correction list extended |
 | 28 | B1 follow-up critique: counts flip under a scenario-clustered bootstrap (3 blockers, ceiling exception vanishes); nulls are two-sided; file `mde` is the wrong estimand; text arm afraid = 47% refusals, calm counted though untestable, no text-vs-emo contrast; ceiling extends positions not layers so "rebuilt above the window" is untested; CRN partial | 20 | §1.3, §6 | §13.5 sentence replaced; registry texts corrected; to-dos below |
 | 29 | A2 follow-up critique: "flat" is wrong (dips 300→600 at L43, rises at L16; |Δ| < 0.03 is what holds); fixed penalty fixes the target so the result is proportional-regime, not asymptotic, and depends on the single anchor; CV scored accuracy not stability on a decade grid; space gaps 0.002–0.029; CAA cosine still a standardised fit's 6-way image with a non-sampling CI; no model/revision or partial flag in the file; λ 0.65→0.06 confirms the covariance mechanism | 21 | §2.1, §13.2 | wording corrected in place; to-dos below |
+| 30 | B1c critique (report 22): random-control bullet was wrong (happy +28%, no `rand_all − none` contrast, unit-norm not footprint matching); `emo_all − emo13_42` and `text_keep − none` were driver-declared, not in PREREG §5; the layer-43–63 null is unpowered for desperate (≤ 0.17) and calm (≤ 0.41); blocked fraction tracks readable-affect removed (r ≈ 0.85, five points; blocked-per-removed median 0.27 still < 0.50); calm's significant contrast is dropped by the testability filter; afraid's top-dose readout is non-monotone with `separated` false; MC-ablate read at the top dose only with an unclustered CI; BH-FDR over 5 not 6; rewrite attrition ungated (selection on outcome); prereg stamp empty (document not staged), IST/UTC header mismatch; `probe_n` 1615 vs 2160 | ✅ wording corrected in registry/report/README ⟨2026-09-05⟩; **to-do:** a footprint-matched or orthogonal control with a `rand − none` contrast, a subspace (rank-k) ablation arm, an attention-masking arm, gate rewrites and report attrition per dose, stamp the pre-registration on the box |
 | 22 | Rev-3 A2: `pair_on` bug zeroes the other-label `pca_diff` direction (patched, deployed 2026-09-04); covariance-estimator decline with n is estimator behaviour (λ falls with n; λ discarded); `split_half` is not stratified and its n-points are nested prefixes of one permutation per seed; raw-space "dom" is `(μ₊−μ₋)/sd²`, not CAA's mean difference; regularisation not n-normalised and `logreg_cv` excluded from the sweep; `decode_acc` substitutes the decision rule and reuses the split-half seed-0 permutation; dual implementation tested only at d = 400, n ≥ d, for 2 of 8 estimators, never on real features | 17 | §2, §7 | §11 §7 row downgraded; to-dos below; A2 analysis must report `space='std'` |
 
 **Done 2026-09-05 (night):** `paired_slope_contrast` blocked and dose-paired (26e535d) and every rev-3 contrast re-read with it (`reblock.b1f_emo_vs_rand_blocked`); the all-layer ablation arm, refusal-filtered text arm with an affect-preserving control rewrite, and contrast-bootstrap MDE are implemented in `b1c_alllayer.py` and running under `PREREG_B1c.md`; the second fixed-λ anchor (n = 2000), layer 54, and the 8B fixed-λ arm are running on box 4.
@@ -814,10 +815,33 @@ afraid result is 47% refusals), and any one-sided reading of the nulls. Paper B'
 section is rewritten around the *fraction* with the contrast-bootstrap detectable effect
 stated (13–50% of the none slope per emotion), not the file's `mde`.
 
+**⟨2026-09-04 22:05Z⟩ B1c answers the last branch.** The pre-registered all-layer test
+(`docs/planning/PREREG_B1c.md`; report 22; registry `b1c.*`) returned **H1**: with the
+direction removed at every hidden state 13–63, the median blocked fraction is 0.09 [0.04, 0.25]
+over five testable emotions; layers 43–63 add nothing detectable for afraid, angry, happy and sad
+(unpowered for desperate and calm); afraid and sad replicate their partial block (21%, 33%);
+both rewrite arms fail their own checks again. So "rebuilt above the window" is out for this
+direction, and what remains is the rank-1 branch: the blocked fraction tracks how much readable
+affect the ablation removes (r ≈ 0.85; blocked-per-removed ≈ 0.27), i.e. the `dom` direction
+captures only part of the affect representation and the part it captures carries only part of
+the transfer. The Paper B sentence becomes:
+
+> *Projecting the difference-of-means emotion direction out of A's span at every hidden state
+> 13–63 during B's prefill removes a median 9% [4%, 25%] of B's dose-response (21% and 33% for
+> afraid and sad, null elsewhere), no more than the 30-layer window did, while a unit-norm
+> random direction changes nothing. The single direction is therefore insufficient to carry the
+> transfer; whether a higher-rank affect subspace or B's re-derivation from A's tokens carries
+> the rest is not distinguished by this design.*
+
+Open for Paper B: a rank-k subspace ablation and an attention-masking arm (PREREG §7); a
+footprint-matched control with its own contrast; a rewrite design that survives its check.
+
 ### 13.4 Runs launched under this rescope
 
 | run | box | purpose | status |
 |---|---|---|---|
+| **B1c** (`b1c_alllayer.py`, GPU; B1's probe pool; pre-registered `PREREG_B1c.md` @ cc2dc32) | `sb-58e32f35598fd1b0` (box 3) | all-layer ablation hs 13–63, `rand_all`, `text`/`text_keep`, 4 doses, median-fraction decision rule | ✅ complete 22:05Z: verdict **H1** (0.09 [0.04, 0.25]); 8 `b1c.*` entries quotable; report 22 + blind critique; see §13.5 |
+| A2 add-ons (`a2_followup.py`, CPU) | `sb-ea69c0d19be26d97` (box 4) | second fixed-λ anchor n = 2000 at layers 43, 54; layer 54 at n = 600; fixed-λ arm on the 8B (layers 14, 21, 27) | ⏳ running since 20:00Z, ~2.5× slower than box 1; at layer 54 of the n = 2000 sweep at 22:10Z; lease risk for the 8B sweep |
 | A2 follow-up (`a2_followup.py`, CPU; features regenerated from the saved 27B pool by `a2_regen_feats.py`) | `sb-45376053750d2753` | tuned-C / fixed-λ logistic; std-space cosines; CAA-raw cross-estimator with CI; λ per fit | ✅ layers 16 + 43 complete (17:42Z); layer 54 lost when box 1's lease expired ~17:55Z. Four `a2f.*` entries quotable |
 | B1 follow-up (`b1_followup.py`, GPU; B1's own probe pool and cached features, so directions are identical to the completed run) | `sb-45376053750d2753` | ceiling + text arms, seeded B with common random numbers across arms, per-layer gate, fresh random per (emotion, rep), sign-aware rule + MDE | ✅ complete 17:20Z: verdict `mixed`; see §13.5 |
 | A2 on Llama-3-8B-abl | `sb-45376053750d2753` | the 8B half of the n/d anomaly | ✅ complete 13:24Z; anomaly reproduces |

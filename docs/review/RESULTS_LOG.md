@@ -460,3 +460,6 @@ is the intervals:
 
 Reports 18 and 20's hand computations are confirmed to the digit. The blocked intervals are
 wider for the B1 family (scenario effects are real) and similar for A3.
+
+## 2026-09-04 22:05Z — B1c pre-registered all-layer ablation complete (box 3)
+Verdict **H1** under PREREG_B1c §5: median blocked fraction 0.092 [0.038, 0.254] over five testable emotions (calm untestable). Significant blocking for afraid (21%) and sad (33%) only; `emo_all` vs `emo13_42` null for all six emotions, so layers 43–63 add nothing. Random control inert at twice the removed norm. All 51 ablated layers gated ≥ 0.88. MC-steer 6/6, MC-ablate failures 0, but the affect stays largely readable on A's span after ablation for four emotions (desperate 0.955 → 0.819). Rewrite arms uninterpretable 6/6. The driver's prereg stamp is empty (document not staged to the box); ordering rests on git times 19:02Z/19:22Z vs run start 19:32Z. Files `results/rev3/b1c_alllayer_qwen36-27b.json`, `b1c_cells_qwen36-27b.json`; registry `b1c.*` (8 entries); report `results/reports/22_rev3_b1c_alllayer.md`.

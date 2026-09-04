@@ -1,555 +1,1240 @@
 {
-  "_readme": "Provenance registry (RESEARCH_PLAN rev 3, §0.2/§0.3). One entry per reported number. `category` is the §0.2 provenance class; `claim_status` is whether the SENTENCE built on the number may still be quoted, which is a separate question from whether the number resolves. Checked by tools/check_provenance.py.",
-  "_categories": {
-    "a": "reproducible from committed files",
-    "b": "run, but the artifact was lost (lease expiry) -- re-run and commit",
-    "c": "no evidence of a run -- retract, and investigate how it entered",
-    "d": "run in a prior phase, artifact external to this repo -- locate or re-run"
-  },
-  "_claim_status": {
-    "quotable": "number resolves AND the sentence built on it is supported",
-    "retracted": "number may resolve, but the sentence it supports does not follow",
-    "pending": "awaiting a re-run before it can be quoted either way"
-  },
-  "claims": [
-    {
-      "id": "e0.present_acc",
-      "text": "present-speaker emotion decodes at 0.90 (6-way, chance 0.167)",
-      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#4"],
-      "category": "a", "claim_status": "quotable",
-      "pointer": {"script": "src/core/coupling_e0.py",
-                  "file": "results/core/e0_qwen36-27b.json",
-                  "json_path": "focus_result.present_acc",
-                  "config": {"model": "Qwen/Qwen3.6-27B", "focus": 43}},
-      "expected": 0.8987, "tol": 0.001
-    },
-    {
-      "id": "e0.cross_cos",
-      "text": "present and other subspaces near-orthogonal, cos 0.04",
-      "appears_in": ["README.md#headline-results"],
-      "category": "a", "claim_status": "quotable",
-      "pointer": {"script": "src/core/coupling_e0.py",
-                  "file": "results/core/e0_qwen36-27b.json",
-                  "json_path": "focus_result.orthogonality_cross_cos"},
-      "expected": 0.0435, "tol": 0.001
-    },
-    {
-      "id": "e2ci.contagion_5of6",
-      "text": "emotional contagion significant for 5/6 emotions (bootstrap CIs)",
-      "appears_in": ["README.md#headline-results"],
-      "category": "a", "claim_status": "pending",
-      "note": "The COUNT resolves. The CIs behind it do not: coupling_e2_ci.py resamples each alpha cell independently although the same 29 scenarios recur across cells -- an unpaired bootstrap on paired data, which understates the interval used to declare significance (AUDIT 18). Re-derive with the scenario-blocked bootstrap in acl_core.slope_ci before quoting.",
-      "pointer": {"script": "src/representation/coupling_e2_ci.py",
-                  "file": "results/representation/e2ci_qwen36-27b.json",
-                  "config": {"alphas": [0.0, 0.5, 1.0], "repeats": 3, "n_per_cell": 87},
-                  "control_lines": "src/representation/coupling_e2_ci.py:1-11",
-                  "control_expect": ["drop the model-breaking alpha=2 regime"]},
-      "derive": {"fn": "count_sig", "args": {"key": "present"}},
-      "expected": 5, "tol": 0
-    },
-    {
-      "id": "e2ci.present_gt_other",
-      "text": "the load-bearing result: B's present shift exceeds its other shift",
-      "appears_in": ["docs/writeups/paper.html#5", "src/core/coupling_e2.py docstring"],
-      "category": "a", "claim_status": "retracted",
-      "note": "AUDIT 3. The claim asserts 6/6 or a general dissociation; the file gives 1/6 (angry only). No test of the difference is run anywhere. Under difference-of-means on the matched grid it is reported to hold for 5/6 -- which makes it Paper A's A3 exhibit, not Paper B's headline.",
-      "pointer": {"script": "src/representation/coupling_e2_ci.py",
-                  "file": "results/representation/e2ci_qwen36-27b.json"},
-      "derive": {"fn": "present_gt_other"},
-      "expected": 6, "tol": 0
-    },
-    {
-      "id": "e3.affect_removed",
-      "text": "81-95% of A's affect is removed by the read-time ablation",
-      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#6"],
-      "category": "a", "claim_status": "retracted",
-      "note": "The ARITHMETIC resolves exactly. The claim does not: E3 never regenerates B. B's reply is produced from unmodified text at coupling_e3_ablate.py:154, and the ablation is applied afterwards inside a single scoring pass over the concatenated transcript. The number is a re-encoding effect over frozen tokens, not a channel measurement, and the 81-95 / 5-14 pair was never a budget -- no denominator relationship exists between two readouts taken from one pass over different token spans.",
-      "pointer": {"script": "src/representation/coupling_e3_ablate.py",
-                  "file": "results/representation/e3v2_qwen36-27b.json",
-                  "control_lines": "src/representation/coupling_e3_ablate.py:146-155",
-                  "control_expect": ["a_reps = E2.gen_steered", "b_reps = E2.gen_steered"]},
-      "derive": {"fn": "range", "args": {"field": "A_manip_removed"}},
-      "expected": [0.809, 0.948], "tol": 0.002
-    },
-    {
-      "id": "e3.text_channel_intact",
-      "text": "the text channel cannot be severed: contagion stays 86-95% intact",
-      "appears_in": ["README.md#headline-results"],
-      "category": "a", "claim_status": "retracted",
-      "note": "Same defect as e3.affect_removed, and this is the sentence §1.2 says has no experiment behind it in any reading. Superseded by B1 (the E4 rerun), which does regenerate B under the intervention.",
-      "pointer": {"script": "src/representation/coupling_e3_ablate.py",
-                  "file": "results/representation/e3v2_qwen36-27b.json",
-                  "control_lines": "src/representation/coupling_e3_ablate.py:146-155",
-                  "control_expect": ["b_reps = E2.gen_steered(model, tok, bprompts, steer, None)"]},
-      "derive": {"fn": "range", "args": {"field": "B_contagion_lost"}},
-      "expected": [0.047, 0.138], "tol": 0.002
-    },
-    {
-      "id": "e5.beta03_all6",
-      "text": "the activation-passing channel works at beta=0.3: all 6 emotions transmit",
-      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#7"],
-      "category": "a", "claim_status": "retracted",
-      "note": "AUDIT 1. The 6/6 transmit count resolves, but beta was selected on its own outcome (three betas run, only 0.3 gives 6/6) and the specificity controls fail at the selected beta: emo_specific is positive for only 4/6 and the scramble transmits MORE than the full vector for 3/6. No CIs anywhere in E5.",
-      "pointer": {"script": "src/representation/coupling_e5_actpass.py",
-                  "file": "results/representation/e5actpass_qwen36-b03.json",
-                  "config": {"beta": 0.3},
-                  "control_lines": "src/representation/coupling_e5_actpass.py:185-185",
-                  "control_expect": ["vA[np.random.default_rng(0).permutation(len(vA))]"]},
-      "derive": {"fn": "count_positive", "args": {"field": "transmit(full-none)"}},
-      "expected": 6, "tol": 0
-    },
-    {
-      "id": "e5.emotion_causally_responsible",
-      "text": "the emotion component is causally responsible; a scrambled activation transmits far less",
-      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#7"],
-      "category": "a", "claim_status": "retracted",
-      "note": "The scramble is broken by construction: coupling_e5_actpass.py:185 permutes vA WITHIN one emotion, so it preserves the emotion component and cannot test emotion specificity at all. §6: a permutation null must permute across the variable it tests.",
-      "pointer": {"script": "src/representation/coupling_e5_actpass.py",
-                  "file": "results/representation/e5actpass_qwen36-b03.json",
-                  "control_lines": "src/representation/coupling_e5_actpass.py:185-185",
-                  "control_expect": ["permutation(len(vA))"]},
-      "derive": {"fn": "count_positive", "args": {"field": "vs_scramble(full-scramble)"}},
-      "expected": 6, "tol": 0
-    },
-    {
-      "id": "cmi.coupling_nats",
-      "text": "A-to-B coupling quantified at 0.197 nats (z = 11.5 vs scramble null)",
-      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#8"],
-      "category": "a", "claim_status": "retracted",
-      "note": "AUDIT 2. The number resolves. What it measures does not support the sentence: cmi_passed.py pools 6 emotions x 29 episodes into one matrix and permutes ACROSS emotion blocks, so both variables carry a strong block mean by construction and the statistic mostly recovers 'which of six emotions this was'. The real-data call also conditions on nothing (Z=None) despite the pilot's own hygiene test.",
-      "pointer": {"script": "src/information/cmi_passed.py",
-                  "file": "results/information/cmi_passed_qwen36-27b.json",
-                  "json_path": "coupling_nats"},
-      "expected": 0.1972, "tol": 0.001
-    },
-    {
-      "id": "cmi.pilot_spurious",
-      "text": "the CMI pilot measured 0.88 nats spurious under a lossy conditioner",
-      "appears_in": ["docs/writeups/dossier.html"],
-      "category": "a", "claim_status": "pending",
-      "note": "Was category (c): results/information/cmi_pilot.json was not in the repo. Archaeology 2026-09-04: the number entered at c976a8e (2026-07-25, the initial commit) in dossier.html; the script writes its JSON only when run, and no run had ever been committed. Re-run locally 2026-09-04 (CPU-only synthetic, seeds 0-11, ~6 s): beta=0 lossy-encoder estimate 0.8815, byte-identical across two runs. The number now resolves. Left 'pending' rather than promoted to quotable: AUDIT 2 retracted it on provenance grounds, and whether the dossier sentence built on it may be quoted again is an adjudication decision, not a checker decision.",
-      "pointer": {"script": "src/information/cmi_pilot.py",
-                  "file": "results/information/cmi_pilot.json",
-                  "json_path": "confound.beta0_est_lossy_ARTIFACT"},
-      "expected": 0.8815, "tol": 0.001
-    },
-    {
-      "id": "stability.postfix_gate_27b",
-      "text": "post-fix stability gate 0.967 on the 27B (pre-fix 0.427)",
-      "appears_in": ["docs/review/NOVELTY_REVIEW.md", "docs/writeups/dossier.html"],
-      "category": "b", "claim_status": "pending",
-      "note": "Observed in run logs; the JSON died with the sandbox lease. A2 re-measured it 2026-09-04 (a2.focus_dom_split_half: 0.9736 at n=2000/half, 0.955 at 1200, 0.915 at 600, raw space, results/rev3/a2_estimator_qwen36-27b.json). That is a new number on a new pool; the 0.967 as worded has no file and its n is unknown, so this entry stays pending until the authors retire the sentence in favour of the A2 figure.",
-      "pointer": {"script": "src/estimator/stability_diag.py", "file": null}
-    },
-    {
-      "id": "stability.postfix_gate_8b",
-      "text": "post-fix stability gate 0.965 on the 8B (pre-fix 0.195)",
-      "appears_in": ["docs/review/NOVELTY_REVIEW.md"],
-      "category": "b", "claim_status": "pending",
-      "note": "Same lease loss. Only the PRE-fix 8B value is committed, in p1dose_stability_llama3-abl.json (0.195). A2 re-measured 2026-09-04 (a2_8b.focus_dom_split_half: 0.9413 at n=1200/half, raw space). New number on a new pool; the 0.965 sentence stays pending until retired.",
-      "pointer": {"script": "src/estimator/stability_diag.py", "file": null}
-    },
-    {
-      "id": "stabdiag.logreg_27b_600",
-      "text": "logistic split-half agreement 0.409 at n=600/half on the 27B",
-      "appears_in": ["README.md#re-measurement", "docs/planning/RESEARCH_PLAN.md#2.2"],
-      "category": "a", "claim_status": "quotable",
-      "pointer": {"script": "src/estimator/stability_diag.py",
-                  "file": "results/estimator/stabdiag_qwen36-27b.json",
-                  "json_path": "results[2].logreg.cos_mean",
-                  "config": {"model": "Qwen/Qwen3.6-27B", "focus": 43}},
-      "expected": 0.4087, "tol": 0.001
-    },
-    {
-      "id": "stabdiag.dom_27b_600",
-      "text": "difference-of-means split-half agreement 0.893 at n=600/half on the 27B",
-      "appears_in": ["README.md#re-measurement"],
-      "category": "a", "claim_status": "quotable",
-      "pointer": {"script": "src/estimator/stability_diag.py",
-                  "file": "results/estimator/stabdiag_qwen36-27b.json",
-                  "json_path": "results[2].diff_of_means.cos_mean"},
-      "expected": 0.8927, "tol": 0.001
-    },
-    {
-      "id": "stabdiag.dom_8b_1200",
-      "text": "difference-of-means split-half agreement 0.898 at n=1200/half on the 8B",
-      "appears_in": ["README.md#re-measurement"],
-      "category": "a", "claim_status": "quotable",
-      "pointer": {"script": "src/estimator/stability_diag.py",
-                  "file": "results/estimator/stabdiag_llama3-abl-big.json",
-                  "json_path": "results[3].diff_of_means.cos_mean",
-                  "config": {"model": "failspy/Llama-3-8B-Instruct-abliterated"}},
-      "expected": 0.8982, "tol": 0.001
-    },
-    {
-      "id": "dualest.stability_dissociation",
-      "text": "logreg gives the better classifier (0.926 vs 0.850) and the worse direction (0.394 vs 0.940)",
-      "appears_in": ["README.md#re-measurement"],
-      "category": "a", "claim_status": "quotable",
-      "pointer": {"script": "src/estimator/dual_estimator_battery.py",
-                  "file": "results/estimator/dualest_qwen36-27b.json",
-                  "json_path": "arms.logreg.e0.stability_cos",
-                  "config": {"n_pool": 2170, "focus": 43}},
-      "expected": 0.3935, "tol": 0.001
-    },
-    {
-      "id": "model_identity.llama31",
-      "text": "cross-scale check performed on Llama-3.1-8B",
-      "appears_in": ["README.md", "docs/writeups/paper.html#table1"],
-      "category": "d", "claim_status": "retracted",
-      "note": "AUDIT 11. Every Llama artifact in this repo is llama3- (Llama-3, instruct or abliterated). No Llama-3.1-8B result file exists anywhere. Correct the identity claim whether or not the numbers are re-derived (§0.2).",
-      "pointer": {"script": null, "file": null}
-    },
-    {
-      "id": "behavioral.honesty_floor_ruled_out",
-      "text": "behavioral reach not detectable; the honesty floor is ruled out",
-      "appears_in": ["README.md#headline-results", "docs/writeups/paper.html#10", "docs/writeups/paper.html#12"],
-      "category": "a", "claim_status": "retracted",
-      "note": "AUDIT 6. The abliterated behavioral CI is [-0.08, +0.13] at n=32, which rules out nothing on a 0.31 base rate, and no MDE is computed anywhere. The model this rests on failed its own positive control (P1: baseline cheat 0.510, THREAT 0.540, INSTRUCT 0.450). Use acl_core.mde before any null is reported as informative.",
-      "pointer": {"script": "src/behavioral/behavioral_powered.py",
-                  "file": "results/behavioral/behavioral_powered_qwen36-27b.json",
-                  "json_path": "manip_sig"},
-      "expected": true
-    },
-    {
-      "id": "behavioral.multiturn_accumulation",
-      "text": "representation contagion accumulates over 8 turns",
-      "appears_in": ["docs/writeups/paper.html#10", "commit e03c17e"],
-      "category": "a", "claim_status": "retracted",
-      "note": "AUDIT 8. It accumulates identically without steering: the bdesp slope is significant under desperate (+0.404), calm (+0.432) AND neutral (+0.306); calm exceeds desperate; the desp-calm contrast is n.s. (+0.008, CI [-0.011, +0.024]). Also unreported: B cheats 0.085 under desperate vs 0.234 under calm, a 15-point effect opposite the hypothesis. Preregistered for prospective test in B6 rather than reported post-hoc.",
-      "pointer": {"script": "src/behavioral/behavioral_multiturn.py",
-                  "file": "results/behavioral/behavioral_multiturn_qwen36-27b.json"}
-    },
-    {
-      "id": "induction.scramble_control",
-      "text": "the scramble-controlled induction arm shows no emotion-specific behavioral effect",
-      "appears_in": ["docs/writeups/paper.html#10"],
-      "category": "a", "claim_status": "retracted",
-      "note": "AUDIT 7. The ~0 result is arithmetic, not evidence: behavioral_induction.py:168 builds the scramble by permuting the DESPERATE vectors among themselves, so cheat(desperate) - cheat(scramble) is ~0 by construction. manip_sig is false in all three models, and SHARED_WORKSPACE_SPEC says a failed manipulation check invalidates the run.",
-      "pointer": {"script": "src/behavioral/behavioral_induction.py",
-                  "file": "results/behavioral/behavioral_induction_qwen36-27b.json",
-                  "json_path": "manip_sig",
-                  "control_lines": "src/behavioral/behavioral_induction.py:168-168",
-                  "control_expect": ["vdesp[rng.permutation(len(vdesp))]"]},
-      "expected": true
-    },
-    {
-      "id": "jlens.beats_logit_lens",
-      "text": "verbalizable via the Jacobian lens for 6/6 emotions, beating a logit-lens control",
-      "appears_in": ["README.md#headline-results"],
-      "category": "a", "claim_status": "retracted",
-      "note": "AUDIT 10/17. Scores are compared across unnormalised scales (J-lens after lens.transport, logit-lens without), n=16, no CIs; the 'best layer' is selected where the J-lens produced the most content tokens and the logit lens is then reported at that layer. Commit c976a8e claims 6/6 for jlens_coupling, whose file is 2/6 negative.",
-      "pointer": {"script": "src/verbalization/jlens_contagion.py",
-                  "file": "results/verbalization/jlens_contagion_qwen36-27b.json",
-                  "config": {"layer": 29}}
-    },
-    {
-      "id": "dataset.13k_released",
-      "text": "all results and the ~13k archived generations are released",
-      "appears_in": ["README.md#data", "docs/writeups/paper.html"],
-      "category": "c", "claim_status": "retracted",
-      "note": "AUDIT 14. The repo holds 300 E0 dialogues plus 200 multi-turn transcripts; the README itself calls the dataset private; and three different counts (~13k / 12,333 / ~12k) appear across documents. §0.6 makes publishing the dataset a Phase 0 deliverable precisely because it is the only thing that lets anyone outside the team check the ablation. Archaeology 2026-09-04: all three counts entered together at c976a8e (2026-07-25, the initial commit) -- README '~12k', dossier '12,333', paper '\u224813k' -- none tied to a file, and no later commit introduced or reconciled them.",
-      "pointer": {"script": null, "file": null}
-    },
-    {
-      "id": "b1.stability_gate_dom",
-      "text": "B1 direction-stability gate (2026-09-04 full rerun): difference-of-means split-half cosine 0.9074 [0.904, 0.911] at n=600/half, 10 splits, raw space, measured at layer 43 -- the steering and read layer, which is NOT one of the 30 ablated layers (13-42); logistic 0.567; pre-declared gate 0.80 passes",
-      "appears_in": ["docs/review/RESULTS_LOG.md", "results/rev3/README.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Was category (b): the 2026-09-02 sweep's 0.909 died with its sandbox. This is a NEW measurement from the from-scratch rerun (different pool, n=1615 kept vs 1578), not a recovery of the old number. Per-class: {'happy': 0.929, 'calm': 0.948, 'sad': 0.9, 'angry': 0.942, 'afraid': 0.859, 'desperate': 0.867}. The stability of the 30 directions actually projected out is not measured anywhere (results/reports/16) -- quotable only with the layer stated.",
-      "pointer": {"script": "src/rev3/b1_e4rerun.py",
-                  "file": "results/rev3/b1_e4rerun_qwen36-27b.json",
-                  "json_path": "direction_stability.used.mean",
-                  "config": {"direction_stability.used.n_per_half": 600, "direction_stability.used.n_seeds": 10, "direction_stability.used.space": "raw", "focus": 43, "abl_hs_range": [13, 42]}},
-      "expected": 0.9074, "tol": 0.001
-    },
-    {
-      "id": "b1.mc_ablate_pass_6of6",
-      "text": "B1 (full grid, 54/54 cells): the generation-side manipulation check passes on point estimates for 6 of 6 emotions (drop_emo +0.11 to +0.37 vs drop_rand within +/-0.005); the stricter CI-separation flag holds for 4 of 6 (not afraid, not calm)",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Derived from the committed cells by src/rev3/b1_analyze.py (deterministic). Supersedes b1.mc_ablate_pass_5of5 (partial grid). Caveats from results/reports/16: afraid's MC-steer readout is off-target (modal readout desperate at alpha=1) and non-monotone; 'passes' is a sign test, 'separated' the CI test; the check certifies removal of the linear feature from A's span at layers 13-42, not from what B received.",
-      "pointer": {"script": "src/rev3/b1_analyze.py",
-                  "file": "results/rev3/b1_summary_qwen36-27b.json",
-                  "config": {"n_cells": 54, "n_expected": 54},
-                  "control_lines": "src/rev3/b1_analyze.py:76-81",
-                  "control_expect": ["mc[\"separated\"] = bool(mc[\"emo\"][\"ci\"][1] < mc[\"rand\"][\"ci\"][0])",
-                                     "mc[\"passes\"] = bool(mc[\"drop_emo\"] > 0 and mc[\"drop_emo\"] > mc[\"drop_rand\"])"]},
-      "derive": {"fn": "count_true", "args": {"path": "mc_ablate.passes"}},
-      "expected": 6, "tol": 0
-    },
-    {
-      "id": "b1.emo_vs_rand_sig_3of6",
-      "text": "B1 (full grid): the emo-minus-rand present-slope contrast excludes zero for 3 of 6 emotions -- negative (ablation reduces B's dose-response) for afraid (-50.5 [-72.4, -29.1]) and sad (-29.1 [-49.0, -10.0]), POSITIVE for happy (+31.2 [+9.4, +53.3]); crosses zero for desperate, calm, angry",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Supersedes b1.emo_vs_rand_sig_2of5. happy's POSITIVE contrast is a dose-grid artifact: all arms peak at alpha=0.5, which the 3-point OLS slope (= y(1)-y(0)) discards (results/reports/16 delta). The contrast interval is paired but NOT scenario-blocked (acl_core.paired_slope_contrast). calm's none-arm slope does not exclude zero, so it has no transmission to block. Expressed as a fraction of the none-arm slope, the three null emotions are consistent with blocking up to 0.33 (desperate), 0.27 (angry); see results/rev3/README.md.",
-      "pointer": {"script": "src/rev3/b1_analyze.py",
-                  "file": "results/rev3/b1_summary_qwen36-27b.json",
-                  "config": {"n_cells": 54},
-                  "control_lines": "src/rev3/b1_analyze.py:60-64",
-                  "control_expect": ["paired_slope_contrast"]},
-      "derive": {"fn": "count_sig", "args": {"key": "emo_vs_rand"}},
-      "expected": 3, "tol": 0
-    },
-    {
-      "id": "b1.verdict_not_blocking",
-      "text": "B1 pre-declared decision rule returns 'not_blocking': the manipulation check passed for 6/6 (>= 3 required) and the emo-vs-rand contrast is significant for fewer than 4 of 6",
-      "appears_in": ["docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#11"],
-      "category": "a", "claim_status": "quotable",
-      "note": "This is the rule's output, not a statement that ablation does nothing: 2 of 6 emotions show significant reduction, 1 shows significant increase, and the nulls are underpowered (no MDE computed; acl_core.mde never called). RESEARCH_PLAN section 1.3's 'outcome 2' reading additionally requires the token-level and ceiling arms (2026-09-04 amendment) before it locates the channel. The rule's denominator is 6 and was declared before the run (b1_e4rerun.py:399-403); it counts significance WITHOUT sign, so its 3 includes happy's reversal. Provenance defects in this file: code_sha is empty, seeds.run is recorded although gen_B is unseeded, and control_pointers name forced_choice_readout and build_dirs, neither of which runs.",
-      "pointer": {"script": "src/rev3/b1_e4rerun.py",
-                  "file": "results/rev3/b1_e4rerun_qwen36-27b.json",
-                  "json_path": "verdict",
-                  "config": {"n_mc_pass": 6, "probe_n": 1615, "estimator": "dom"},
-                  "control_lines": "src/rev3/b1_e4rerun.py:399-403",
-                  "control_expect": ["\"blocking\" if sum(1 for e in EMOS", ">= 4"]},
-      "expected": "not_blocking"
-    },
-    {
-      "id": "a2.focus_dom_split_half",
-      "text": "A2 (full run, 7 depths, pool n=4253): at the focus layer (hidden_states[43]) the difference-of-means direction reproduces across disjoint halves at cosine 0.9736 at n=2000/half (10 splits, raw space); 0.915 at n=600",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#2"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Raw-space cosine (C/sd, the steering direction); the standardised-space cosine was not run (results/reports/17). Within a seed the n-grid points are nested prefixes of one permutation. Uniform across all 7 depths (0.966-0.979 at n=2000). This is the A2 re-measurement that stability.postfix_gate_27b (category b, 0.967 at an unrecorded n) was waiting for; it is a new number, not a recovery.",
-      "pointer": {"script": "src/rev3/a2_estimator.py",
-                  "file": "results/rev3/a2_estimator_qwen36-27b.json",
-                  "json_path": "headline.dom_split_half",
-                  "config": {"headline.focus_layer": 43, "headline.n_per_half": 2000, "n_pool": 4253}},
-      "expected": 0.9736, "tol": 0.001
-    },
-    {
-      "id": "a2.focus_logreg_split_half",
-      "text": "A2: at the focus layer the multinomial logistic-regression row (C=0.5) reproduces at cosine 0.5664 at n=2000/half; the C=0.5 curve is flat-to-declining after n=600 (0.575 -> 0.568 -> 0.566; pooled across the four declining depths t ~ -1.8 at 10 seeds, unresolved) while the C=0.05 row still rises on 6 of 7 depths and ends at 0.575 -- the shape of the logistic curve depends on the untuned regularisation constant",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#2"],
-      "category": "a", "claim_status": "quotable",
-      "note": "C fixed, so the per-sample penalty weakens 27x across the n grid (results/reports/14, 17 delta). Peak at n=600 on 4 of 7 depths only; hs16 and hs29 are still rising significantly. ridge (alpha=1000) 0.349; logreg_cv excluded from the split-half sweep. The earlier wording 'stops improving after n=600 on 5 of 7 depths' was withdrawn 2026-09-04 after the delta critique. Do not quote a plateau; quote the C-dependence.",
-      "pointer": {"script": "src/rev3/a2_estimator.py",
-                  "file": "results/rev3/a2_estimator_qwen36-27b.json",
-                  "json_path": "headline.logreg_split_half",
-                  "config": {"headline.focus_layer": 43, "headline.n_per_half": 2000}},
-      "expected": 0.5664, "tol": 0.001
-    },
-    {
-      "id": "a2.focus_logreg_vs_dom_cos",
-      "text": "A2: at the focus layer the raw-space (C/sd) logistic and difference-of-means directions agree at cosine 0.5922 (n=2000; 0.54-0.60 at all 7 depths, but on the SAME 2000-row subsample at every depth)",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/review/A0_PRIOR_ART.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "NOT comparable to 2604.08169 as it stands: that paper compares CAA's raw mean difference with a raw logistic weight; this file compares w/sd with (mu+ - mu-)/sd^2 (results/reports/17 delta). Neither C nor sd is stored, so the like-for-like cosine needs a rerun that emits it. One subsample (default_rng(seed+1) inside the layer loop) read at every depth; no CI. Clusters: logistic family >= 0.98 within; dom/dom_norm/pca_diff >= 0.97; mass_mean_cov nearer logreg (0.49) than dom (0.17).",
-      "pointer": {"script": "src/rev3/a2_estimator.py",
-                  "file": "results/rev3/a2_estimator_qwen36-27b.json",
-                  "json_path": "headline.logreg_vs_dom_cos",
-                  "config": {"by_layer.43.cross_estimator_n": 2000}},
-      "expected": 0.5922, "tol": 0.001
-    },
-    {
-      "id": "a2.focus_decode_gap",
-      "text": "A2: at the focus layer, held-out 6-way present decode is 0.9506 (logreg) vs 0.8832 (difference-of-means) -- better classifier, worse direction, on one pool",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "One 70/30 split, no CI, decision rule substituted by decode_acc (midpoint intercept + row normalisation), and the split reuses the split-half seed-0 permutation (results/reports/17). Quotable as a literal pair of numbers; 'better classifier' in the strict sense needs each estimator's own rule and repeated splits.",
-      "pointer": {"script": "src/rev3/a2_estimator.py",
-                  "file": "results/rev3/a2_estimator_qwen36-27b.json",
-                  "json_path": "headline.logreg_decode_present",
-                  "config": {"headline.dom_decode_present": 0.8832}},
-      "expected": 0.9506, "tol": 0.001
-    },
-    {
-      "id": "a3.exhibit_dom_raw",
-      "text": "A3 (Qwen3.6-27B, focus 43, pool n=4253, DIR/READ halves 2126/2127, reps 2 = 58/cell): with difference-of-means steering AND readout, B's raw present-slope exceeds its raw other-slope for 4 of 6 emotions, 2 significant (afraid, angry)",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Raw projections onto unnormalised rows. The rows' norms are not stored; the present channel's score SD at alpha=0 is 1.65-2.4x the other channel's under dom (results/reports/18), so this count is partly scale. See a3.exhibit_dom_scalefree for the same data with each channel on its own scale. Paired contrast via acl_core.paired_slope_contrast (paired, not scenario-blocked); per-arm slopes scenario-blocked.",
-      "pointer": {"script": "src/rev3/a3_dissociation.py",
-                  "file": "results/rev3/a3_dissociation_qwen36-27b.json",
-                  "json_path": "exhibit.dom->dom.present_gt_other",
-                  "config": {"focus": 43, "probe_n": 4253, "configs": [["logreg", "logreg"], ["dom", "logreg"], ["dom", "dom"]]}},
-      "expected": 4, "tol": 0
-    },
-    {
-      "id": "a3.exhibit_dom_scalefree",
-      "text": "A3, same cells, each channel divided by its own alpha=0 SD (z0): present > other for 2 of 6, 0 significant, and other > present significant for 3 (desperate, happy, sad); under Cohen's d, within-scenario SD and rank normalisation (results/reports/18): 1 of 6, 0 significant, 3 reversed -- the present-vs-other dissociation does not survive any scale-free reading",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#2"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Derived by src/rev3/a3_scalefree.py from the per-sample rows in the A3 result (deterministic; two runs byte-identical). The script's pooled-SD variant (zall) is biased by the dose response and is not part of this claim. The two z0 survivors (afraid +0.24, angry +0.29) are below the design MDE (0.6-0.9 baseline-SD per unit dose). This is the re-analysis RESEARCH_PLAN section 2.3 A3 (2026-09-04 amendment) required before the 5-of-6 exhibit could be quoted; the exhibit is withdrawn.",
-      "pointer": {"script": "src/rev3/a3_scalefree.py",
-                  "file": "results/rev3/a3_scalefree_qwen36-27b.json",
-                  "json_path": "results.dom->dom.z0.present_gt_other"},
-      "expected": 2, "tol": 0
-    },
-    {
-      "id": "a3.published_config_reversal",
-      "text": "A3 reproduces the published configuration (logistic steering, logistic readout) with a non-circular probe: present > other for 0 of 6 emotions; other > present is significant for 4 of 6 on the driver's unblocked bootstrap, 3 of 6 after scenario clustering and FDR (results/reports/18)",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Consistent with e2ci (1 of 6, angry) and with the E2-CI critique's paired re-test (five significant reversals). Under dom steering with logistic readout: 1 of 6 (afraid). Caveats: the paired contrast in acl_core.paired_slope_contrast is neither scenario-blocked nor dose-paired; the six emotions share one alpha=0 baseline; a logreg probe at split-half 0.576 is misaligned with its steering axis, which attenuates the present channel mechanically; the design has no control separating B-models-A from attention to A's steered text.",
-      "pointer": {"script": "src/rev3/a3_dissociation.py",
-                  "file": "results/rev3/a3_dissociation_qwen36-27b.json",
-                  "json_path": "exhibit.logreg->logreg.present_gt_other"},
-      "expected": 0, "tol": 0
-    },
-    {
-      "id": "a3.direction_stability",
-      "text": "A3 probe pool: difference-of-means split-half 0.915 [0.911, 0.919] vs logistic 0.576 [0.567, 0.585] at n=600/half, 10 splits, raw space, layer 43",
-      "appears_in": ["results/rev3/README.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Third independent measurement of the pair today (B1 pool: 0.907 / 0.567; A2 pool at n=600: 0.915 / 0.575). Same pool as A2 here.",
-      "pointer": {"script": "src/rev3/a3_dissociation.py",
-                  "file": "results/rev3/a3_dissociation_qwen36-27b.json",
-                  "json_path": "direction_stability.dom.mean",
-                  "config": {"direction_stability.dom.n_per_half": 600, "direction_stability.dom.space": "raw"}},
-      "expected": 0.9151, "tol": 0.001
-    },
-    {
-      "id": "a2_8b.focus_dom_split_half",
-      "text": "A2 on Llama-3-8B-abliterated (7 depths, pool n=3898, k=220): at the focus layer (hidden_states[21]) the difference-of-means direction reproduces across disjoint halves at cosine 0.9413 at n=1200/half (10 splits, raw space); 0.925-0.941 on all 7 depths",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#2"],
-      "category": "a", "claim_status": "quotable",
-      "note": "n=2000/half not reachable on this pool (2n > 3898). Raw-space only; same caveats as a2.focus_dom_split_half. Re-measurement for stability.postfix_gate_8b (category b, 0.965 at unrecorded n): 0.941 at 1200, 0.895 at 600 -- a new number, not a recovery.",
-      "pointer": {"script": "src/rev3/a2_estimator.py", "file": "results/rev3/a2_estimator_llama3-abl.json", "json_path": "headline.dom_split_half", "config": {"headline.focus_layer": 21, "headline.n_per_half": 1200, "n_pool": 3898}},
-      "expected": 0.9413, "tol": 0.001
-    },
-    {
-      "id": "a2_8b.focus_logreg_split_half",
-      "text": "A2 on Llama-3-8B-abliterated: at the focus layer the C=0.5 logistic row reproduces at cosine 0.286 at n=1200/half; the curve peaks at n=300-600 and DECLINES at n=1200 on 6 of 7 depths (paired over 10 seeds: focus -0.020, t=-3.6, 9/10 negative; pooled 10/10), and the more-regularised C=0.05 row declines harder at all 7 depths -- unlike the 27B, this is not a fixed-C artifact",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#2"],
-      "category": "a", "claim_status": "quotable",
-      "note": "results/reports/19: the decline is significant and survives stronger regularisation on this model, so it is a live in-house instance of a logistic direction getting LESS reproducible with more data -- on one model, one pool (49% retention), no tuned-C arm yet. The 27B shows the opposite (C=0.05 rises). The two models disagree on mechanism; do not generalise either.",
-      "pointer": {"script": "src/rev3/a2_estimator.py", "file": "results/rev3/a2_estimator_llama3-abl.json", "json_path": "headline.logreg_split_half", "config": {"headline.focus_layer": 21, "headline.n_per_half": 1200}},
-      "expected": 0.286, "tol": 0.001
-    },
-    {
-      "id": "a2_8b.nd_anomaly_reproduces",
-      "text": "The n/d ordering violation reproduces on the rev-3 pipeline: the 8B has the better n/d (0.95 vs 0.83) and the worse fixed-C logistic reproducibility at matched n=1200/half (0.286 vs 0.568), while difference-of-means is similar (0.941 vs 0.955) -- n/d does not order these two models",
-      "appears_in": ["docs/planning/RESEARCH_PLAN.md#2", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Two models, one pipeline, one acl_core sha (23c758a9; the driver sha is empty in both files). Two models differing in d, k (160 vs 220), retention (74% vs 49%), tokenizer and abliteration -- an ordering, not a mechanism (results/reports/19). The geometry candidate (effective rank, SNR) is named, not tested: rank does not track stability within the 8B. The tuned-C arm has run on neither model yet.",
-      "pointer": {"script": "src/rev3/a2_estimator.py", "file": "results/rev3/a2_estimator_llama3-abl.json", "json_path": "by_layer.21.diagnostics_present.n_over_d"},
-      "expected": 0.952, "tol": 0.005
-    },
-    {
-      "id": "a2_8b.focus_logreg_vs_dom_cos",
-      "text": "A2 on Llama-3-8B-abliterated: raw-space logistic and difference-of-means directions agree at cosine 0.3824 at the focus layer (0.36-0.42 on all depths); decode 0.8034 (logreg) vs 0.7308 (dom), one split",
-      "appears_in": ["results/rev3/README.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Same non-comparability to 2604.08169 and same single-subsample/no-CI caveats as a2.focus_logreg_vs_dom_cos. Under dom on the 8B the present<->other cosine at the focus layer (0.379) is 0.89 of the within-present cosine (0.427): the near-orthogonal-speaker result does NOT hold under the stable estimator on this model (results/reports/19); under logreg it sits at the 1/(K-1) floor ratio 0.13.",
-      "pointer": {"script": "src/rev3/a2_estimator.py", "file": "results/rev3/a2_estimator_llama3-abl.json", "json_path": "headline.logreg_vs_dom_cos"},
-      "expected": 0.3824, "tol": 0.001
-    },
-    {
-      "id": "b1f.verdict_mixed",
-      "text": "B1 follow-up (same pool and directions as B1; B seeded with a common seed across arms; 3 reps; arms none/emo/rand/ceiling/text): the pre-declared sign-aware rule returns 'mixed' -- MC-ablate passes 6/6, significant NEGATIVE emo-vs-rand contrasts for 2 of 5 testable emotions under the driver's paired bootstrap (afraid, sad) and 3 of 5 under a scenario-clustered, dose-paired bootstrap (plus angry; committed source results/rev3/reblocked_contrasts.json), 0 significant positive, 1 untestable (calm)",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#1"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Rule declared in src/rev3/b1_followup.py before the run: blocking needs >= 4 significant negative contrasts among testable emotions; the rule counts sign. The completed B1's happy sign-reversal (+31) is absent here (-0.0 [-20, +20]); with B seeded and common random numbers it was noise. MDE per emotion 35-83 probe units against none slopes 38-202.",
-      "pointer": {"script": "src/rev3/b1_followup.py",
-                  "file": "results/rev3/b1_followup_qwen36-27b.json",
-                  "json_path": "verdict",
-                  "config": {"counts.n_block": 2, "counts.n_antiblock": 0, "counts.n_untestable": 1, "counts.n_mc_pass": 6, "probe_n": 1615}},
-      "expected": "mixed"
-    },
-    {
-      "id": "b1f.blocked_fraction",
-      "text": "B1 follow-up: residual ablation of the emotion direction over layers 13-42 during B's prefill reduces B's dose-response by +0.25 [+0.16, +0.35] (afraid) and +0.37 [+0.19, +0.56] (sad) of the none-arm slope; desperate -0.03 [-0.24, +0.18], happy +0.00 [-0.35, +0.34], angry +0.12 [-0.01, +0.26] are two-sided nulls (consistent with up to ~35% blocking OR up to ~24-35% amplification; angry is a blocker under a clustered bootstrap); calm untestable",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#1"],
-      "category": "a", "claim_status": "quotable",
-      "note": "blocked_fraction = -(emo - rand contrast) / none slope, CI-implied range from the paired contrast (paired, NOT scenario-blocked; the file's mde field is the wrong estimand -- from each contrast's own bootstrap the detectable difference is 13/19/27/30/50/96% of the none slope for afraid/angry/sad/desperate/happy/calm, results/reports/20). One model, one pool, 29 scenarios x 3 reps.",
-      "pointer": {"script": "src/rev3/b1_followup.py",
-                  "file": "results/rev3/b1_followup_qwen36-27b.json",
-                  "json_path": "summary.afraid.blocked_fraction.emo_vs_rand.point"},
-      "expected": 0.2522, "tol": 0.001
-    },
-    {
-      "id": "b1f.ceiling_equals_emo",
-      "text": "B1 follow-up ceiling arm: projecting the emotion direction out at ALL prefill positions (not only A's span) removes strictly more of A's readable affect (readout drops 0.17-0.46 vs 0.11-0.37) but reduces B's dose-response no further -- emo minus ceiling crosses zero for 5 of 6 under the driver's bootstrap and 6 of 6 under a scenario-clustered one -- so positional coverage is not the limit of residual ablation at layers 13-42",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#1"],
-      "category": "a", "claim_status": "quotable",
-      "note": "The ceiling arm extends the mask over POSITIONS, not LAYERS (abl_dec unchanged: hs 13-42), so it is silent between 'rebuilt at layers 43-63', 'never carried by this rank-1 direction' and 'carried non-linearly' (results/reports/20). Do not read it as 'B rebuilds above the window'. removed_norm per position: ceiling 0.35 over ~92 positions vs emo 0.51 over ~33 (total ~2x). mask_hit_rate for ceiling is set by fiat.",
-      "pointer": {"script": "src/rev3/b1_followup.py",
-                  "file": "results/rev3/b1_followup_qwen36-27b.json",
-                  "json_path": "summary.angry.emo_vs_ceiling.sig"},
-      "expected": true
-    },
-    {
-      "id": "b1f.text_arm",
-      "text": "B1 follow-up token-level arm: replacing A's steered message with an unsteered neutral rewrite (no hooks) reduces B's dose-response for sad (-24 [-45, -3]) and angry (-68 [-104, -35]); desperate and happy not detectably; afraid's -54 is refusal-contaminated (47% of its alpha=1 rewrites are refusals that rewrite_failed does not catch) and calm is untestable by the pre-declared rule; no text-vs-emo contrast was computed",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "The rewrite's own manipulation check is uneven (readout drop 0.287 desperate, 0.185 happy, 0.011 afraid, 0.058 calm); rewrite_refusal_frac is recorded per row but not used by analyze; the text arm also changes the scoring context for B's reply. No affect-preserving control rewrite exists. results/reports/20 verdict: NOT SUPPORTED as originally worded (4 of 6).",
-      "pointer": {"script": "src/rev3/b1_followup.py",
-                  "file": "results/rev3/b1_followup_qwen36-27b.json",
-                  "json_path": "summary.angry.text_vs_none.diff"},
-      "expected": -68.52, "tol": 0.05
-    },
-    {
-      "id": "b1f.ablated_layers_gated",
-      "text": "B1 follow-up: the difference-of-means direction reproduces across disjoint halves at every ablated layer, min 0.882 (hs 14), median 0.898, max 0.920 (hs 37), n=600/half, 10 splits; no layer below the 0.80 gate",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Closes the 'ablated layers ungated' objection from results/reports/16. Raw space.",
-      "pointer": {"script": "src/rev3/b1_followup.py",
-                  "file": "results/rev3/b1_followup_qwen36-27b.json",
-                  "json_path": "ablated_layer_stability.min",
-                  "config": {"layers_below_gate": []}},
-      "expected": 0.8816, "tol": 0.001
-    },
-    {
-      "id": "a2f.focus_logreg_fixed_lambda_flat",
-      "text": "A2 follow-up (27B, focus layer 43, same pool as A2, 10 disjoint splits): with the per-sample logistic penalty held at its C=0.5, n=600 value for every n (C_n = 0.5*600/n), the logistic row's split-half cosine moves by less than 0.03 from n=150 to n=2000 -- 0.581, 0.596, 0.575, 0.578, 0.581 [0.577, 0.585] -- while difference-of-means on the same splits rises 0.732 -> 0.974",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#2"],
-      "category": "a", "claim_status": "quotable",
-      "note": "No material convergence over the reachable range, with the schedule controlled. NOT flat: paired over seeds the curve dips 300->600 at layer 43 (t -4.6) and rises at layer 16 (t +3.8); 150->2000 mean -0.0002 (3/10 positive). Because the fixed per-sample penalty fixes the population target, the cosine must approach 1 eventually -- this is a proportional-regime observation (n <= 2000, d = 5120), not an asymptotic one, and the plateau LEVEL depends on the single anchor run (results/reports/21). Caveats: raw space (std within +0.02, same shape); n-grid points nested within a seed; one pool; layer 54 was lost to the lease (10/48 cells). Same flatness at layer 16 (0.48-0.50).",
-      "pointer": {"script": "src/rev3/a2_followup.py",
-                  "file": "results/rev3/a2_followup_qwen36-27b.json",
-                  "json_path": "by_layer.43.stability.logreg_lam.2000.raw.mean",
-                  "config": {"c_n_formula": "C_n = C_REF * N_REF / n_fit = 0.5 * 600 / n_fit; sklearn's objective is 0.5*||w||^2 + C*sum_i loss_i, so the per-sample penalty 1/(2*C*n) is held at its C=0.5, n=600 value for every n. C_600 == 0.5 exactly.", "cross_n": 2000}},
-      "expected": 0.581, "tol": 0.001
-    },
-    {
-      "id": "a2f.focus_tuned_c_does_not_close_gap",
-      "text": "A2 follow-up: cross-validated C per fit (logreg_cv) reaches 0.608 [0.590, 0.625] at n=2000 on the focus layer vs 0.566 for fixed C=0.5 and 0.974 for difference-of-means -- tuning moves the logistic row by about a tenth of the gap",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#2"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Partial answer to A0's RAPTOR question: CV selected C for ACCURACY (sklearn default scoring), not direction stability, on a decade-spaced grid {0.005, 0.05, 0.5, 5} with cv=3, refit per half; the trend runs toward smaller C and C=0.005 was never run as a fixed value. A stability-scored or finer sweep could do better (results/reports/21).",
-      "pointer": {"script": "src/rev3/a2_followup.py",
-                  "file": "results/rev3/a2_followup_qwen36-27b.json",
-                  "json_path": "by_layer.43.stability.logreg_cv.2000.raw.mean"},
-      "expected": 0.608, "tol": 0.001
-    },
-    {
-      "id": "a2f.std_space_matches_raw",
-      "text": "A2 follow-up: standardised-space split-half cosines are always higher than raw-space values, never by more than 0.03 (gaps 0.002-0.029, shrinking as the cosine approaches 1), with the same shape at layers 16 and 43 -- the space was not the story",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Closes the 'only raw space was run' objection from results/reports/17. Focus layer, n=2000: logreg raw 0.566 / std 0.588; dom raw 0.974 / std 0.976.",
-      "pointer": {"script": "src/rev3/a2_followup.py",
-                  "file": "results/rev3/a2_followup_qwen36-27b.json",
-                  "json_path": "by_layer.43.stability.dom.2000.std.mean"},
-      "expected": 0.976, "tol": 0.001
-    },
-    {
-      "id": "a2f.caa_raw_vs_logreg_raw",
-      "text": "A2 follow-up, the like-for-like cross-estimator quantity: cosine between CAA's raw mean difference and the raw-space logistic direction at the focus layer is 0.427 [0.421, 0.431] (n=2000, 10 independent subsamples), against 0.98-0.99 reported by 2604.08169 for compassion",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/review/A0_PRIOR_ART.md"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Closer to 2604.08169's quantity than A2's 0.59 but still not it: logreg_raw is the raw-space image of a fit on standardised features, and a 6-way softmax row is not a binary probe. The 10-draw CI has no sampling content (draws of 2000 from 4253 overlap ~47%; the degenerate flag only fires at n_pool <= cross_n). Companion values at layer 43: caa_raw|dom_raw 0.722 (the sd^2 division moves dom's direction), caa_raw|dom_std 0.869, logreg_raw|dom_raw 0.603. Layer 16: caa_raw|logreg_raw 0.498.",
-      "pointer": {"script": "src/rev3/a2_followup.py",
-                  "file": "results/rev3/a2_followup_qwen36-27b.json",
-                  "json_path": "by_layer.43.cross_estimator.caa_raw|logreg_raw.mean",
-                  "config": {"by_layer.43.cross_estimator_degenerate": false}},
-      "expected": 0.4268, "tol": 0.001
-    },
-    {
-      "id": "reblock.b1f_emo_vs_rand_blocked",
-      "text": "Under a scenario-blocked, dose-paired bootstrap (29 scenarios), the B1 follow-up's emo-minus-rand contrast is significantly negative for 3 of 6 emotions (afraid, sad, angry) versus 2 under the drivers' unblocked paired bootstrap; the ceiling arm's one positive exception (angry, emo-vs-ceiling) is not significant blocked; the completed B1's counts are unchanged; A3's dom->dom happy becomes significantly reversed",
-      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#13"],
-      "category": "a", "claim_status": "quotable",
-      "note": "Computed by src/rev3/reblock_contrasts.py from the committed per-sample rows using acl_core.paired_slope_contrast(block=, pair_doses=True) (core change at 26e535d; defaults bit-identical to the old behaviour). Confirms the hand computations in results/reports/18 and 20. Point estimates are identical by construction; only the intervals change.",
-      "pointer": {"script": "src/rev3/reblock_contrasts.py",
-                  "file": "results/rev3/reblocked_contrasts.json",
-                  "json_path": "counts.b1_followup/emo_vs_rand.sig_neg_blocked",
-                  "config": {"counts.b1_followup/emo_vs_rand.sig_neg_unblocked": 2, "counts.b1_followup/emo_vs_ceiling.sig_pos_blocked": 0, "counts.a3_dissociation/dom->dom.sig_neg_blocked": 1}},
-      "expected": 3, "tol": 0
+ "_readme": "Provenance registry (RESEARCH_PLAN rev 3, §0.2/§0.3). One entry per reported number. `category` is the §0.2 provenance class; `claim_status` is whether the SENTENCE built on the number may still be quoted, which is a separate question from whether the number resolves. Checked by tools/check_provenance.py.",
+ "_categories": {
+  "a": "reproducible from committed files",
+  "b": "run, but the artifact was lost (lease expiry) -- re-run and commit",
+  "c": "no evidence of a run -- retract, and investigate how it entered",
+  "d": "run in a prior phase, artifact external to this repo -- locate or re-run"
+ },
+ "_claim_status": {
+  "quotable": "number resolves AND the sentence built on it is supported",
+  "retracted": "number may resolve, but the sentence it supports does not follow",
+  "pending": "awaiting a re-run before it can be quoted either way"
+ },
+ "claims": [
+  {
+   "id": "e0.present_acc",
+   "text": "present-speaker emotion decodes at 0.90 (6-way, chance 0.167)",
+   "appears_in": [
+    "README.md#headline-results",
+    "docs/writeups/paper.html#4"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "pointer": {
+    "script": "src/core/coupling_e0.py",
+    "file": "results/core/e0_qwen36-27b.json",
+    "json_path": "focus_result.present_acc",
+    "config": {
+     "model": "Qwen/Qwen3.6-27B",
+     "focus": 43
     }
-  ]
+   },
+   "expected": 0.8987,
+   "tol": 0.001
+  },
+  {
+   "id": "e0.cross_cos",
+   "text": "present and other subspaces near-orthogonal, cos 0.04",
+   "appears_in": [
+    "README.md#headline-results"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "pointer": {
+    "script": "src/core/coupling_e0.py",
+    "file": "results/core/e0_qwen36-27b.json",
+    "json_path": "focus_result.orthogonality_cross_cos"
+   },
+   "expected": 0.0435,
+   "tol": 0.001
+  },
+  {
+   "id": "e2ci.contagion_5of6",
+   "text": "emotional contagion significant for 5/6 emotions (bootstrap CIs)",
+   "appears_in": [
+    "README.md#headline-results"
+   ],
+   "category": "a",
+   "claim_status": "pending",
+   "note": "The COUNT resolves. The CIs behind it do not: coupling_e2_ci.py resamples each alpha cell independently although the same 29 scenarios recur across cells -- an unpaired bootstrap on paired data, which understates the interval used to declare significance (AUDIT 18). Re-derive with the scenario-blocked bootstrap in acl_core.slope_ci before quoting.",
+   "pointer": {
+    "script": "src/representation/coupling_e2_ci.py",
+    "file": "results/representation/e2ci_qwen36-27b.json",
+    "config": {
+     "alphas": [
+      0.0,
+      0.5,
+      1.0
+     ],
+     "repeats": 3,
+     "n_per_cell": 87
+    },
+    "control_lines": "src/representation/coupling_e2_ci.py:1-11",
+    "control_expect": [
+     "drop the model-breaking alpha=2 regime"
+    ]
+   },
+   "derive": {
+    "fn": "count_sig",
+    "args": {
+     "key": "present"
+    }
+   },
+   "expected": 5,
+   "tol": 0
+  },
+  {
+   "id": "e2ci.present_gt_other",
+   "text": "the load-bearing result: B's present shift exceeds its other shift",
+   "appears_in": [
+    "docs/writeups/paper.html#5",
+    "src/core/coupling_e2.py docstring"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "AUDIT 3. The claim asserts 6/6 or a general dissociation; the file gives 1/6 (angry only). No test of the difference is run anywhere. Under difference-of-means on the matched grid it is reported to hold for 5/6 -- which makes it Paper A's A3 exhibit, not Paper B's headline.",
+   "pointer": {
+    "script": "src/representation/coupling_e2_ci.py",
+    "file": "results/representation/e2ci_qwen36-27b.json"
+   },
+   "derive": {
+    "fn": "present_gt_other"
+   },
+   "expected": 6,
+   "tol": 0
+  },
+  {
+   "id": "e3.affect_removed",
+   "text": "81-95% of A's affect is removed by the read-time ablation",
+   "appears_in": [
+    "README.md#headline-results",
+    "docs/writeups/paper.html#6"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "The ARITHMETIC resolves exactly. The claim does not: E3 never regenerates B. B's reply is produced from unmodified text at coupling_e3_ablate.py:154, and the ablation is applied afterwards inside a single scoring pass over the concatenated transcript. The number is a re-encoding effect over frozen tokens, not a channel measurement, and the 81-95 / 5-14 pair was never a budget -- no denominator relationship exists between two readouts taken from one pass over different token spans.",
+   "pointer": {
+    "script": "src/representation/coupling_e3_ablate.py",
+    "file": "results/representation/e3v2_qwen36-27b.json",
+    "control_lines": "src/representation/coupling_e3_ablate.py:146-155",
+    "control_expect": [
+     "a_reps = E2.gen_steered",
+     "b_reps = E2.gen_steered"
+    ]
+   },
+   "derive": {
+    "fn": "range",
+    "args": {
+     "field": "A_manip_removed"
+    }
+   },
+   "expected": [
+    0.809,
+    0.948
+   ],
+   "tol": 0.002
+  },
+  {
+   "id": "e3.text_channel_intact",
+   "text": "the text channel cannot be severed: contagion stays 86-95% intact",
+   "appears_in": [
+    "README.md#headline-results"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "Same defect as e3.affect_removed, and this is the sentence §1.2 says has no experiment behind it in any reading. Superseded by B1 (the E4 rerun), which does regenerate B under the intervention.",
+   "pointer": {
+    "script": "src/representation/coupling_e3_ablate.py",
+    "file": "results/representation/e3v2_qwen36-27b.json",
+    "control_lines": "src/representation/coupling_e3_ablate.py:146-155",
+    "control_expect": [
+     "b_reps = E2.gen_steered(model, tok, bprompts, steer, None)"
+    ]
+   },
+   "derive": {
+    "fn": "range",
+    "args": {
+     "field": "B_contagion_lost"
+    }
+   },
+   "expected": [
+    0.047,
+    0.138
+   ],
+   "tol": 0.002
+  },
+  {
+   "id": "e5.beta03_all6",
+   "text": "the activation-passing channel works at beta=0.3: all 6 emotions transmit",
+   "appears_in": [
+    "README.md#headline-results",
+    "docs/writeups/paper.html#7"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "AUDIT 1. The 6/6 transmit count resolves, but beta was selected on its own outcome (three betas run, only 0.3 gives 6/6) and the specificity controls fail at the selected beta: emo_specific is positive for only 4/6 and the scramble transmits MORE than the full vector for 3/6. No CIs anywhere in E5.",
+   "pointer": {
+    "script": "src/representation/coupling_e5_actpass.py",
+    "file": "results/representation/e5actpass_qwen36-b03.json",
+    "config": {
+     "beta": 0.3
+    },
+    "control_lines": "src/representation/coupling_e5_actpass.py:185-185",
+    "control_expect": [
+     "vA[np.random.default_rng(0).permutation(len(vA))]"
+    ]
+   },
+   "derive": {
+    "fn": "count_positive",
+    "args": {
+     "field": "transmit(full-none)"
+    }
+   },
+   "expected": 6,
+   "tol": 0
+  },
+  {
+   "id": "e5.emotion_causally_responsible",
+   "text": "the emotion component is causally responsible; a scrambled activation transmits far less",
+   "appears_in": [
+    "README.md#headline-results",
+    "docs/writeups/paper.html#7"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "The scramble is broken by construction: coupling_e5_actpass.py:185 permutes vA WITHIN one emotion, so it preserves the emotion component and cannot test emotion specificity at all. §6: a permutation null must permute across the variable it tests.",
+   "pointer": {
+    "script": "src/representation/coupling_e5_actpass.py",
+    "file": "results/representation/e5actpass_qwen36-b03.json",
+    "control_lines": "src/representation/coupling_e5_actpass.py:185-185",
+    "control_expect": [
+     "permutation(len(vA))"
+    ]
+   },
+   "derive": {
+    "fn": "count_positive",
+    "args": {
+     "field": "vs_scramble(full-scramble)"
+    }
+   },
+   "expected": 6,
+   "tol": 0
+  },
+  {
+   "id": "cmi.coupling_nats",
+   "text": "A-to-B coupling quantified at 0.197 nats (z = 11.5 vs scramble null)",
+   "appears_in": [
+    "README.md#headline-results",
+    "docs/writeups/paper.html#8"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "AUDIT 2. The number resolves. What it measures does not support the sentence: cmi_passed.py pools 6 emotions x 29 episodes into one matrix and permutes ACROSS emotion blocks, so both variables carry a strong block mean by construction and the statistic mostly recovers 'which of six emotions this was'. The real-data call also conditions on nothing (Z=None) despite the pilot's own hygiene test.",
+   "pointer": {
+    "script": "src/information/cmi_passed.py",
+    "file": "results/information/cmi_passed_qwen36-27b.json",
+    "json_path": "coupling_nats"
+   },
+   "expected": 0.1972,
+   "tol": 0.001
+  },
+  {
+   "id": "cmi.pilot_spurious",
+   "text": "the CMI pilot measured 0.88 nats spurious under a lossy conditioner",
+   "appears_in": [
+    "docs/writeups/dossier.html"
+   ],
+   "category": "a",
+   "claim_status": "pending",
+   "note": "Was category (c): results/information/cmi_pilot.json was not in the repo. Archaeology 2026-09-04: the number entered at c976a8e (2026-07-25, the initial commit) in dossier.html; the script writes its JSON only when run, and no run had ever been committed. Re-run locally 2026-09-04 (CPU-only synthetic, seeds 0-11, ~6 s): beta=0 lossy-encoder estimate 0.8815, byte-identical across two runs. The number now resolves. Left 'pending' rather than promoted to quotable: AUDIT 2 retracted it on provenance grounds, and whether the dossier sentence built on it may be quoted again is an adjudication decision, not a checker decision.",
+   "pointer": {
+    "script": "src/information/cmi_pilot.py",
+    "file": "results/information/cmi_pilot.json",
+    "json_path": "confound.beta0_est_lossy_ARTIFACT"
+   },
+   "expected": 0.8815,
+   "tol": 0.001
+  },
+  {
+   "id": "stability.postfix_gate_27b",
+   "text": "post-fix stability gate 0.967 on the 27B (pre-fix 0.427)",
+   "appears_in": [
+    "docs/review/NOVELTY_REVIEW.md",
+    "docs/writeups/dossier.html"
+   ],
+   "category": "b",
+   "claim_status": "pending",
+   "note": "Observed in run logs; the JSON died with the sandbox lease. A2 re-measured it 2026-09-04 (a2.focus_dom_split_half: 0.9736 at n=2000/half, 0.955 at 1200, 0.915 at 600, raw space, results/rev3/a2_estimator_qwen36-27b.json). That is a new number on a new pool; the 0.967 as worded has no file and its n is unknown, so this entry stays pending until the authors retire the sentence in favour of the A2 figure.",
+   "pointer": {
+    "script": "src/estimator/stability_diag.py",
+    "file": null
+   }
+  },
+  {
+   "id": "stability.postfix_gate_8b",
+   "text": "post-fix stability gate 0.965 on the 8B (pre-fix 0.195)",
+   "appears_in": [
+    "docs/review/NOVELTY_REVIEW.md"
+   ],
+   "category": "b",
+   "claim_status": "pending",
+   "note": "Same lease loss. Only the PRE-fix 8B value is committed, in p1dose_stability_llama3-abl.json (0.195). A2 re-measured 2026-09-04 (a2_8b.focus_dom_split_half: 0.9413 at n=1200/half, raw space). New number on a new pool; the 0.965 sentence stays pending until retired.",
+   "pointer": {
+    "script": "src/estimator/stability_diag.py",
+    "file": null
+   }
+  },
+  {
+   "id": "stabdiag.logreg_27b_600",
+   "text": "logistic split-half agreement 0.409 at n=600/half on the 27B",
+   "appears_in": [
+    "README.md#re-measurement",
+    "docs/planning/RESEARCH_PLAN.md#2.2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "pointer": {
+    "script": "src/estimator/stability_diag.py",
+    "file": "results/estimator/stabdiag_qwen36-27b.json",
+    "json_path": "results[2].logreg.cos_mean",
+    "config": {
+     "model": "Qwen/Qwen3.6-27B",
+     "focus": 43
+    }
+   },
+   "expected": 0.4087,
+   "tol": 0.001
+  },
+  {
+   "id": "stabdiag.dom_27b_600",
+   "text": "difference-of-means split-half agreement 0.893 at n=600/half on the 27B",
+   "appears_in": [
+    "README.md#re-measurement"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "pointer": {
+    "script": "src/estimator/stability_diag.py",
+    "file": "results/estimator/stabdiag_qwen36-27b.json",
+    "json_path": "results[2].diff_of_means.cos_mean"
+   },
+   "expected": 0.8927,
+   "tol": 0.001
+  },
+  {
+   "id": "stabdiag.dom_8b_1200",
+   "text": "difference-of-means split-half agreement 0.898 at n=1200/half on the 8B",
+   "appears_in": [
+    "README.md#re-measurement"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "pointer": {
+    "script": "src/estimator/stability_diag.py",
+    "file": "results/estimator/stabdiag_llama3-abl-big.json",
+    "json_path": "results[3].diff_of_means.cos_mean",
+    "config": {
+     "model": "failspy/Llama-3-8B-Instruct-abliterated"
+    }
+   },
+   "expected": 0.8982,
+   "tol": 0.001
+  },
+  {
+   "id": "dualest.stability_dissociation",
+   "text": "logreg gives the better classifier (0.926 vs 0.850) and the worse direction (0.394 vs 0.940)",
+   "appears_in": [
+    "README.md#re-measurement"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "pointer": {
+    "script": "src/estimator/dual_estimator_battery.py",
+    "file": "results/estimator/dualest_qwen36-27b.json",
+    "json_path": "arms.logreg.e0.stability_cos",
+    "config": {
+     "n_pool": 2170,
+     "focus": 43
+    }
+   },
+   "expected": 0.3935,
+   "tol": 0.001
+  },
+  {
+   "id": "model_identity.llama31",
+   "text": "cross-scale check performed on Llama-3.1-8B",
+   "appears_in": [
+    "README.md",
+    "docs/writeups/paper.html#table1"
+   ],
+   "category": "d",
+   "claim_status": "retracted",
+   "note": "AUDIT 11. Every Llama artifact in this repo is llama3- (Llama-3, instruct or abliterated). No Llama-3.1-8B result file exists anywhere. Correct the identity claim whether or not the numbers are re-derived (§0.2).",
+   "pointer": {
+    "script": null,
+    "file": null
+   }
+  },
+  {
+   "id": "behavioral.honesty_floor_ruled_out",
+   "text": "behavioral reach not detectable; the honesty floor is ruled out",
+   "appears_in": [
+    "README.md#headline-results",
+    "docs/writeups/paper.html#10",
+    "docs/writeups/paper.html#12"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "AUDIT 6. The abliterated behavioral CI is [-0.08, +0.13] at n=32, which rules out nothing on a 0.31 base rate, and no MDE is computed anywhere. The model this rests on failed its own positive control (P1: baseline cheat 0.510, THREAT 0.540, INSTRUCT 0.450). Use acl_core.mde before any null is reported as informative.",
+   "pointer": {
+    "script": "src/behavioral/behavioral_powered.py",
+    "file": "results/behavioral/behavioral_powered_qwen36-27b.json",
+    "json_path": "manip_sig"
+   },
+   "expected": true
+  },
+  {
+   "id": "behavioral.multiturn_accumulation",
+   "text": "representation contagion accumulates over 8 turns",
+   "appears_in": [
+    "docs/writeups/paper.html#10",
+    "commit e03c17e"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "AUDIT 8. It accumulates identically without steering: the bdesp slope is significant under desperate (+0.404), calm (+0.432) AND neutral (+0.306); calm exceeds desperate; the desp-calm contrast is n.s. (+0.008, CI [-0.011, +0.024]). Also unreported: B cheats 0.085 under desperate vs 0.234 under calm, a 15-point effect opposite the hypothesis. Preregistered for prospective test in B6 rather than reported post-hoc.",
+   "pointer": {
+    "script": "src/behavioral/behavioral_multiturn.py",
+    "file": "results/behavioral/behavioral_multiturn_qwen36-27b.json"
+   }
+  },
+  {
+   "id": "induction.scramble_control",
+   "text": "the scramble-controlled induction arm shows no emotion-specific behavioral effect",
+   "appears_in": [
+    "docs/writeups/paper.html#10"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "AUDIT 7. The ~0 result is arithmetic, not evidence: behavioral_induction.py:168 builds the scramble by permuting the DESPERATE vectors among themselves, so cheat(desperate) - cheat(scramble) is ~0 by construction. manip_sig is false in all three models, and SHARED_WORKSPACE_SPEC says a failed manipulation check invalidates the run.",
+   "pointer": {
+    "script": "src/behavioral/behavioral_induction.py",
+    "file": "results/behavioral/behavioral_induction_qwen36-27b.json",
+    "json_path": "manip_sig",
+    "control_lines": "src/behavioral/behavioral_induction.py:168-168",
+    "control_expect": [
+     "vdesp[rng.permutation(len(vdesp))]"
+    ]
+   },
+   "expected": true
+  },
+  {
+   "id": "jlens.beats_logit_lens",
+   "text": "verbalizable via the Jacobian lens for 6/6 emotions, beating a logit-lens control",
+   "appears_in": [
+    "README.md#headline-results"
+   ],
+   "category": "a",
+   "claim_status": "retracted",
+   "note": "AUDIT 10/17. Scores are compared across unnormalised scales (J-lens after lens.transport, logit-lens without), n=16, no CIs; the 'best layer' is selected where the J-lens produced the most content tokens and the logit lens is then reported at that layer. Commit c976a8e claims 6/6 for jlens_coupling, whose file is 2/6 negative.",
+   "pointer": {
+    "script": "src/verbalization/jlens_contagion.py",
+    "file": "results/verbalization/jlens_contagion_qwen36-27b.json",
+    "config": {
+     "layer": 29
+    }
+   }
+  },
+  {
+   "id": "dataset.13k_released",
+   "text": "all results and the ~13k archived generations are released",
+   "appears_in": [
+    "README.md#data",
+    "docs/writeups/paper.html"
+   ],
+   "category": "c",
+   "claim_status": "retracted",
+   "note": "AUDIT 14. The repo holds 300 E0 dialogues plus 200 multi-turn transcripts; the README itself calls the dataset private; and three different counts (~13k / 12,333 / ~12k) appear across documents. §0.6 makes publishing the dataset a Phase 0 deliverable precisely because it is the only thing that lets anyone outside the team check the ablation. Archaeology 2026-09-04: all three counts entered together at c976a8e (2026-07-25, the initial commit) -- README '~12k', dossier '12,333', paper '≈13k' -- none tied to a file, and no later commit introduced or reconciled them.",
+   "pointer": {
+    "script": null,
+    "file": null
+   }
+  },
+  {
+   "id": "b1.stability_gate_dom",
+   "text": "B1 direction-stability gate (2026-09-04 full rerun): difference-of-means split-half cosine 0.9074 [0.904, 0.911] at n=600/half, 10 splits, raw space, measured at layer 43 -- the steering and read layer, which is NOT one of the 30 ablated layers (13-42); logistic 0.567; pre-declared gate 0.80 passes",
+   "appears_in": [
+    "docs/review/RESULTS_LOG.md",
+    "results/rev3/README.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Was category (b): the 2026-09-02 sweep's 0.909 died with its sandbox. This is a NEW measurement from the from-scratch rerun (different pool, n=1615 kept vs 1578), not a recovery of the old number. Per-class: {'happy': 0.929, 'calm': 0.948, 'sad': 0.9, 'angry': 0.942, 'afraid': 0.859, 'desperate': 0.867}. The stability of the 30 directions actually projected out is not measured anywhere (results/reports/16) -- quotable only with the layer stated.",
+   "pointer": {
+    "script": "src/rev3/b1_e4rerun.py",
+    "file": "results/rev3/b1_e4rerun_qwen36-27b.json",
+    "json_path": "direction_stability.used.mean",
+    "config": {
+     "direction_stability.used.n_per_half": 600,
+     "direction_stability.used.n_seeds": 10,
+     "direction_stability.used.space": "raw",
+     "focus": 43,
+     "abl_hs_range": [
+      13,
+      42
+     ]
+    }
+   },
+   "expected": 0.9074,
+   "tol": 0.001
+  },
+  {
+   "id": "b1.mc_ablate_pass_6of6",
+   "text": "B1 (full grid, 54/54 cells): the generation-side manipulation check passes on point estimates for 6 of 6 emotions (drop_emo +0.11 to +0.37 vs drop_rand within +/-0.005); the stricter CI-separation flag holds for 4 of 6 (not afraid, not calm)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Derived from the committed cells by src/rev3/b1_analyze.py (deterministic). Supersedes b1.mc_ablate_pass_5of5 (partial grid). Caveats from results/reports/16: afraid's MC-steer readout is off-target (modal readout desperate at alpha=1) and non-monotone; 'passes' is a sign test, 'separated' the CI test; the check certifies removal of the linear feature from A's span at layers 13-42, not from what B received.",
+   "pointer": {
+    "script": "src/rev3/b1_analyze.py",
+    "file": "results/rev3/b1_summary_qwen36-27b.json",
+    "config": {
+     "n_cells": 54,
+     "n_expected": 54
+    },
+    "control_lines": "src/rev3/b1_analyze.py:76-81",
+    "control_expect": [
+     "mc[\"separated\"] = bool(mc[\"emo\"][\"ci\"][1] < mc[\"rand\"][\"ci\"][0])",
+     "mc[\"passes\"] = bool(mc[\"drop_emo\"] > 0 and mc[\"drop_emo\"] > mc[\"drop_rand\"])"
+    ]
+   },
+   "derive": {
+    "fn": "count_true",
+    "args": {
+     "path": "mc_ablate.passes"
+    }
+   },
+   "expected": 6,
+   "tol": 0
+  },
+  {
+   "id": "b1.emo_vs_rand_sig_3of6",
+   "text": "B1 (full grid): the emo-minus-rand present-slope contrast excludes zero for 3 of 6 emotions -- negative (ablation reduces B's dose-response) for afraid (-50.5 [-72.4, -29.1]) and sad (-29.1 [-49.0, -10.0]), POSITIVE for happy (+31.2 [+9.4, +53.3]); crosses zero for desperate, calm, angry",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Supersedes b1.emo_vs_rand_sig_2of5. happy's POSITIVE contrast is a dose-grid artifact: all arms peak at alpha=0.5, which the 3-point OLS slope (= y(1)-y(0)) discards (results/reports/16 delta). The contrast interval is paired but NOT scenario-blocked (acl_core.paired_slope_contrast). calm's none-arm slope does not exclude zero, so it has no transmission to block. Expressed as a fraction of the none-arm slope, the three null emotions are consistent with blocking up to 0.33 (desperate), 0.27 (angry); see results/rev3/README.md.",
+   "pointer": {
+    "script": "src/rev3/b1_analyze.py",
+    "file": "results/rev3/b1_summary_qwen36-27b.json",
+    "config": {
+     "n_cells": 54
+    },
+    "control_lines": "src/rev3/b1_analyze.py:60-64",
+    "control_expect": [
+     "paired_slope_contrast"
+    ]
+   },
+   "derive": {
+    "fn": "count_sig",
+    "args": {
+     "key": "emo_vs_rand"
+    }
+   },
+   "expected": 3,
+   "tol": 0
+  },
+  {
+   "id": "b1.verdict_not_blocking",
+   "text": "B1 pre-declared decision rule returns 'not_blocking': the manipulation check passed for 6/6 (>= 3 required) and the emo-vs-rand contrast is significant for fewer than 4 of 6",
+   "appears_in": [
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#11"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "This is the rule's output, not a statement that ablation does nothing: 2 of 6 emotions show significant reduction, 1 shows significant increase, and the nulls are underpowered (no MDE computed; acl_core.mde never called). RESEARCH_PLAN section 1.3's 'outcome 2' reading additionally requires the token-level and ceiling arms (2026-09-04 amendment) before it locates the channel. The rule's denominator is 6 and was declared before the run (b1_e4rerun.py:399-403); it counts significance WITHOUT sign, so its 3 includes happy's reversal. Provenance defects in this file: code_sha is empty, seeds.run is recorded although gen_B is unseeded, and control_pointers name forced_choice_readout and build_dirs, neither of which runs.",
+   "pointer": {
+    "script": "src/rev3/b1_e4rerun.py",
+    "file": "results/rev3/b1_e4rerun_qwen36-27b.json",
+    "json_path": "verdict",
+    "config": {
+     "n_mc_pass": 6,
+     "probe_n": 1615,
+     "estimator": "dom"
+    },
+    "control_lines": "src/rev3/b1_e4rerun.py:399-403",
+    "control_expect": [
+     "\"blocking\" if sum(1 for e in EMOS",
+     ">= 4"
+    ]
+   },
+   "expected": "not_blocking"
+  },
+  {
+   "id": "a2.focus_dom_split_half",
+   "text": "A2 (full run, 7 depths, pool n=4253): at the focus layer (hidden_states[43]) the difference-of-means direction reproduces across disjoint halves at cosine 0.9736 at n=2000/half (10 splits, raw space); 0.915 at n=600",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Raw-space cosine (C/sd, the steering direction); the standardised-space cosine was not run (results/reports/17). Within a seed the n-grid points are nested prefixes of one permutation. Uniform across all 7 depths (0.966-0.979 at n=2000). This is the A2 re-measurement that stability.postfix_gate_27b (category b, 0.967 at an unrecorded n) was waiting for; it is a new number, not a recovery.",
+   "pointer": {
+    "script": "src/rev3/a2_estimator.py",
+    "file": "results/rev3/a2_estimator_qwen36-27b.json",
+    "json_path": "headline.dom_split_half",
+    "config": {
+     "headline.focus_layer": 43,
+     "headline.n_per_half": 2000,
+     "n_pool": 4253
+    }
+   },
+   "expected": 0.9736,
+   "tol": 0.001
+  },
+  {
+   "id": "a2.focus_logreg_split_half",
+   "text": "A2: at the focus layer the multinomial logistic-regression row (C=0.5) reproduces at cosine 0.5664 at n=2000/half; the C=0.5 curve is flat-to-declining after n=600 (0.575 -> 0.568 -> 0.566; pooled across the four declining depths t ~ -1.8 at 10 seeds, unresolved) while the C=0.05 row still rises on 6 of 7 depths and ends at 0.575 -- the shape of the logistic curve depends on the untuned regularisation constant",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "C fixed, so the per-sample penalty weakens 27x across the n grid (results/reports/14, 17 delta). Peak at n=600 on 4 of 7 depths only; hs16 and hs29 are still rising significantly. ridge (alpha=1000) 0.349; logreg_cv excluded from the split-half sweep. The earlier wording 'stops improving after n=600 on 5 of 7 depths' was withdrawn 2026-09-04 after the delta critique. Do not quote a plateau; quote the C-dependence.",
+   "pointer": {
+    "script": "src/rev3/a2_estimator.py",
+    "file": "results/rev3/a2_estimator_qwen36-27b.json",
+    "json_path": "headline.logreg_split_half",
+    "config": {
+     "headline.focus_layer": 43,
+     "headline.n_per_half": 2000
+    }
+   },
+   "expected": 0.5664,
+   "tol": 0.001
+  },
+  {
+   "id": "a2.focus_logreg_vs_dom_cos",
+   "text": "A2: at the focus layer the raw-space (C/sd) logistic and difference-of-means directions agree at cosine 0.5922 (n=2000; 0.54-0.60 at all 7 depths, but on the SAME 2000-row subsample at every depth)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/review/A0_PRIOR_ART.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "NOT comparable to 2604.08169 as it stands: that paper compares CAA's raw mean difference with a raw logistic weight; this file compares w/sd with (mu+ - mu-)/sd^2 (results/reports/17 delta). Neither C nor sd is stored, so the like-for-like cosine needs a rerun that emits it. One subsample (default_rng(seed+1) inside the layer loop) read at every depth; no CI. Clusters: logistic family >= 0.98 within; dom/dom_norm/pca_diff >= 0.97; mass_mean_cov nearer logreg (0.49) than dom (0.17).",
+   "pointer": {
+    "script": "src/rev3/a2_estimator.py",
+    "file": "results/rev3/a2_estimator_qwen36-27b.json",
+    "json_path": "headline.logreg_vs_dom_cos",
+    "config": {
+     "by_layer.43.cross_estimator_n": 2000
+    }
+   },
+   "expected": 0.5922,
+   "tol": 0.001
+  },
+  {
+   "id": "a2.focus_decode_gap",
+   "text": "A2: at the focus layer, held-out 6-way present decode is 0.9506 (logreg) vs 0.8832 (difference-of-means) -- better classifier, worse direction, on one pool",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "One 70/30 split, no CI, decision rule substituted by decode_acc (midpoint intercept + row normalisation), and the split reuses the split-half seed-0 permutation (results/reports/17). Quotable as a literal pair of numbers; 'better classifier' in the strict sense needs each estimator's own rule and repeated splits.",
+   "pointer": {
+    "script": "src/rev3/a2_estimator.py",
+    "file": "results/rev3/a2_estimator_qwen36-27b.json",
+    "json_path": "headline.logreg_decode_present",
+    "config": {
+     "headline.dom_decode_present": 0.8832
+    }
+   },
+   "expected": 0.9506,
+   "tol": 0.001
+  },
+  {
+   "id": "a3.exhibit_dom_raw",
+   "text": "A3 (Qwen3.6-27B, focus 43, pool n=4253, DIR/READ halves 2126/2127, reps 2 = 58/cell): with difference-of-means steering AND readout, B's raw present-slope exceeds its raw other-slope for 4 of 6 emotions, 2 significant (afraid, angry)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Raw projections onto unnormalised rows. The rows' norms are not stored; the present channel's score SD at alpha=0 is 1.65-2.4x the other channel's under dom (results/reports/18), so this count is partly scale. See a3.exhibit_dom_scalefree for the same data with each channel on its own scale. Paired contrast via acl_core.paired_slope_contrast (paired, not scenario-blocked); per-arm slopes scenario-blocked.",
+   "pointer": {
+    "script": "src/rev3/a3_dissociation.py",
+    "file": "results/rev3/a3_dissociation_qwen36-27b.json",
+    "json_path": "exhibit.dom->dom.present_gt_other",
+    "config": {
+     "focus": 43,
+     "probe_n": 4253,
+     "configs": [
+      [
+       "logreg",
+       "logreg"
+      ],
+      [
+       "dom",
+       "logreg"
+      ],
+      [
+       "dom",
+       "dom"
+      ]
+     ]
+    }
+   },
+   "expected": 4,
+   "tol": 0
+  },
+  {
+   "id": "a3.exhibit_dom_scalefree",
+   "text": "A3, same cells, each channel divided by its own alpha=0 SD (z0): present > other for 2 of 6, 0 significant, and other > present significant for 3 (desperate, happy, sad); under Cohen's d, within-scenario SD and rank normalisation (results/reports/18): 1 of 6, 0 significant, 3 reversed -- the present-vs-other dissociation does not survive any scale-free reading",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Derived by src/rev3/a3_scalefree.py from the per-sample rows in the A3 result (deterministic; two runs byte-identical). The script's pooled-SD variant (zall) is biased by the dose response and is not part of this claim. The two z0 survivors (afraid +0.24, angry +0.29) are below the design MDE (0.6-0.9 baseline-SD per unit dose). This is the re-analysis RESEARCH_PLAN section 2.3 A3 (2026-09-04 amendment) required before the 5-of-6 exhibit could be quoted; the exhibit is withdrawn.",
+   "pointer": {
+    "script": "src/rev3/a3_scalefree.py",
+    "file": "results/rev3/a3_scalefree_qwen36-27b.json",
+    "json_path": "results.dom->dom.z0.present_gt_other"
+   },
+   "expected": 2,
+   "tol": 0
+  },
+  {
+   "id": "a3.published_config_reversal",
+   "text": "A3 reproduces the published configuration (logistic steering, logistic readout) with a non-circular probe: present > other for 0 of 6 emotions; other > present is significant for 4 of 6 on the driver's unblocked bootstrap, 3 of 6 after scenario clustering and FDR (results/reports/18)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Consistent with e2ci (1 of 6, angry) and with the E2-CI critique's paired re-test (five significant reversals). Under dom steering with logistic readout: 1 of 6 (afraid). Caveats: the paired contrast in acl_core.paired_slope_contrast is neither scenario-blocked nor dose-paired; the six emotions share one alpha=0 baseline; a logreg probe at split-half 0.576 is misaligned with its steering axis, which attenuates the present channel mechanically; the design has no control separating B-models-A from attention to A's steered text.",
+   "pointer": {
+    "script": "src/rev3/a3_dissociation.py",
+    "file": "results/rev3/a3_dissociation_qwen36-27b.json",
+    "json_path": "exhibit.logreg->logreg.present_gt_other"
+   },
+   "expected": 0,
+   "tol": 0
+  },
+  {
+   "id": "a3.direction_stability",
+   "text": "A3 probe pool: difference-of-means split-half 0.915 [0.911, 0.919] vs logistic 0.576 [0.567, 0.585] at n=600/half, 10 splits, raw space, layer 43",
+   "appears_in": [
+    "results/rev3/README.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Third independent measurement of the pair today (B1 pool: 0.907 / 0.567; A2 pool at n=600: 0.915 / 0.575). Same pool as A2 here.",
+   "pointer": {
+    "script": "src/rev3/a3_dissociation.py",
+    "file": "results/rev3/a3_dissociation_qwen36-27b.json",
+    "json_path": "direction_stability.dom.mean",
+    "config": {
+     "direction_stability.dom.n_per_half": 600,
+     "direction_stability.dom.space": "raw"
+    }
+   },
+   "expected": 0.9151,
+   "tol": 0.001
+  },
+  {
+   "id": "a2_8b.focus_dom_split_half",
+   "text": "A2 on Llama-3-8B-abliterated (7 depths, pool n=3898, k=220): at the focus layer (hidden_states[21]) the difference-of-means direction reproduces across disjoint halves at cosine 0.9413 at n=1200/half (10 splits, raw space); 0.925-0.941 on all 7 depths",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "n=2000/half not reachable on this pool (2n > 3898). Raw-space only; same caveats as a2.focus_dom_split_half. Re-measurement for stability.postfix_gate_8b (category b, 0.965 at unrecorded n): 0.941 at 1200, 0.895 at 600 -- a new number, not a recovery.",
+   "pointer": {
+    "script": "src/rev3/a2_estimator.py",
+    "file": "results/rev3/a2_estimator_llama3-abl.json",
+    "json_path": "headline.dom_split_half",
+    "config": {
+     "headline.focus_layer": 21,
+     "headline.n_per_half": 1200,
+     "n_pool": 3898
+    }
+   },
+   "expected": 0.9413,
+   "tol": 0.001
+  },
+  {
+   "id": "a2_8b.focus_logreg_split_half",
+   "text": "A2 on Llama-3-8B-abliterated: at the focus layer the C=0.5 logistic row reproduces at cosine 0.286 at n=1200/half; the curve peaks at n=300-600 and DECLINES at n=1200 on 6 of 7 depths (paired over 10 seeds: focus -0.020, t=-3.6, 9/10 negative; pooled 10/10), and the more-regularised C=0.05 row declines harder at all 7 depths -- unlike the 27B, this is not a fixed-C artifact",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "results/reports/19: the decline is significant and survives stronger regularisation on this model, so it is a live in-house instance of a logistic direction getting LESS reproducible with more data -- on one model, one pool (49% retention), no tuned-C arm yet. The 27B shows the opposite (C=0.05 rises). The two models disagree on mechanism; do not generalise either.",
+   "pointer": {
+    "script": "src/rev3/a2_estimator.py",
+    "file": "results/rev3/a2_estimator_llama3-abl.json",
+    "json_path": "headline.logreg_split_half",
+    "config": {
+     "headline.focus_layer": 21,
+     "headline.n_per_half": 1200
+    }
+   },
+   "expected": 0.286,
+   "tol": 0.001
+  },
+  {
+   "id": "a2_8b.nd_anomaly_reproduces",
+   "text": "The n/d ordering violation reproduces on the rev-3 pipeline: the 8B has the better n/d (0.95 vs 0.83) and the worse fixed-C logistic reproducibility at matched n=1200/half (0.286 vs 0.568), while difference-of-means is similar (0.941 vs 0.955) -- n/d does not order these two models",
+   "appears_in": [
+    "docs/planning/RESEARCH_PLAN.md#2",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Two models, one pipeline, one acl_core sha (23c758a9; the driver sha is empty in both files). Two models differing in d, k (160 vs 220), retention (74% vs 49%), tokenizer and abliteration -- an ordering, not a mechanism (results/reports/19). The geometry candidate (effective rank, SNR) is named, not tested: rank does not track stability within the 8B. The tuned-C arm has run on neither model yet.",
+   "pointer": {
+    "script": "src/rev3/a2_estimator.py",
+    "file": "results/rev3/a2_estimator_llama3-abl.json",
+    "json_path": "by_layer.21.diagnostics_present.n_over_d"
+   },
+   "expected": 0.952,
+   "tol": 0.005
+  },
+  {
+   "id": "a2_8b.focus_logreg_vs_dom_cos",
+   "text": "A2 on Llama-3-8B-abliterated: raw-space logistic and difference-of-means directions agree at cosine 0.3824 at the focus layer (0.36-0.42 on all depths); decode 0.8034 (logreg) vs 0.7308 (dom), one split",
+   "appears_in": [
+    "results/rev3/README.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Same non-comparability to 2604.08169 and same single-subsample/no-CI caveats as a2.focus_logreg_vs_dom_cos. Under dom on the 8B the present<->other cosine at the focus layer (0.379) is 0.89 of the within-present cosine (0.427): the near-orthogonal-speaker result does NOT hold under the stable estimator on this model (results/reports/19); under logreg it sits at the 1/(K-1) floor ratio 0.13.",
+   "pointer": {
+    "script": "src/rev3/a2_estimator.py",
+    "file": "results/rev3/a2_estimator_llama3-abl.json",
+    "json_path": "headline.logreg_vs_dom_cos"
+   },
+   "expected": 0.3824,
+   "tol": 0.001
+  },
+  {
+   "id": "b1f.verdict_mixed",
+   "text": "B1 follow-up (same pool and directions as B1; B seeded with a common seed across arms; 3 reps; arms none/emo/rand/ceiling/text): the pre-declared sign-aware rule returns 'mixed' -- MC-ablate passes 6/6, significant NEGATIVE emo-vs-rand contrasts for 2 of 5 testable emotions under the driver's paired bootstrap (afraid, sad) and 3 of 5 under a scenario-clustered, dose-paired bootstrap (plus angry; committed source results/rev3/reblocked_contrasts.json), 0 significant positive, 1 untestable (calm)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#1"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Rule declared in src/rev3/b1_followup.py before the run: blocking needs >= 4 significant negative contrasts among testable emotions; the rule counts sign. The completed B1's happy sign-reversal (+31) is absent here (-0.0 [-20, +20]); with B seeded and common random numbers it was noise. MDE per emotion 35-83 probe units against none slopes 38-202.",
+   "pointer": {
+    "script": "src/rev3/b1_followup.py",
+    "file": "results/rev3/b1_followup_qwen36-27b.json",
+    "json_path": "verdict",
+    "config": {
+     "counts.n_block": 2,
+     "counts.n_antiblock": 0,
+     "counts.n_untestable": 1,
+     "counts.n_mc_pass": 6,
+     "probe_n": 1615
+    }
+   },
+   "expected": "mixed"
+  },
+  {
+   "id": "b1f.blocked_fraction",
+   "text": "B1 follow-up: residual ablation of the emotion direction over layers 13-42 during B's prefill reduces B's dose-response by +0.25 [+0.16, +0.35] (afraid) and +0.37 [+0.19, +0.56] (sad) of the none-arm slope; desperate -0.03 [-0.24, +0.18], happy +0.00 [-0.35, +0.34], angry +0.12 [-0.01, +0.26] are two-sided nulls (consistent with up to ~35% blocking OR up to ~24-35% amplification; angry is a blocker under a clustered bootstrap); calm untestable",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#1"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "blocked_fraction = -(emo - rand contrast) / none slope, CI-implied range from the paired contrast (paired, NOT scenario-blocked; the file's mde field is the wrong estimand -- from each contrast's own bootstrap the detectable difference is 13/19/27/30/50/96% of the none slope for afraid/angry/sad/desperate/happy/calm, results/reports/20). One model, one pool, 29 scenarios x 3 reps.",
+   "pointer": {
+    "script": "src/rev3/b1_followup.py",
+    "file": "results/rev3/b1_followup_qwen36-27b.json",
+    "json_path": "summary.afraid.blocked_fraction.emo_vs_rand.point"
+   },
+   "expected": 0.2522,
+   "tol": 0.001
+  },
+  {
+   "id": "b1f.ceiling_equals_emo",
+   "text": "B1 follow-up ceiling arm: projecting the emotion direction out at ALL prefill positions (not only A's span) removes strictly more of A's readable affect (readout drops 0.17-0.46 vs 0.11-0.37) but reduces B's dose-response no further -- emo minus ceiling crosses zero for 5 of 6 under the driver's bootstrap and 6 of 6 under a scenario-clustered one -- so positional coverage is not the limit of residual ablation at layers 13-42",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#1"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "The ceiling arm extends the mask over POSITIONS, not LAYERS (abl_dec unchanged: hs 13-42), so it is silent between 'rebuilt at layers 43-63', 'never carried by this rank-1 direction' and 'carried non-linearly' (results/reports/20). Do not read it as 'B rebuilds above the window'. removed_norm per position: ceiling 0.35 over ~92 positions vs emo 0.51 over ~33 (total ~2x). mask_hit_rate for ceiling is set by fiat.",
+   "pointer": {
+    "script": "src/rev3/b1_followup.py",
+    "file": "results/rev3/b1_followup_qwen36-27b.json",
+    "json_path": "summary.angry.emo_vs_ceiling.sig"
+   },
+   "expected": true
+  },
+  {
+   "id": "b1f.text_arm",
+   "text": "B1 follow-up token-level arm: replacing A's steered message with an unsteered neutral rewrite (no hooks) reduces B's dose-response for sad (-24 [-45, -3]) and angry (-68 [-104, -35]); desperate and happy not detectably; afraid's -54 is refusal-contaminated (47% of its alpha=1 rewrites are refusals that rewrite_failed does not catch) and calm is untestable by the pre-declared rule; no text-vs-emo contrast was computed",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "The rewrite's own manipulation check is uneven (readout drop 0.287 desperate, 0.185 happy, 0.011 afraid, 0.058 calm); rewrite_refusal_frac is recorded per row but not used by analyze; the text arm also changes the scoring context for B's reply. No affect-preserving control rewrite exists. results/reports/20 verdict: NOT SUPPORTED as originally worded (4 of 6).",
+   "pointer": {
+    "script": "src/rev3/b1_followup.py",
+    "file": "results/rev3/b1_followup_qwen36-27b.json",
+    "json_path": "summary.angry.text_vs_none.diff"
+   },
+   "expected": -68.52,
+   "tol": 0.05
+  },
+  {
+   "id": "b1f.ablated_layers_gated",
+   "text": "B1 follow-up: the difference-of-means direction reproduces across disjoint halves at every ablated layer, min 0.882 (hs 14), median 0.898, max 0.920 (hs 37), n=600/half, 10 splits; no layer below the 0.80 gate",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Closes the 'ablated layers ungated' objection from results/reports/16. Raw space.",
+   "pointer": {
+    "script": "src/rev3/b1_followup.py",
+    "file": "results/rev3/b1_followup_qwen36-27b.json",
+    "json_path": "ablated_layer_stability.min",
+    "config": {
+     "layers_below_gate": []
+    }
+   },
+   "expected": 0.8816,
+   "tol": 0.001
+  },
+  {
+   "id": "a2f.focus_logreg_fixed_lambda_flat",
+   "text": "A2 follow-up (27B, focus layer 43, same pool as A2, 10 disjoint splits): with the per-sample logistic penalty held at its C=0.5, n=600 value for every n (C_n = 0.5*600/n), the logistic row's split-half cosine moves by less than 0.03 from n=150 to n=2000 -- 0.581, 0.596, 0.575, 0.578, 0.581 [0.577, 0.585] -- while difference-of-means on the same splits rises 0.732 -> 0.974",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "No material convergence over the reachable range, with the schedule controlled. NOT flat: paired over seeds the curve dips 300->600 at layer 43 (t -4.6) and rises at layer 16 (t +3.8); 150->2000 mean -0.0002 (3/10 positive). Because the fixed per-sample penalty fixes the population target, the cosine must approach 1 eventually -- this is a proportional-regime observation (n <= 2000, d = 5120), not an asymptotic one, and the plateau LEVEL depends on the single anchor run (results/reports/21). Caveats: raw space (std within +0.02, same shape); n-grid points nested within a seed; one pool; layer 54 was lost to the lease (10/48 cells). Same flatness at layer 16 (0.48-0.50).",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b.json",
+    "json_path": "by_layer.43.stability.logreg_lam.2000.raw.mean",
+    "config": {
+     "c_n_formula": "C_n = C_REF * N_REF / n_fit = 0.5 * 600 / n_fit; sklearn's objective is 0.5*||w||^2 + C*sum_i loss_i, so the per-sample penalty 1/(2*C*n) is held at its C=0.5, n=600 value for every n. C_600 == 0.5 exactly.",
+     "cross_n": 2000
+    }
+   },
+   "expected": 0.581,
+   "tol": 0.001
+  },
+  {
+   "id": "a2f.focus_tuned_c_does_not_close_gap",
+   "text": "A2 follow-up: cross-validated C per fit (logreg_cv) reaches 0.608 [0.590, 0.625] at n=2000 on the focus layer vs 0.566 for fixed C=0.5 and 0.974 for difference-of-means -- tuning moves the logistic row by about a tenth of the gap",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Partial answer to A0's RAPTOR question: CV selected C for ACCURACY (sklearn default scoring), not direction stability, on a decade-spaced grid {0.005, 0.05, 0.5, 5} with cv=3, refit per half; the trend runs toward smaller C and C=0.005 was never run as a fixed value. A stability-scored or finer sweep could do better (results/reports/21).",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b.json",
+    "json_path": "by_layer.43.stability.logreg_cv.2000.raw.mean"
+   },
+   "expected": 0.608,
+   "tol": 0.001
+  },
+  {
+   "id": "a2f.std_space_matches_raw",
+   "text": "A2 follow-up: standardised-space split-half cosines are always higher than raw-space values, never by more than 0.03 (gaps 0.002-0.029, shrinking as the cosine approaches 1), with the same shape at layers 16 and 43 -- the space was not the story",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Closes the 'only raw space was run' objection from results/reports/17. Focus layer, n=2000: logreg raw 0.566 / std 0.588; dom raw 0.974 / std 0.976.",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b.json",
+    "json_path": "by_layer.43.stability.dom.2000.std.mean"
+   },
+   "expected": 0.976,
+   "tol": 0.001
+  },
+  {
+   "id": "a2f.caa_raw_vs_logreg_raw",
+   "text": "A2 follow-up, the like-for-like cross-estimator quantity: cosine between CAA's raw mean difference and the raw-space logistic direction at the focus layer is 0.427 [0.421, 0.431] (n=2000, 10 independent subsamples), against 0.98-0.99 reported by 2604.08169 for compassion",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/review/A0_PRIOR_ART.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Closer to 2604.08169's quantity than A2's 0.59 but still not it: logreg_raw is the raw-space image of a fit on standardised features, and a 6-way softmax row is not a binary probe. The 10-draw CI has no sampling content (draws of 2000 from 4253 overlap ~47%; the degenerate flag only fires at n_pool <= cross_n). Companion values at layer 43: caa_raw|dom_raw 0.722 (the sd^2 division moves dom's direction), caa_raw|dom_std 0.869, logreg_raw|dom_raw 0.603. Layer 16: caa_raw|logreg_raw 0.498.",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b.json",
+    "json_path": "by_layer.43.cross_estimator.caa_raw|logreg_raw.mean",
+    "config": {
+     "by_layer.43.cross_estimator_degenerate": false
+    }
+   },
+   "expected": 0.4268,
+   "tol": 0.001
+  },
+  {
+   "id": "reblock.b1f_emo_vs_rand_blocked",
+   "text": "Under a scenario-blocked, dose-paired bootstrap (29 scenarios), the B1 follow-up's emo-minus-rand contrast is significantly negative for 3 of 6 emotions (afraid, sad, angry) versus 2 under the drivers' unblocked paired bootstrap; the ceiling arm's one positive exception (angry, emo-vs-ceiling) is not significant blocked; the completed B1's counts are unchanged; A3's dom->dom happy becomes significantly reversed",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Computed by src/rev3/reblock_contrasts.py from the committed per-sample rows using acl_core.paired_slope_contrast(block=, pair_doses=True) (core change at 26e535d; defaults bit-identical to the old behaviour). Confirms the hand computations in results/reports/18 and 20. Point estimates are identical by construction; only the intervals change.",
+   "pointer": {
+    "script": "src/rev3/reblock_contrasts.py",
+    "file": "results/rev3/reblocked_contrasts.json",
+    "json_path": "counts.b1_followup/emo_vs_rand.sig_neg_blocked",
+    "config": {
+     "counts.b1_followup/emo_vs_rand.sig_neg_unblocked": 2,
+     "counts.b1_followup/emo_vs_ceiling.sig_pos_blocked": 0,
+     "counts.a3_dissociation/dom->dom.sig_neg_blocked": 1
+    }
+   },
+   "expected": 3,
+   "tol": 0
+  },
+  {
+   "id": "b1c.verdict_H1",
+   "text": "B1c (pre-registered, PREREG_B1c.md at cc2dc32 committed 19:22Z, run started 19:32Z): ablating the difference-of-means emotion direction from A's span at every hidden state 13-63 (51 layers) during B's prefill returns the pre-registered verdict H1 -- median blocked fraction of the dose-response (emo_all vs rand_all, 5 testable emotions, scenario bootstrap over 29 scenarios) 0.09 [0.04, 0.25]; calm untestable; MC-steer 6/6, MC-ablate failures 0; no cell excluded for quality",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/22_rev3_b1c_alllayer.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "The driver's own prereg stamp is EMPTY (prereg.found=false: the document was not staged to the box); the pre-registration ordering rests on git commit times (122af4c 19:02Z, cc2dc32 19:22Z) versus _provenance.started_utc 19:32:20Z. H1 is the prereg's 'rank-1 insufficiency' outcome: it says the single direction does not carry the transfer, not what does (PREREG §7). The MC-ablate criterion (emo_all drop >= emo13_42 drop, rand drop < 0.02) passes, but the affect stays largely READABLE on A's span after ablation for four emotions (see b1c.readout_residual). Under-reported by the rule: calm's emo_all vs rand_all contrast (-41.6 [-74.9, -10.7]) is the largest and significant but calm is untestable (none slope +44 [-3, +99]); afraid's A-span readout under none is non-monotone in dose (0.25/0.49/0.58/0.40) and afraid alone has mc_ablate.separated = false. BH-FDR ran over 5 testable emotions, PREREG says six. probe_n 1615 vs PREREG §3's 2160 (B1's pool after its degeneracy filter). The prereg header date is IST, provenance is UTC.",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
+    "json_path": "verdict",
+    "config": {
+     "counts.n_testable": 5,
+     "counts.n_untestable": 1,
+     "counts.n_mc_ablate_fail": 0,
+     "counts.n_mc_steer_pass": 6,
+     "decision.n_scenarios": 29,
+     "n_abl_blocks_all": 51,
+     "probe_n": 1615,
+     "estimator": "dom"
+    }
+   },
+   "expected": "H1"
+  },
+  {
+   "id": "b1c.median_fraction",
+   "text": "B1c: median blocked fraction 0.092, scenario-bootstrap CI [0.038, 0.254]; per emotion desperate 0.06, afraid 0.21, happy 0.05, sad 0.33, angry 0.09 (calm 0.94 is a ratio of a non-significant none slope and does not enter)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/22_rev3_b1c_alllayer.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Fraction = -(emo_all - rand_all contrast)/none slope, sign-aware (b1c_alllayer.py::blocked_fraction); the decision CI resamples the 29 common scenarios with numerator and denominator recomputed per draw (::_decide).",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
+    "json_path": "decision.median",
+    "config": {
+     "decision.n_emotions": 5
+    }
+   },
+   "expected": 0.0922,
+   "tol": 0.001
+  },
+  {
+   "id": "b1c.no_gain_beyond_layer42",
+   "text": "B1c: extending the ablation from hidden states 13-42 (30 layers) to 13-63 (51 layers) changes no emotion's dose-response detectably -- the blocked, dose-paired emo_all vs emo13_42 contrast includes zero for all six emotions; as an extra blocked fraction its upper bound is below 0.08 of the none slope for afraid, angry, happy and sad, but 0.17 for desperate and 0.41 for calm, where the null is unpowered",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/22_rev3_b1c_alllayer.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "This contrast was declared in the driver (CONTRASTS, b1c_alllayer.py L109-110) but is NOT among PREREG §5's four contrasts; treat as driver-declared, not pre-registered. Derived: number of summary.<emotion>.emo_all_vs_emo13_42.sig that are true.",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_qwen36-27b.json"
+   },
+   "expected": 0,
+   "derive": {
+    "fn": "count_true",
+    "args": {
+     "path": "emo_all_vs_emo13_42.sig"
+    }
+   },
+   "tol": 0
+  },
+  {
+   "id": "b1c.partial_block_replicates",
+   "text": "B1c: the partial blocking seen in the B1 follow-up replicates in an independent sampling run with the same pool and directions -- significant negative emo_all vs rand_all contrasts for afraid (-44.9 [-58.0, -31.8], 21% of the none slope) and sad (-31.7 [-59.4, -6.1], 33%); angry -18.1 [-38.5, +1.3] misses (its emo13_42 vs rand_all contrast is significant, -23.8 [-44.9, -3.4]); desperate and happy null; BH-FDR q afraid 0.001, sad 0.048, angry 0.115",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/22_rev3_b1c_alllayer.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "'Replicates' means the same directions (probe pool sha 70129f86...) with fresh generation seeds and a fourth dose; it is not an independent direction estimate.",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
+    "json_path": "counts.n_block",
+    "config": {
+     "counts.blocking_emotions": [
+      "afraid",
+      "sad"
+     ],
+     "counts.n_antiblock": 0
+    }
+   },
+   "expected": 2
+  },
+  {
+   "id": "b1c.random_control_inert",
+   "text": "B1c: a fresh random direction per (emotion, rep, layer), unit-norm-matched to the emotion direction and removed at all 51 hidden states, leaves five of six slopes within 5% of the none arm (desperate -2%, afraid -3%, calm -4%, sad +4%, angry +0.3%) and moves happy by +28% (47.9 -> 61.4, CIs overlapping); it removes about twice the residual norm the emotion direction removes (1.15-1.26 vs 0.35-0.66) because an isotropic vector aligns with the residual stream better than a mean-centred direction",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/22_rev3_b1c_alllayer.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "DESCRIPTIVE ONLY: no rand_all vs none contrast was pre-registered or computed. Corrected after results/reports/22 (blind critique): the first wording said 'within 7%' and called the larger removed norm a stronger control; both were wrong. The removed_norm ranges pool 30-layer (emo13_42) and 51-layer (emo_all) means.",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
+    "json_path": "summary.afraid.rand_all.removed_norm"
+   },
+   "expected": 1.24,
+   "tol": 0.01
+  },
+  {
+   "id": "b1c.readout_residual",
+   "text": "B1c: after all-layer ablation at the top dose the forced-choice readout on A's span still reports the steered emotion well above its dose-0 floor for desperate (0.955 -> 0.819, floor 0.108), happy (0.744 -> 0.551, 0.287), calm (0.764 -> 0.632, 0.277) and angry (0.598 -> 0.382, 0.038); the floor-corrected share of readable affect removed is 0.16-0.79, and across the five testable emotions the blocked fraction tracks it (Pearson r 0.85 on five points; blocked-per-removed 0.11-0.43, median 0.27)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/22_rev3_b1c_alllayer.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Part of what the blocked fractions measure is instrument strength: the ablation blocks transfer roughly in proportion to how much readable affect it removes. A linear extrapolation to a fully effective ablation (median 0.27) still sits under the H1 threshold of 0.50, which is why H1 is read as 'the rank-1 direction is insufficient', not 'the linear affect representation does not carry the transfer'. Angry loses 39% of readable affect and ranks fourth in blocking; calm loses 26% and has the largest contrast; so it is a trend, not a two-emotion story. Numbers from summary.<e>.{none,emo_all}.ctx_readout_by_dose and mc_ablate; r recomputed by the author (the blind critic reports 0.91 under a variant floor).",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
+    "json_path": "summary.desperate.mc_ablate.emo_all.mean"
+   },
+   "expected": 0.819,
+   "tol": 0.002
+  },
+  {
+   "id": "b1c.text_arms_uninterpretable",
+   "text": "B1c: both rewrite arms are uninterpretable under the pre-registered §4.4 check for all six emotions -- the neutral rewrite keeps 67-98% of A's readable affect (threshold 50%), and the affect-preserving control rewrite itself shifts the transfer significantly for desperate (+31), happy (-51), calm (-66) and sad (-69), in both directions; afraid additionally loses 26%/20% of rewrites to refusals or degenerate output",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/22_rev3_b1c_alllayer.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "The token-channel question stays open; this is the third consecutive design (B1 text, B1-follow-up text, B1c text/text_keep) in which a rewrite arm fails its own check.",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
+    "json_path": "counts.n_text_uninterpretable"
+   },
+   "expected": 6
+  },
+  {
+   "id": "b1c.gate_all_layers",
+   "text": "B1c: the difference-of-means direction passes the 0.80 split-half gate at every one of the 51 ablated hidden states (class-mean cosine 0.882 at hs 14 to 0.927 at hs 53; n = 600 per half, 10 seeds)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/22_rev3_b1c_alllayer.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
+    "json_path": "direction_stability.gate_pass",
+    "config": {
+     "direction_stability.layers_below_gate": [],
+     "direction_stability.n_per_half": 600
+    }
+   },
+   "expected": true
+  }
+ ]
 }

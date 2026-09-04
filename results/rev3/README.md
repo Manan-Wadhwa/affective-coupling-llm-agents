@@ -501,6 +501,29 @@ partial-run flag.
 
 ---
 
+## B1c — pre-registered all-layer ablation — **COMPLETE, 2026-09-04 22:05Z; verdict H1**
+
+Pre-registration `docs/planning/PREREG_B1c.md` (122af4c 19:02Z, addendum cc2dc32 19:22Z; run start 19:32Z — the driver's own prereg stamp is empty, see report 22). File `b1c_alllayer_qwen36-27b.json` (432 arm-rows, 29 scenarios, 6 arms × 4 doses × 3 reps × 6 emotions), checkpoint `b1c_cells_qwen36-27b.json`. Same probe pool and directions as B1 (sha 70129f86…); B sampled with common random numbers across arms. Gate ≥ 0.80 at all 51 ablated hidden states (0.882–0.927). Registry `b1c.*`.
+
+**Decision (PREREG §5): H1** — median blocked fraction of `emo_all − rand_all` over the five testable emotions 0.092, scenario-bootstrap CI [0.038, 0.254] (H1 needs median ≤ 0.50 and upper ≤ 0.65). MC-steer 6/6, MC-ablate failures 0, no quality exclusions.
+
+| emotion | none | emo13_42 | emo_all | rand_all | emo_all − rand_all (blocked, dose-paired) | blocked | emo_all − emo13_42 | A-span readout top dose none → emo_all (floor) |
+|---|---|---|---|---|---|---|---|---|
+| desperate | +84 [+59, +111] | +82 | +77 | +82 | −5.0 [−22.5, +12.1] | 0.06 | −4.1 [−14.3, +3.9] | 0.955 → 0.819 (0.108) |
+| afraid | +212 [+169, +253] | +154 | +160 | +205 | **−44.9 [−58.0, −31.8]** | 0.21 | +5.8 [−2.4, +14.1] | 0.397 → 0.281 (0.250) |
+| happy | +48 [+8, +88] | +53 | +59 | +61 | −2.3 [−19.0, +13.8] | 0.05 | +6.2 [−2.6, +15.8] | 0.744 → 0.551 (0.287) |
+| calm · untestable | +44 [−3, +99] | +9 | +1 | +43 | −41.6 [−74.9, −10.7] | (0.94) | −8.2 [−17.9, +1.4] | 0.764 → 0.632 (0.277) |
+| sad | +98 [+65, +132] | +65 | +70 | +101 | **−31.7 [−59.4, −6.1]** | 0.33 | +4.4 [−7.8, +15.3] | 0.545 → 0.165 (0.039) |
+| angry | +196 [+155, +235] | +173 | +178 | +197 | −18.1 [−38.5, +1.3] | 0.09 | +5.7 [−1.8, +13.7] | 0.598 → 0.382 (0.038) |
+
+- Layers 43–63 add nothing: `emo_all − emo13_42` includes zero for all six emotions.
+- `emo13_42 − rand_all` significant for afraid, sad and angry (−23.8 [−44.9, −3.4]); BH-FDR q (emo_all) afraid 0.001, sad 0.048, angry 0.115.
+- Random control (descriptive, no pre-registered contrast): `rand_all` within 5% of `none` for five emotions, +28% for happy (CIs overlapping); it removes ~2× the residual norm (1.15–1.26 vs 0.35–0.66) because it is unit-norm-matched, not footprint-matched.
+- Instrument caveat (critique): blocked fraction tracks the share of readable affect the ablation removes (r ≈ 0.85, five points; blocked-per-removed median 0.27); calm's contrast −41.6 [−74.9, −10.7] is significant but excluded by the testability filter; afraid's top-dose readout is non-monotone and its MC `separated` flag is false.
+- Secondary readout on B's reply: `emo_all − rand_all` significant for sad only (−0.09 [−0.16, −0.03]).
+- Rewrite arms uninterpretable 6/6 (neutral rewrite keeps 67–98% of A's readable affect; `text_keep − none` significant for desperate +31, happy −51, calm −66, sad −69; afraid loses 26%/20% of rewrites to refusals).
+- Reading: the rank-1 `dom` direction is insufficient to carry the transfer at any layer 13–63; what carries the rest is untested (PREREG §7). Report and blind critique: `results/reports/22_rev3_b1c_alllayer.md`.
+
 ## Provenance gaps introduced by these files (to close, not to hide)
 
 1. ~~B1 stability gate 0.909 — no committed artifact~~ — closed by the rerun's `b1_e4rerun_qwen36-27b.json` (0.907; a new measurement).
