@@ -991,14 +991,106 @@ def slope_ci(doses: Sequence[float], per_sample: dict, n_boot: int = 5000,
             "sig": bool(lo > 0 or hi < 0)}
 
 
+def _blocked_panel(doses, ys, block):
+    """Per-dose (values, block-id) pair, with `block` broadcast over doses.
+
+    `block` may be None (every sample is its own block), one sequence of scenario ids used
+    at every dose, or {dose: ids}. Values and ids are trimmed to their common length so a
+    ragged cell degrades rather than raising.
+    """
+    if block is None:
+        bids = [np.arange(len(y)) for y in ys]
+    elif isinstance(block, dict):
+        bids = [np.asarray(block[d]) for d in doses]
+    else:
+        bids = [np.asarray(block) for _ in ys]
+    out_y, out_b = [], []
+    for y, b in zip(ys, bids):
+        n = min(len(y), len(b))
+        out_y.append(y[:n]); out_b.append(b[:n])
+    return out_y, out_b
+
+
+def _block_dose_means(doses, ys, bids, uniq):
+    """[n_blocks, n_doses] matrix of per-block means (the per-scenario dose curve)."""
+    M = np.full((len(uniq), len(doses)), np.nan)
+    pos = {u: i for i, u in enumerate(uniq)}
+    for j, (y, b) in enumerate(zip(ys, bids)):
+        for u in uniq:
+            sel = y[b == u]
+            if len(sel):
+                M[pos[u], j] = sel.mean()
+    return M
+
+
+def _blocked_paired_slope_contrast(doses, A, B, block, pair_doses, n_boot, seed):
+    """PREREG_B1c §5: the scenario-blocked, dose-paired arm contrast.
+
+    With `pair_doses`, the resampling unit is a whole scenario's dose curve: per scenario
+    the OLS slope over doses of arm A's per-scenario mean minus the same for arm B, then a
+    ONE-SAMPLE bootstrap over scenarios of the mean difference. Sampling noise that is
+    shared by the two arms and correlation across doses within a scenario are therefore
+    both inside the resampling unit rather than assumed away.
+
+    Without `pair_doses` (block given alone) the blocks are resampled independently at each
+    dose, arms still paired within a dose — the cluster analogue of the unblocked path.
+    """
+    A, ba = _blocked_panel(doses, A, block)
+    B, bb = _blocked_panel(doses, B, block)
+    have = [set(np.unique(b).tolist()) for b in ba + bb]
+    uniq = sorted(set.intersection(*have)) if have else []
+    MA = _block_dose_means(doses, A, ba, uniq)
+    MB = _block_dose_means(doses, B, bb, uniq)
+    ok = np.isfinite(MA).all(1) & np.isfinite(MB).all(1)
+    MA, MB = MA[ok], MB[ok]
+    uniq = [u for u, k in zip(uniq, ok) if k]
+    nb = len(uniq)
+    n_per_dose = {str(d): int(min(len(x), len(y))) for d, x, y in zip(doses, A, B)}
+    if nb < 2:
+        return {"slope_a": float("nan"), "slope_b": float("nan"), "diff": float("nan"),
+                "ci": [float("nan"), float("nan")], "sig": False,
+                "n_per_dose": n_per_dose, "n_blocks": nb}
+    # ols_slope is linear in y, so the mean of the per-block slopes IS the slope of the
+    # per-block mean curve; the point estimate is the same object the bootstrap resamples.
+    sa = ols_slope(doses, MA.mean(0))
+    sb = ols_slope(doses, MB.mean(0))
+    rng = np.random.default_rng(seed)
+    if pair_doses:
+        d = np.array([ols_slope(doses, MA[i]) - ols_slope(doses, MB[i]) for i in range(nb)])
+        boot = d[rng.integers(0, nb, size=(n_boot, nb))].mean(1)
+    else:
+        boot = np.empty(n_boot)
+        for t in range(n_boot):
+            ma, mb = [], []
+            for j in range(len(doses)):
+                pick = rng.integers(0, nb, nb)
+                ma.append(MA[pick, j].mean()); mb.append(MB[pick, j].mean())
+            boot[t] = ols_slope(doses, ma) - ols_slope(doses, mb)
+    lo, hi = np.percentile(boot, [2.5, 97.5])
+    return {"slope_a": float(sa), "slope_b": float(sb), "diff": float(sa - sb),
+            "ci": [float(lo), float(hi)], "sig": bool(lo > 0 or hi < 0),
+            "n_per_dose": n_per_dose, "n_blocks": nb}
+
+
 def paired_slope_contrast(doses, a_per_sample: dict, b_per_sample: dict,
-                          n_boot: int = 5000, seed: int = 0) -> dict:
+                          n_boot: int = 5000, seed: int = 0,
+                          block=None, pair_doses: bool = False) -> dict:
     """The A3 test the original never ran: slope(a) - slope(b) with a CI, resampled PAIRED
     so the two arms share their sample draw (present vs other are measured on the same B
-    utterance, so the paired contrast is the correct one)."""
+    utterance, so the paired contrast is the correct one).
+
+    `block` (a scenario id per sample, one sequence for every dose or {dose: ids}) and
+    `pair_doses` add PREREG_B1c §5's scenario-blocked, dose-paired contrast: the unit of
+    resampling becomes the scenario's whole dose curve. Both default to the old behaviour,
+    which is left byte-for-byte intact below, so every existing caller (b1_analyze.py,
+    a3_dissociation.py, a3_scalefree.py, b1_e4rerun.py, b1_followup.py) is unaffected. The
+    blocked path returns the same keys plus `n_blocks`.
+    """
     doses = list(doses)
     A = [np.asarray(a_per_sample[d], float) for d in doses]
     B = [np.asarray(b_per_sample[d], float) for d in doses]
+    if block is not None or pair_doses:
+        return _blocked_paired_slope_contrast(doses, A, B, block, pair_doses, n_boot, seed)
     sa = ols_slope(doses, [y.mean() for y in A])
     sb = ols_slope(doses, [y.mean() for y in B])
     rng = np.random.default_rng(seed)

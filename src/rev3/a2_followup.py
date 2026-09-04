@@ -683,7 +683,12 @@ def main():
     ap.add_argument("--workdir", default="/marimo/work")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--n-ref", type=int, default=600,
+                    help="anchor n for the fixed per-sample penalty: C_n = 0.5 * n_ref / n_fit (default 600)")
     a = ap.parse_args()
+    global N_REF, C_N_FORMULA
+    N_REF = a.n_ref
+    C_N_FORMULA = C_N_FORMULA.replace("0.5 * 600 / n_fit", f"0.5 * {N_REF} / n_fit")
     outdir, workdir = _ensure_dir(a.outdir), _ensure_dir(a.workdir)
 
     if a.selftest:
