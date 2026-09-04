@@ -130,7 +130,10 @@ def main():
                 cid = f"dec/{L}/{lbl}/{m}"
                 if ck.has(cid):
                     entry["decode"].setdefault(lbl, {})[m] = ck.get(cid); continue
-                po = yo if m == "pca_diff" else None
+                # pair on the OTHER label set: yo when fitting present, yp when fitting other.
+                # (Pairing on the label being fitted empties every stratum and returns a zero
+                # direction -- found by results/reports/17, 2026-09-04.)
+                po = (yo if lbl == "present" else yp) if m == "pca_diff" else None
                 dec = C.fit_direction(X[tr], yy[tr], m, seed=a.seed,
                                       pair_on=(po[tr] if po is not None else None))
                 v = round(C.decode_acc(dec, X[te], yy[te]), 4)
@@ -159,10 +162,17 @@ def main():
 
         # cross-estimator agreement at the largest available n (the 2604.08169 quantity)
         nbig = max([n for n in TARGET_N if n <= N] or [N])
+        # A SEEDED RANDOM subsample, not the pool head: the pool is stored in (emotion-pair)
+        # job order, so the first nbig rows hold only ~3 of the 6 present emotions;
+        # fit_direction then allocates y.max()+1 rows and indexing class 3+ raised IndexError
+        # (crashed the 2026-09-04 box-2 run after layer 16). n_cls is passed explicitly too.
+        sub = np.random.default_rng(a.seed + 1).permutation(N)[:nbig]
+        Xb, ypb, yob = X[sub], yp[sub], yo[sub]
+        NC = len(C.EMOTIONS)
         base = {}
         for m in ESTIMATORS:
-            base[m] = C.fit_direction(X[:nbig], yp[:nbig], m, seed=a.seed,
-                                      pair_on=(yo[:nbig] if m == "pca_diff" else None))
+            base[m] = C.fit_direction(Xb, ypb, m, n_cls=NC, seed=a.seed,
+                                      pair_on=(yob if m == "pca_diff" else None))
         for m1 in ESTIMATORS:
             entry["cross_estimator"][m1] = {}
             for m2 in ESTIMATORS:
@@ -178,9 +188,10 @@ def main():
         # present/other subspace geometry under each estimator (the survivor result)
         entry["speaker_geometry"] = {}
         for m in ("logreg", "dom", "mass_mean_cov"):
-            dp = C.fit_direction(X[:nbig], yp[:nbig], m, seed=a.seed,
-                                 pair_on=(yo[:nbig] if m == "pca_diff" else None))
-            do = C.fit_direction(X[:nbig], yo[:nbig], m, seed=a.seed)
+            dp = C.fit_direction(Xb, ypb, m, n_cls=NC, seed=a.seed,
+                                 pair_on=(yob if m == "pca_diff" else None))
+            do = C.fit_direction(Xb, yob, m, n_cls=NC, seed=a.seed,
+                                 pair_on=(ypb if m == "pca_diff" else None))
             cross = [abs(float(C.raw_direction(dp, i) @ C.raw_direction(do, i)))
                      for i in range(len(C.EMOTIONS))]
             within = [abs(float(C.raw_direction(dp, i) @ C.raw_direction(dp, j)))

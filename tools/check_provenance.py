@@ -85,8 +85,19 @@ def _d_range(blob, args):
     return [round(min(vals), 4), round(max(vals), 4)]
 
 
+def _d_count_true(blob, args):
+    """How many per-emotion summary entries have a truthy value at a dotted path
+    (e.g. mc_ablate.passes). Entries lacking the path count as false."""
+    n = 0
+    for e, v in blob["summary"].items():
+        ok, got = dig(v, args["path"])
+        n += int(bool(ok and got))
+    return n
+
+
 DERIVERS = {"count_sig": _d_count_sig, "count_positive": _d_count_positive,
-            "present_gt_other": _d_present_gt_other, "range": _d_range}
+            "present_gt_other": _d_present_gt_other, "range": _d_range,
+            "count_true": _d_count_true}
 
 
 def check_claim(c):

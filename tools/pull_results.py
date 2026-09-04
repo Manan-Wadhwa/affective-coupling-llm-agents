@@ -18,7 +18,8 @@ Usage:
   python tools/pull_results.py --url https://sb-xxxx.sb.molab.run/ --dest results/rev3
   python tools/pull_results.py --url ... --dest results/rev3 --all --watch 600
 """
-import argparse, base64, json, os, subprocess, sys, time
+import argparse, base64, functools, json, os, subprocess, sys, time
+print = functools.partial(print, flush=True)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 EXEC = os.path.join(HERE, "..", ".claude", "skills", "marimo-pair", "scripts",
@@ -38,27 +39,76 @@ for p in pats:
 print("@@LIST@@" + json.dumps(out))
 '''
 
+# Files are pulled in CHUNKS. A single scratchpad print of a ~1 MB base64 line comes back
+# truncated (the stream splits long lines across chunks), which is exactly how the first
+# watcher of 2026-09-04 died mid-run on a 700 KB checkpoint. Each chunk is its own marker
+# line and carries its offset so a short read is detected rather than silently accepted.
+CHUNK = 200_000
+
 GET_SRC = '''
-import base64, json
-p = {path!r}
+import base64, json, os
+p = {path!r}; off = {off}; n = {n}
 with open(p, "rb") as f:
-    data = f.read()
-print("@@FILE@@" + json.dumps({{"path": p, "b64": base64.b64encode(data).decode()}}))
+    f.seek(off); data = f.read(n)
+print("@@FILE@@" + json.dumps({{"path": p, "off": off, "len": len(data),
+                                 "size": os.path.getsize(p),
+                                 "b64": base64.b64encode(data).decode()}}))
 '''
 
 
 def run(url, code, timeout=300):
-    r = subprocess.run(["bash", EXEC, "--url", url, "-"], input=code,
-                       capture_output=True, text=True, timeout=timeout)
-    return r.stdout + r.stderr
+    """Run one scratchpad call. The helper is started in its own process group and the whole
+    group is killed on timeout: with plain subprocess.run a stalled curl grandchild keeps the
+    stdout pipe open after the shell is killed and communicate() blocks forever -- which is
+    how both watchers hung silently for two hours on 2026-09-04."""
+    import signal
+    p = subprocess.Popen(["bash", EXEC, "--url", url, "-"], stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+                         start_new_session=True)
+    try:
+        out, _ = p.communicate(code, timeout=timeout)
+        return out
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(p.pid, signal.SIGKILL)
+        except Exception:
+            pass
+        try:
+            out, _ = p.communicate(timeout=10)
+        except Exception:
+            out = ""
+        print(f"[pull] call timed out after {timeout}s; killed process group", file=sys.stderr,
+              flush=True)
+        return out or ""
 
 
 def marker(out, tag):
     for line in out.splitlines():
         i = line.find(tag)
         if i >= 0:
-            return json.loads(line[i + len(tag):])
+            try:
+                return json.loads(line[i + len(tag):])
+            except json.JSONDecodeError:
+                return None          # truncated line: report as a failed read, do not die
     return None
+
+
+def fetch_file(url, path, size):
+    """Pull one sandbox file in CHUNK-sized pieces; return bytes or None on any short read."""
+    buf = bytearray()
+    off = 0
+    while off < size:
+        got = marker(run(url, GET_SRC.format(path=path, off=off, n=CHUNK)), "@@FILE@@")
+        if got is None or got.get("off") != off:
+            return None
+        piece = base64.b64decode(got["b64"])
+        if len(piece) != got.get("len") or (len(piece) == 0 and off < size):
+            return None
+        buf += piece
+        off += len(piece)
+        if got.get("size", size) != size:      # file grew under us; caller retries next tick
+            return None
+    return bytes(buf)
 
 
 def main():
@@ -93,10 +143,10 @@ def main():
             if os.path.exists(local) and os.path.getsize(local) == rec["size"]:
                 print(f"[same] {name} ({rec['size']} B)")
                 continue
-            got = marker(run(a.url, GET_SRC.format(path=rec["path"])), "@@FILE@@")
-            if got is None:
-                print(f"[FAIL] {name}", file=sys.stderr); continue
-            blob = base64.b64decode(got["b64"])
+            blob = fetch_file(a.url, rec["path"], rec["size"])
+            if blob is None:
+                print(f"[FAIL] {name} (short/truncated read; will retry)", file=sys.stderr)
+                continue
             tmp = local + ".part"
             with open(tmp, "wb") as f:
                 f.write(blob)
