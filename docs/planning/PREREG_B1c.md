@@ -126,3 +126,27 @@ here); the β budget (B7).
 Result file carries: model revision, `code_sha` of the driver and core, the probe pool sha, the
 seed rule, per-layer gates, per-arm `removed_norm` and mask sizes, per-row `gen_seed`, the
 exclusion counts from §4.3–4.4, and this document's git commit hash.
+
+## Addendum, 2026-09-05, before launch (driver written, not yet run)
+
+Recorded so that it cannot be read as a post-hoc discovery:
+
+1. The §5 decision resamples *scenarios*, not emotions. With an even split of blocked
+   fractions across emotions (e.g. three near 0.7, three near 0.2) and little scenario-level
+   heterogeneity, the median sits at the midpoint of the two clusters and is estimated
+   tightly, so the rule can return **H1** on a median near 0.45 even though half the emotions
+   are strongly blocked. This is the pre-registered rule and it stands; the per-emotion
+   counts reported alongside are what would show such a split, and the write-up must show
+   them next to the verdict.
+2. Ablation covers hidden states 13–63 (decoder blocks 12–62). Hidden state 64 is the last
+   block's output, which feeds only the final norm and head, so projecting there at A's
+   positions cannot change anything B attends to.
+3. "degenerate + refusal ≤ 0.10" is applied to their union (`is_degenerate` already includes
+   refusal); both fractions are recorded separately.
+4. Slopes and contrasts are computed on the balanced panel of (rep, scenario) keys present at
+   every dose in every arm being compared, because a dose-paired contrast is undefined for a
+   scenario missing a dose; `n_scenario_keys` is recorded per arm.
+5. The §4.4 rewrite check applies to `text` only; `text_keep` is the affect-preserving control
+   and its readout ratio (expected ≈ 1) is reported, not gated.
+6. `instrument_failed` uses the full MC-ablate check (emo_all drop ≥ emo13_42 drop AND
+   rand_all drop < 0.02); the count under the emo_all-only reading is reported alongside.
