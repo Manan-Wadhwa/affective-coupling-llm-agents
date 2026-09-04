@@ -438,7 +438,7 @@
     },
     {
       "id": "b1f.verdict_mixed",
-      "text": "B1 follow-up (same pool and directions as B1; B seeded with a common seed across arms; 3 reps; arms none/emo/rand/ceiling/text): the pre-declared sign-aware rule returns 'mixed' -- MC-ablate passes 6/6, significant NEGATIVE emo-vs-rand contrasts for 2 of 5 testable emotions under the driver's paired bootstrap (afraid, sad) and 3 of 5 under a scenario-clustered, dose-paired bootstrap (plus angry, results/reports/20), 0 significant positive, 1 untestable (calm)",
+      "text": "B1 follow-up (same pool and directions as B1; B seeded with a common seed across arms; 3 reps; arms none/emo/rand/ceiling/text): the pre-declared sign-aware rule returns 'mixed' -- MC-ablate passes 6/6, significant NEGATIVE emo-vs-rand contrasts for 2 of 5 testable emotions under the driver's paired bootstrap (afraid, sad) and 3 of 5 under a scenario-clustered, dose-paired bootstrap (plus angry; committed source results/rev3/reblocked_contrasts.json), 0 significant positive, 1 untestable (calm)",
       "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#1"],
       "category": "a", "claim_status": "quotable",
       "note": "Rule declared in src/rev3/b1_followup.py before the run: blocking needs >= 4 significant negative contrasts among testable emotions; the rule counts sign. The completed B1's happy sign-reversal (+31) is absent here (-0.0 [-20, +20]); with B seeded and common random numbers it was noise. MDE per emotion 35-83 probe units against none slopes 38-202.",
@@ -538,6 +538,18 @@
                   "json_path": "by_layer.43.cross_estimator.caa_raw|logreg_raw.mean",
                   "config": {"by_layer.43.cross_estimator_degenerate": false}},
       "expected": 0.4268, "tol": 0.001
+    },
+    {
+      "id": "reblock.b1f_emo_vs_rand_blocked",
+      "text": "Under a scenario-blocked, dose-paired bootstrap (29 scenarios), the B1 follow-up's emo-minus-rand contrast is significantly negative for 3 of 6 emotions (afraid, sad, angry) versus 2 under the drivers' unblocked paired bootstrap; the ceiling arm's one positive exception (angry, emo-vs-ceiling) is not significant blocked; the completed B1's counts are unchanged; A3's dom->dom happy becomes significantly reversed",
+      "appears_in": ["results/rev3/README.md", "docs/review/RESULTS_LOG.md", "docs/planning/RESEARCH_PLAN.md#13"],
+      "category": "a", "claim_status": "quotable",
+      "note": "Computed by src/rev3/reblock_contrasts.py from the committed per-sample rows using acl_core.paired_slope_contrast(block=, pair_doses=True) (core change at 26e535d; defaults bit-identical to the old behaviour). Confirms the hand computations in results/reports/18 and 20. Point estimates are identical by construction; only the intervals change.",
+      "pointer": {"script": "src/rev3/reblock_contrasts.py",
+                  "file": "results/rev3/reblocked_contrasts.json",
+                  "json_path": "counts.b1_followup/emo_vs_rand.sig_neg_blocked",
+                  "config": {"counts.b1_followup/emo_vs_rand.sig_neg_unblocked": 2, "counts.b1_followup/emo_vs_ceiling.sig_pos_blocked": 0, "counts.a3_dissociation/dom->dom.sig_neg_blocked": 1}},
+      "expected": 3, "tol": 0
     }
   ]
 }

@@ -104,3 +104,30 @@ direction, and not a split over data.
 first automated summary of 2601.09173 asserted that it measured probe split-half
 reproducibility across disjoint data and compared logistic regression against
 difference-of-means. It does neither.*
+
+---
+
+## Addendum 2026-09-05 — the in-house numbers on the two quantities A0 separated
+
+A0 distinguished **cross-estimator agreement** (2604.08169's quantity) from **within-estimator
+reproducibility** (Paper A's). Both are now measured on this data (`results/rev3/`):
+
+- *Within-estimator, disjoint halves, n = 2000/half, ten splits, focus layer of the 27B:*
+  difference-of-means 0.974, logistic (C = 0.5) 0.566, logistic with the per-sample penalty
+  held fixed 0.581 (moving < 0.03 over n = 150 → 2000), cross-validated C 0.608
+  (`a2.focus_*`, `a2f.*`). The 8B: 0.941 vs 0.286 at n = 1200 (`a2_8b.*`).
+- *Cross-estimator, the like-for-like version — CAA's raw mean difference against the raw-space
+  logistic direction:* **0.43** at the focus layer, 0.50 at depth 0.25
+  (`a2f.caa_raw_vs_logreg_raw`), against 0.98–0.99 in 2604.08169 for compassion. Caveats from
+  results/reports/21: the logistic direction here is the raw-space image of a fit on
+  standardised features and a six-way row, not a binary probe; the ten-subsample CI has no
+  sampling content. A disagreement in that paper's units, on a different trait and design; not
+  a refutation.
+- *RAPTOR's remedy engaged:* validation-tuned L2 moves the logistic row by about a tenth of
+  the gap (0.566 → 0.608) on an accuracy-scored, decade-spaced grid; a stability-scored sweep
+  is the open item (RESEARCH_PLAN §12 to-dos).
+
+Consequence for the verdict above: contribution 2 (non-convergence with n) survives as a
+proportional-regime statement — no material convergence over n ≤ 2000 at d = 5120 with the
+schedule controlled — not as an asymptotic one; contribution 4 (a published flip) is dropped
+(A3, results/reports/18).

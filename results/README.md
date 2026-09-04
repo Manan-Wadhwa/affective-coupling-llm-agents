@@ -90,13 +90,21 @@ recorded" means the file carries no such field.
 | `responses_qwen36_sample300.jsonl` | `src/core/coupling_e0.py` via `$RESP_LOG` | 300 | `tag, prompt, output` (all `e0_dialogue`) | **RAW** sample | AUDIT 14 — the "≈13k archived generations" claim is retracted (`dataset.13k_released`, category (c)); the repo holds these 300 |
 | `responses_multiturn_qwen36_sample200.jsonl` | `src/behavioral/behavioral_multiturn.py` via `$RESP_LOG` | 200 | `cond, rep, turn, A, B, conv` | **RAW** sample | AUDIT 14 — and these 200 |
 
-## rev3/ — the rebuild (see `rev3/README.md` for the tables)
+## rev3/ — the rebuild (see `rev3/README.md` for every table)
 
 | file | label | one line |
 |---|---|---|
-| `b1_cells_qwen36-27b.json` | **CHECKPOINT · PARTIAL 47/54** | E4 rerun per-cell raw arrays; 5 of 6 emotions complete, `angry` 2 reps at α=0 |
-| `b1_partial_summary.json` | **DERIVED · PARTIAL 47/54** (regenerated 2026-09-04; the `70894ba` version was from 7/54) | manipulation checks pass on point estimates 5/5 (calm's CIs overlap); emo−rand blocking contrast excludes zero for 2 of 5; **no verdict** |
-| `a2_cells_qwen36-27b.json` | **CHECKPOINT · PARTIAL — 1 of 7 depths (layer 16, not the focus layer 43)** | decode and split-half cells for one layer; nothing yet at the layer the published numbers use |
+| `b1_e4rerun_qwen36-27b.json` | **RESULT · COMPLETE** | E4 rerun; gate 0.907; rule → `not_blocking` (sign-aware re-read → `mixed`) |
+| `b1_followup_qwen36-27b.json` | **RESULT · COMPLETE** | ceiling + text arms, seeded B, all ablated layers gated; `mixed`; emo−rand blocks 25–37% for two (three blocked-bootstrap) |
+| `b1_cells_*`, `b1f_cells_*`, `b1_summary_*`, `b1_partial_summary.json` | CHECKPOINT / DERIVED / SUPERSEDED | per-cell arrays and analyzer outputs |
+| `a2_estimator_qwen36-27b.json` | **RESULT · COMPLETE** | 7 depths; focus dom 0.974 vs logreg 0.566 |
+| `a2_estimator_llama3-abl.json` | **RESULT · COMPLETE** | 7 depths; focus dom 0.941 vs logreg 0.286; n/d ordering reproduces |
+| `a2_followup_qwen36-27b.json` | **RESULT · 2 of 3 layers** | tuned C, fixed penalty (< 0.03 movement over n), both spaces, CAA-raw cross 0.43 |
+| `a2_cells_*`, `a2f_cells_*` | CHECKPOINT | |
+| `a3_dissociation_qwen36-27b.json` | **RESULT · COMPLETE** | present > other: published config 0/6; dom→dom 4/6 raw |
+| `a3_scalefree_qwen36-27b.json` | **DERIVED** | the same on per-channel scales: 1–2/6, 0 significant — exhibit withdrawn |
+| `reblocked_contrasts.json` | **DERIVED** (2026-09-05) | every rev-3 contrast recomputed with the scenario-blocked, dose-paired bootstrap; which significance calls change |
+| `inflight_box*/` | staging | pools and response logs from the sandboxes (committed); feature caches and result duplicates ignored |
 
 **Numbers in `docs/review/RESULTS_LOG.md` with no committed file:** the B1 direction-stability
 gate (0.909 / logreg 0.577). It is written only to `b1_e4rerun_<tag>.json` at sweep

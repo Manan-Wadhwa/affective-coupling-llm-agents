@@ -424,3 +424,39 @@ Output `results/rev3/a2_followup_qwen36-27b.json`. Registry: `a2f.focus_logreg_f
   accuracy, not stability. Space gaps 0.002–0.029. CAA cosine still not the published
   quantity; its CI has no sampling content. Registry, README and plan reworded; Paper A's
   sentence is now the critic's.
+
+---
+
+## 2026-09-05 · B1c launched (pre-registered; `docs/planning/PREREG_B1c.md` @ cc2dc32)
+
+Driver `src/rev3/b1c_alllayer.py` written from the pre-registration, self-tested, and passed
+by an independent verifier with no must-fix items. Known limitations recorded before the run:
+the A-span readout does not record its mask hit rate; cells whose every rewrite was excluded
+vanish from the summary's `text_excluded_n` (still in rows); BH-FDR runs over testable
+emotions, not all six; the `text` and `text_keep` prompts differ in framing beyond the
+affect instruction; the per-layer gate thresholds the class mean, so one weak class at one
+layer cannot fail it (per-class values are reported); feature extraction for 51 layers
+overwrites the 31-layer cache. Runtime estimate 2.6–3.2 h on one 96 GB GPU. Box 4 runs the
+A2 add-ons (layer 54; a second fixed-penalty anchor at n = 2000; the fixed-penalty arm on the
+8B) in parallel.
+
+---
+
+## 2026-09-05 · Blocked, dose-paired re-read of every rev-3 contrast (CPU, no new data)
+
+`src/rev3/reblock_contrasts.py` → `results/rev3/reblocked_contrasts.json`, using the
+`block=`/`pair_doses=` path added to `acl_core.paired_slope_contrast` at 26e535d. Registry:
+`reblock.b1f_emo_vs_rand_blocked`. Point estimates are unchanged by construction; what moves
+is the intervals:
+
+| contrast | unblocked → blocked+paired (significant negative / positive, of 6) |
+|---|---|
+| B1 emo − rand | 2 / 1 → 2 / 1 (unchanged; happy's reversal remains on this run) |
+| B1 follow-up emo − rand | 2 / 0 → **3** / 0 (angry −24.1 [−44.9, −3.4]) |
+| B1 follow-up emo − ceiling | 0 / 1 → 0 / **0** (angry's exception vanishes; 6/6 cross zero) |
+| B1 follow-up emo − none | 3 / 0 → 4 / 0 |
+| A3 dom→dom present − other | 0 / 2 → **1** / 2 (happy −46.6 [−93.3, −2.1]) |
+| A3 logreg→logreg | 4 / 0 → 4 / 0 |
+
+Reports 18 and 20's hand computations are confirmed to the digit. The blocked intervals are
+wider for the B1 family (scenario effects are real) and similar for A3.

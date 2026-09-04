@@ -1,0 +1,1660 @@
+{
+ "source_commit_of_core_change": "26e535d",
+ "experiments": {
+  "b1_e4rerun": {
+   "doses": [
+    0.0,
+    0.5,
+    1.0
+   ],
+   "by_emotion": {
+    "desperate": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -9.769815626386261,
+       "ci": [
+        -26.135057765128806,
+        5.827244164377459
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -9.769815626386205,
+       "ci": [
+        -24.219636439155764,
+        4.693411871615948
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 14.456524155385855
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -7.845060049608492,
+       "ci": [
+        -25.024788842318255,
+        9.318057281860295
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -7.845060049608378,
+       "ci": [
+        -23.851044903241636,
+        8.907695455167195
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 16.379370179204415
+     },
+     "emo_vs_orth": {
+      "unblocked": {
+       "diff": -12.752695724809556,
+       "ci": [
+        -28.898676214303922,
+        3.632634016822149
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -12.752695724809442,
+       "ci": [
+        -30.221428522172175,
+        3.7977119000736255
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 17.0095702111229
+     },
+     "emo_vs_cross": {
+      "unblocked": {
+       "diff": 1.2770387466564728,
+       "ci": [
+        -15.808772873300784,
+        18.424449900804266
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 1.2770387466565438,
+       "ci": [
+        -13.806139933445975,
+        14.513491249696727
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 14.159815591571352
+     }
+    },
+    "afraid": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -50.52980644401822,
+       "ci": [
+        -72.4018872463681,
+        -29.129840498905047
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -50.52980644401825,
+       "ci": [
+        -74.29753180640289,
+        -26.729368581527954
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 23.78408161243747
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -34.27491351951835,
+       "ci": [
+        -55.1310816280457,
+        -13.506681155574716
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -34.27491351951835,
+       "ci": [
+        -56.53726970888946,
+        -12.563271249016678
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 21.98699922993639
+     },
+     "emo_vs_orth": {
+      "unblocked": {
+       "diff": -58.41174270505664,
+       "ci": [
+        -78.19443760845446,
+        -38.590933092523464
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -58.41174270505658,
+       "ci": [
+        -80.55269408953923,
+        -38.360565245056556
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 21.096064422241337
+     },
+     "emo_vs_cross": {
+      "unblocked": {
+       "diff": -22.87003983561101,
+       "ci": [
+        -44.09402763953458,
+        -1.6817422239541033
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -22.87003983561101,
+       "ci": [
+        -45.807171565389986,
+        -0.779947677013773
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 22.513611944188106
+     }
+    },
+    "happy": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": 31.199302813134118,
+       "ci": [
+        9.350204192810391,
+        53.34389638082956
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": 31.199302813134146,
+       "ci": [
+        10.510087512366246,
+        51.36271144970415
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 20.42631196866895
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": 31.58286443704602,
+       "ci": [
+        4.128310438992712,
+        59.18911160372464
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": 31.582864437045934,
+       "ci": [
+        7.471251247145929,
+        57.16883758632052
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 24.848793169587296
+     },
+     "emo_vs_orth": {
+      "unblocked": {
+       "diff": 20.04420008947087,
+       "ci": [
+        -5.909677755160013,
+        45.894390644307734
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 20.0442000894707,
+       "ci": [
+        -2.2010306839120144,
+        43.09095975779653
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 22.645995220854275
+     },
+     "emo_vs_cross": {
+      "unblocked": {
+       "diff": 20.049340652470036,
+       "ci": [
+        -3.9045409712928074,
+        44.479079747192884
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 20.04934065246995,
+       "ci": [
+        -3.483088735883758,
+        45.13988607323276
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 24.311487404558257
+     }
+    },
+    "calm": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -13.426101853450922,
+       "ci": [
+        -50.51925718629628,
+        23.52419503622789
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -13.426101853450922,
+       "ci": [
+        -51.851698264578076,
+        24.609020877647588
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 38.23035957111283
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -32.986009357653586,
+       "ci": [
+        -69.93455663684912,
+        3.9027193986150106
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -32.98600935765364,
+       "ci": [
+        -71.91078608451164,
+        6.160284699876189
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 39.035535392193914
+     },
+     "emo_vs_orth": {
+      "unblocked": {
+       "diff": -17.733217475154497,
+       "ci": [
+        -50.51176536935848,
+        14.199244365578524
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -17.733217475154596,
+       "ci": [
+        -51.26343126953142,
+        12.55785439791854
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 31.910642833724978
+     },
+     "emo_vs_cross": {
+      "unblocked": {
+       "diff": -15.32141270303668,
+       "ci": [
+        -50.329378236972765,
+        18.77344279823033
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -15.321412703036723,
+       "ci": [
+        -45.98072600183044,
+        13.768693109127023
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 29.87470955547873
+     }
+    },
+    "sad": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -29.14525794201667,
+       "ci": [
+        -48.98970073045611,
+        -10.017228415337676
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -29.1452579420166,
+       "ci": [
+        -47.10238183248514,
+        -11.731630681222864
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 17.68537557563114
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -34.2105340420477,
+       "ci": [
+        -54.94570678291606,
+        -14.260837056880955
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -34.21053404204771,
+       "ci": [
+        -55.214461899686995,
+        -14.265564153904405
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 20.474448872891294
+     },
+     "emo_vs_orth": {
+      "unblocked": {
+       "diff": -32.48629235523126,
+       "ci": [
+        -53.65774252886874,
+        -12.755585119573343
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -32.486292355231214,
+       "ci": [
+        -53.013213961210774,
+        -13.391002458616146
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 19.811105751297312
+     },
+     "emo_vs_cross": {
+      "unblocked": {
+       "diff": -24.81104256560735,
+       "ci": [
+        -44.93992550157881,
+        -5.258591938005893
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -24.81104256560735,
+       "ci": [
+        -45.24615481235999,
+        -5.398074946625177
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 19.924039932867405
+     }
+    },
+    "angry": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -22.36647853755315,
+       "ci": [
+        -53.12303339915452,
+        7.31613460572136
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -22.366478537553206,
+       "ci": [
+        -56.227711930739375,
+        10.537041155292226
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 33.3823765430158
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -23.512102324638903,
+       "ci": [
+        -56.63808632428194,
+        10.131553005382194
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -23.51210232463893,
+       "ci": [
+        -55.07523816020189,
+        7.372092086529798
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 31.223665123365844
+     },
+     "emo_vs_orth": {
+      "unblocked": {
+       "diff": -20.846154661675627,
+       "ci": [
+        -48.21448303461937,
+        7.600755692501128
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -20.846154661675655,
+       "ci": [
+        -50.41673034199554,
+        9.227583777822854
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 29.822157059909195
+     },
+     "emo_vs_cross": {
+      "unblocked": {
+       "diff": -51.27908774416491,
+       "ci": [
+        -84.09681871562061,
+        -19.661720241256038
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -51.27908774416488,
+       "ci": [
+        -85.44448562617849,
+        -17.56182710111674
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 33.94132926253087
+     }
+    }
+   }
+  },
+  "b1_followup": {
+   "doses": [
+    0.0,
+    0.5,
+    1.0
+   ],
+   "by_emotion": {
+    "desperate": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": 2.572907934753971,
+       "ci": [
+        -13.90266354319564,
+        18.815649808958327
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 2.5729079347539425,
+       "ci": [
+        -17.88648513001839,
+        22.973081514382503
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 20.429783322200446
+     },
+     "emo_vs_ceiling": {
+      "unblocked": {
+       "diff": 1.8048051922137205,
+       "ci": [
+        -8.10828027331455,
+        11.504068206060643
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 1.8048051922137631,
+       "ci": [
+        -7.395906913717977,
+        11.566183944462198
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 9.481045429090088
+     },
+     "ceiling_vs_none": {
+      "unblocked": {
+       "diff": -0.1970006828939148,
+       "ci": [
+        -17.33459876272644,
+        16.29845050775799
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -0.19700068289395745,
+       "ci": [
+        -19.08364757496257,
+        18.061398390322974
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 18.572522982642774
+     },
+     "text_vs_none": {
+      "unblocked": {
+       "diff": -9.05041764473556,
+       "ci": [
+        -28.0621282537538,
+        9.771469173502267
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -9.050417644735518,
+       "ci": [
+        -26.697055393907817,
+        7.873210353392447
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 17.28513287365013
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": 1.6078045093198057,
+       "ci": [
+        -16.26360065540668,
+        18.964032461880304
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 1.6078045093198057,
+       "ci": [
+        -20.70485785233235,
+        23.490931243616114
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 22.09789454797423
+     }
+    },
+    "afraid": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -46.98366004952368,
+       "ci": [
+        -64.64664619565511,
+        -30.043082653579575
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -46.98366004952376,
+       "ci": [
+        -61.91670150762096,
+        -32.31483049785682
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 14.80093550488207
+     },
+     "emo_vs_ceiling": {
+      "unblocked": {
+       "diff": 1.4066239267313847,
+       "ci": [
+        -9.507276386838445,
+        12.771830758629298
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 1.4066239267313563,
+       "ci": [
+        -8.857949831930881,
+        11.577929428064165
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 10.217939629997524
+     },
+     "ceiling_vs_none": {
+      "unblocked": {
+       "diff": -56.40739298885103,
+       "ci": [
+        -75.96335106105563,
+        -36.61341106295847
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -56.407392988851,
+       "ci": [
+        -74.45523664608174,
+        -38.25304819070862
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 18.101094227686563
+     },
+     "text_vs_none": {
+      "unblocked": {
+       "diff": -54.364994084813276,
+       "ci": [
+        -78.24877221422871,
+        -30.354499003285866
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -54.364994084813304,
+       "ci": [
+        -77.03185603169305,
+        -31.226274715691737
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 22.902790658000658
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -55.000769062119645,
+       "ci": [
+        -72.16671984893304,
+        -37.94396219125104
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -55.000769062119645,
+       "ci": [
+        -70.86350363555664,
+        -40.356403047695366
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 15.253550293930637
+     }
+    },
+    "happy": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -0.030564456741302592,
+       "ci": [
+        -19.948062792850504,
+        20.296090608966615
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -0.030564456741160484,
+       "ci": [
+        -19.183534322466514,
+        18.553754310973208
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 18.86864431671986
+     },
+     "emo_vs_ceiling": {
+      "unblocked": {
+       "diff": -1.9554000590570269,
+       "ci": [
+        -20.496727800924063,
+        17.771987779285276
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -1.9554000590568563,
+       "ci": [
+        -20.171495961790033,
+        17.61175134765609
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 18.891623654723062
+     },
+     "ceiling_vs_none": {
+      "unblocked": {
+       "diff": 2.2521548541716783,
+       "ci": [
+        -18.635754318953154,
+        23.30305494095854
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 2.2521548541716214,
+       "ci": [
+        -19.754917673363547,
+        23.249869852153317
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 21.50239376275843
+     },
+     "text_vs_none": {
+      "unblocked": {
+       "diff": 9.281572413358873,
+       "ci": [
+        -20.984666586285627,
+        40.530659923149564
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 9.281572413358901,
+       "ci": [
+        -23.21085614596233,
+        40.70982427967564
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 31.960340212818984
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": 0.2967547951146514,
+       "ci": [
+        -19.264269851500494,
+        20.491635278120768
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 0.2967547951147651,
+       "ci": [
+        -16.55268120307329,
+        18.256252135843983
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 17.404466669458635
+     }
+    },
+    "calm": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -22.83051924211304,
+       "ci": [
+        -48.976291040377895,
+        1.914104904725281
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -22.830519242113013,
+       "ci": [
+        -47.979683415931106,
+        0.2885358143553896
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 24.13410961514325
+     },
+     "emo_vs_ceiling": {
+      "unblocked": {
+       "diff": -0.09864423273609368,
+       "ci": [
+        -20.73048336261079,
+        19.411148730459487
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -0.09864423273603684,
+       "ci": [
+        -18.964892666325614,
+        18.447003710460677
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 18.705948188393144
+     },
+     "ceiling_vs_none": {
+      "unblocked": {
+       "diff": -33.32265390504947,
+       "ci": [
+        -61.69378692100614,
+        -6.052058968052601
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -33.32265390504943,
+       "ci": [
+        -62.73100513847023,
+        -3.8785981741574793
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 29.426203482156374
+     },
+     "text_vs_none": {
+      "unblocked": {
+       "diff": -42.242886526571354,
+       "ci": [
+        -78.67340610909429,
+        -6.778171913800959
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -42.24288652657131,
+       "ci": [
+        -87.41543971884052,
+        -0.41237275142993823
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 43.50153348370529
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -33.42129813778556,
+       "ci": [
+        -57.447133866856674,
+        -10.075140924328629
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -33.42129813778546,
+       "ci": [
+        -57.19452518824512,
+        -10.101142604320877
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 23.546691291962123
+     }
+    },
+    "sad": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -36.57961812231174,
+       "ci": [
+        -55.316751510640955,
+        -18.25979968710958
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -36.57961812231176,
+       "ci": [
+        -57.05917825088675,
+        -17.03036772951646
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 20.014405260685145
+     },
+     "emo_vs_ceiling": {
+      "unblocked": {
+       "diff": -10.886140387017718,
+       "ci": [
+        -24.22335780430295,
+        2.251103979724682
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -10.886140387017718,
+       "ci": [
+        -24.365337123501003,
+        2.7771452750770513
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 13.571241199289027
+     },
+     "ceiling_vs_none": {
+      "unblocked": {
+       "diff": -19.163439483212485,
+       "ci": [
+        -39.41459323301102,
+        0.5035009216678115
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -19.16343948321257,
+       "ci": [
+        -42.64541326546466,
+        3.8632372940516526
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 23.254325279758156
+     },
+     "text_vs_none": {
+      "unblocked": {
+       "diff": -24.213922100417676,
+       "ci": [
+        -45.31363369586271,
+        -3.3191218716917334
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -24.21392210041772,
+       "ci": [
+        -45.41417785890608,
+        -2.815049118162278
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 21.2995643703719
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -30.049579870230204,
+       "ci": [
+        -49.46697661344789,
+        -10.158732633197097
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -30.04957987023029,
+       "ci": [
+        -55.724619793538444,
+        -3.8697975577600676
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 25.92741111788919
+     }
+    },
+    "angry": {
+     "emo_vs_rand": {
+      "unblocked": {
+       "diff": -24.09898836304589,
+       "ci": [
+        -51.951672580713016,
+        2.703576960286351
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -24.098988363045862,
+       "ci": [
+        -44.90062947876762,
+        -3.405409853401027
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": true,
+      "detectable_effect_blocked": 20.747609812683297
+     },
+     "emo_vs_ceiling": {
+      "unblocked": {
+       "diff": 17.99649787829901,
+       "ci": [
+        1.3481473396518582,
+        35.68898437415624
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": 17.996497878299152,
+       "ci": [
+        -2.6524013462643348,
+        39.387620033680605
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": true,
+      "detectable_effect_blocked": 21.02001068997247
+     },
+     "ceiling_vs_none": {
+      "unblocked": {
+       "diff": -39.465877634685114,
+       "ci": [
+        -66.06349703415019,
+        -13.810419314485594
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -39.4658776346852,
+       "ci": [
+        -64.74966071270623,
+        -15.75023638460457
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 24.49971216405083
+     },
+     "text_vs_none": {
+      "unblocked": {
+       "diff": -68.52314879618928,
+       "ci": [
+        -103.81152377109225,
+        -34.767049790700355
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -68.52314879618933,
+       "ci": [
+        -106.20375708621663,
+        -33.23392371080663
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 36.484916687704995
+     },
+     "emo_vs_none": {
+      "unblocked": {
+       "diff": -21.469379756386104,
+       "ci": [
+        -47.5941814455224,
+        3.0265647789999197
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -21.469379756386047,
+       "ci": [
+        -44.550352324142835,
+        -0.3528685316383808
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": true,
+      "detectable_effect_blocked": 22.09874189625223
+     }
+    }
+   }
+  },
+  "a3_dissociation": {
+   "doses": [
+    0.0,
+    0.5,
+    1.0
+   ],
+   "by_config": {
+    "logreg->logreg": {
+     "desperate": {
+      "unblocked": {
+       "diff": -1.0094417200662127,
+       "ci": [
+        -1.9269313622993336,
+        -0.0752634933222649
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -1.009441720066215,
+       "ci": [
+        -1.91623500143069,
+        -0.11873401101565416
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 0.8987504952075179
+     },
+     "afraid": {
+      "unblocked": {
+       "diff": -0.284421452724553,
+       "ci": [
+        -1.5672493078388097,
+        0.9938971707108534
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -0.2844214527245521,
+       "ci": [
+        -1.346616208623358,
+        0.902360334716002
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 1.12448827166968
+     },
+     "happy": {
+      "unblocked": {
+       "diff": -3.2305656558309104,
+       "ci": [
+        -4.410231143753849,
+        -2.072867822649223
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -3.2305656558309104,
+       "ci": [
+        -4.476268687309076,
+        -2.064894182700829
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 1.2056872523041233
+     },
+     "calm": {
+      "unblocked": {
+       "diff": -1.5733328206021433,
+       "ci": [
+        -2.7162595412566977,
+        -0.4471754786474386
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -1.5733328206021429,
+       "ci": [
+        -2.7513698716633357,
+        -0.4395011332873574
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 1.155934369187989
+     },
+     "sad": {
+      "unblocked": {
+       "diff": -0.7689632821139498,
+       "ci": [
+        -1.8759165846648627,
+        0.31317900818986943
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -0.7689632821139512,
+       "ci": [
+        -1.9593266966237641,
+        0.4081315741339442
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 1.1837291353788542
+     },
+     "angry": {
+      "unblocked": {
+       "diff": -1.283561590375355,
+       "ci": [
+        -2.197447515570302,
+        -0.37139589553635843
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -1.283561590375355,
+       "ci": [
+        -2.0559045493029764,
+        -0.5159057038728331
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 0.7699994227150717
+     }
+    },
+    "dom->logreg": {
+     "desperate": {
+      "unblocked": {
+       "diff": -2.204646733794128,
+       "ci": [
+        -3.227643639931218,
+        -1.235795541648251
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -2.2046467337941307,
+       "ci": [
+        -3.288011159655052,
+        -1.140529617552128
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 1.073740771051462
+     },
+     "afraid": {
+      "unblocked": {
+       "diff": 1.4827485563816527,
+       "ci": [
+        0.3149182094999747,
+        2.603830815236378
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": 1.4827485563816545,
+       "ci": [
+        0.07321037207281351,
+        2.9204547489276913
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 1.423622188427439
+     },
+     "happy": {
+      "unblocked": {
+       "diff": -3.9779972035684112,
+       "ci": [
+        -5.318303939140231,
+        -2.663127100321413
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -3.9779972035684095,
+       "ci": [
+        -5.227356138895523,
+        -2.8043338950349876
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 1.2115111219302677
+     },
+     "calm": {
+      "unblocked": {
+       "diff": -1.2053491819208055,
+       "ci": [
+        -2.348001275756161,
+        -0.1044720807832945
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -1.2053491819208078,
+       "ci": [
+        -2.4011460359837153,
+        -0.11660803666795175
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 1.1422689996578819
+     },
+     "sad": {
+      "unblocked": {
+       "diff": -3.068965953135476,
+       "ci": [
+        -4.201354821684008,
+        -1.8928731604125704
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -3.068965953135478,
+       "ci": [
+        -4.031777474589072,
+        -2.0730449862479747
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 0.9793662441705486
+     },
+     "angry": {
+      "unblocked": {
+       "diff": -2.8705597500830287,
+       "ci": [
+        -4.004049923152231,
+        -1.7217489719435417
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": -2.870559750083028,
+       "ci": [
+        -3.8327754952459596,
+        -1.892052521544561
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 0.9703614868506993
+     }
+    },
+    "dom->dom": {
+     "desperate": {
+      "unblocked": {
+       "diff": 16.517502160313747,
+       "ci": [
+        -6.964922308097063,
+        40.10536635191418
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 16.517502160313775,
+       "ci": [
+        -9.879609463656381,
+        41.873410978675565
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 25.876510221165972
+     },
+     "afraid": {
+      "unblocked": {
+       "diff": 106.00340473060527,
+       "ci": [
+        66.16947441585079,
+        144.4223114794946
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": 106.00340473060527,
+       "ci": [
+        60.12667255835259,
+        153.17869016103685
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 46.52600880134213
+     },
+     "happy": {
+      "unblocked": {
+       "diff": -46.63951658999853,
+       "ci": [
+        -96.25451315449003,
+        2.6322139240514066
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -46.63951658999863,
+       "ci": [
+        -93.31307986340757,
+        -2.1453629097101774
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": true,
+      "detectable_effect_blocked": 45.5838584768487
+     },
+     "calm": {
+      "unblocked": {
+       "diff": 16.813816095050544,
+       "ci": [
+        -43.30717398797769,
+        77.53098503428978
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": 16.81381609505056,
+       "ci": [
+        -36.765304438995635,
+        72.06081254463652
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 54.413058491816074
+     },
+     "sad": {
+      "unblocked": {
+       "diff": -1.1329927653169278,
+       "ci": [
+        -36.25817901661912,
+        37.0215078810013
+       ],
+       "sig": false
+      },
+      "blocked_paired": {
+       "diff": -1.1329927653168852,
+       "ci": [
+        -28.38296772120745,
+        25.652531498354534
+       ],
+       "sig": false,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 27.017749609780992
+     },
+     "angry": {
+      "unblocked": {
+       "diff": 109.22720858538588,
+       "ci": [
+        67.90866815994633,
+        151.22424597050104
+       ],
+       "sig": true
+      },
+      "blocked_paired": {
+       "diff": 109.22720858538594,
+       "ci": [
+        64.724956024539,
+        153.999939528955
+       ],
+       "sig": true,
+       "n_blocks": 29
+      },
+      "sig_changed": false,
+      "detectable_effect_blocked": 44.637491752208
+     }
+    }
+   }
+  }
+ },
+ "counts": {
+  "b1_e4rerun/emo_vs_rand": {
+   "sig_neg_unblocked": 2,
+   "sig_neg_blocked": 2,
+   "sig_pos_unblocked": 1,
+   "sig_pos_blocked": 1,
+   "n": 6
+  },
+  "b1_e4rerun/emo_vs_none": {
+   "sig_neg_unblocked": 2,
+   "sig_neg_blocked": 2,
+   "sig_pos_unblocked": 1,
+   "sig_pos_blocked": 1,
+   "n": 6
+  },
+  "b1_e4rerun/emo_vs_orth": {
+   "sig_neg_unblocked": 2,
+   "sig_neg_blocked": 2,
+   "sig_pos_unblocked": 0,
+   "sig_pos_blocked": 0,
+   "n": 6
+  },
+  "b1_e4rerun/emo_vs_cross": {
+   "sig_neg_unblocked": 3,
+   "sig_neg_blocked": 3,
+   "sig_pos_unblocked": 0,
+   "sig_pos_blocked": 0,
+   "n": 6
+  },
+  "b1_followup/emo_vs_rand": {
+   "sig_neg_unblocked": 2,
+   "sig_neg_blocked": 3,
+   "sig_pos_unblocked": 0,
+   "sig_pos_blocked": 0,
+   "n": 6
+  },
+  "b1_followup/emo_vs_ceiling": {
+   "sig_neg_unblocked": 0,
+   "sig_neg_blocked": 0,
+   "sig_pos_unblocked": 1,
+   "sig_pos_blocked": 0,
+   "n": 6
+  },
+  "b1_followup/ceiling_vs_none": {
+   "sig_neg_unblocked": 3,
+   "sig_neg_blocked": 3,
+   "sig_pos_unblocked": 0,
+   "sig_pos_blocked": 0,
+   "n": 6
+  },
+  "b1_followup/text_vs_none": {
+   "sig_neg_unblocked": 4,
+   "sig_neg_blocked": 4,
+   "sig_pos_unblocked": 0,
+   "sig_pos_blocked": 0,
+   "n": 6
+  },
+  "b1_followup/emo_vs_none": {
+   "sig_neg_unblocked": 3,
+   "sig_neg_blocked": 4,
+   "sig_pos_unblocked": 0,
+   "sig_pos_blocked": 0,
+   "n": 6
+  },
+  "a3_dissociation/logreg->logreg": {
+   "sig_neg_unblocked": 4,
+   "sig_neg_blocked": 4,
+   "sig_pos_unblocked": 0,
+   "sig_pos_blocked": 0,
+   "n": 6
+  },
+  "a3_dissociation/dom->logreg": {
+   "sig_neg_unblocked": 5,
+   "sig_neg_blocked": 5,
+   "sig_pos_unblocked": 1,
+   "sig_pos_blocked": 1,
+   "n": 6
+  },
+  "a3_dissociation/dom->dom": {
+   "sig_neg_unblocked": 0,
+   "sig_neg_blocked": 1,
+   "sig_pos_unblocked": 2,
+   "sig_pos_blocked": 2,
+   "n": 6
+  }
+ }
+}
