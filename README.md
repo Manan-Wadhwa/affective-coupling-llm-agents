@@ -163,7 +163,7 @@ See [`docs/review/AUDIT.md`](docs/review/AUDIT.md) for the full list of claims t
 
 ## Data
 
-- `results/*.json` — all quantitative results (E0–E5, CMI, J-lens, behavioral × models).
+- `results/**/*.json` — every committed result file, indexed with its status (quotable / retracted-claim / unregistered / partial) in [`results/README.md`](results/README.md). Not every file backs a quotable claim.
 - `results/generations/responses_qwen36_sample300.jsonl` — a 300-line sample of generated dialogues.
 - The full generation archive and every result file are on the Hugging Face dataset
   `punctualprocrastinator/coupling-27b-results`, which is **private**. Publishing it is a
@@ -177,6 +177,8 @@ produced it.
 
 ```
 src/
+  lib/             acl_core.py — single vendored core for the rev-3 rebuild
+  rev3/            a2_estimator, a3_dissociation, b1_e4rerun; b1_analyze / a2_analyze read checkpoints; splithalf_independent
   core/            coupling_e0, coupling_e2 — shared probes, steering, scenarios
   representation/  E2-CI dose-response, E3/E4 ablation, E5 activation passing
   information/     CMI pilot + the A→B coupling estimate
@@ -186,10 +188,12 @@ src/
 notebooks/         self-contained marimo notebook for GPU sandboxes
 docs/
   writeups/        paper.html, dossier.html
-  review/          AUDIT.md, NOVELTY_REVIEW.md
+  review/          AUDIT.md, NOVELTY_REVIEW.md, RESULTS_LOG.md, A0_PRIOR_ART.md, claims.json
   planning/        RESEARCH_PLAN.md, ROADMAP.md, SHARED_WORKSPACE_SPEC.md
-results/           mirrors src/ topics, plus generations/ for archived transcripts
-tools/             molab.py — drives a marimo/molab sandbox over its HTTP+WS API
+results/           mirrors src/ topics, plus generations/ and rev3/ — see results/README.md
+                   for the per-file status index
+tools/             check_provenance.py (claims registry checker), pull_results.py (sandbox
+                   checkpoint puller), molab.py (drives a marimo/molab sandbox)
 ```
 
 ## Reproduce

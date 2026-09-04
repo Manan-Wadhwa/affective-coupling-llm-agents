@@ -172,9 +172,255 @@ result reversing under estimator substitution all remain unoccupied.
 
 ## In flight
 
-| Run | Box | State |
+*Table rewritten 2026-09-04; the 2026-09-02 sandboxes (`sb-327d7f6b`, `sb-50fc9327`)
+expired before either sweep finished, taking their work directories with them.*
+
+| Run | Box | State (2026-09-04) |
 |---|---|---|
-| B1 — E4 rerun, 27B | `sb-327d7f6b` | sweep, 7/54 cells; `desperate` complete |
-| A2 — estimator battery, 27B | `sb-50fc9327` | pool 3968/5760, then features, then the CPU grid |
-| A3 — present-vs-other paired test | `sb-50fc9327` | chained; starts when A2 frees the GPU, reuses A2's pool at k=160 |
-| A2 — estimator battery, Llama-3-8B-abliterated | `sb-327d7f6b` | chained; starts on `B1_DONE`, k=220 to match the committed run |
+| B1 — E4 rerun, 27B, from scratch | `sb-45376053750d2753` | launched 06:13Z; pool generating |
+| A2 — estimator battery, Llama-3-8B-abliterated, k=220 | `sb-45376053750d2753` | chained; starts on `B1_DONE` |
+| A2 — estimator battery, 27B, k=160, all 7 depths | `sb-7aa3283deeba45cd` | launched 06:13Z; pool generating |
+| A3 — present-vs-other paired test | `sb-7aa3283deeba45cd` | chained; starts on `A2_DONE`, reuses A2's pool (`--pool-cache`, `--probe-k 160`) |
+
+---
+
+## 2026-09-04 · re-read of the committed rev-3 checkpoints — **PARTIAL, no verdict**
+
+No new runs. The cells files committed at `70894ba` were re-read and the derived summary
+regenerated; `results/rev3/README.md` now labels every file in that folder with its grid
+completeness and lists the numbers that have no committed source.
+
+- **B1 is at 47/54 cells, not 7/54** as the 2026-09-02 entry and the previously committed
+  `b1_partial_summary.json` state. Five emotions are complete; `angry` has 2 reps at α = 0.
+  `b1_partial_summary.json` regenerated from the 47-cell file with `src/rev3/b1_analyze.py`
+  (deterministic; two runs byte-identical).
+- **Manipulation checks pass on point estimates for 5/5** measured emotions, with `calm`'s
+  emo/rand CIs overlapping (specificity not established for it) and `afraid`'s A-readout
+  non-monotone in α (0.576 at 0.5, 0.458 at 1.0).
+- **Blocking contrast (emo − rand slope) excludes zero for 2 of 5** (`afraid` −25.7
+  [−44.6, −6.3]; `sad` −28.1 [−51.4, −4.7]) and crosses zero for `desperate`, `happy`,
+  `calm`. `desperate`'s value moved from −14.9 [−41.4, +12.1] (n = 29 at α = 1) to −7.7
+  [−24.1, +9.2] (n = 87). The §B1.3 reading above, written from `desperate` alone, does not
+  hold across the five: the grid is mixed. None of the three §1.3 outcomes is reached.
+- **The B1.1 gate figure (0.909 / logreg 0.577) has no committed file.** It is written only
+  to `b1_e4rerun_<tag>.json` at sweep completion, which has not been pulled. It is in
+  exactly the position of the two category-(b) gates in `claims.json` and must not be
+  quoted until the file lands.
+- **A2 has one depth of seven** (`hidden_states[16]`, depth 0.25; 66 cells), not the focus
+  layer. Layer-16 split-half: `dom` 0.50 → 0.96 across n = 75 → 2000; `logreg` 0.31 → 0.50,
+  flattening between 1200 and 2000; `ridge` 0.25 → 0.31; `mass_mean_cov` and `lda_shrunk`
+  *fall* with n (0.21 → 0.16, 0.25 → 0.20). Full tables in `results/rev3/README.md`.
+- **Category (c) shrank from 2 to 1.** `src/information/cmi_pilot.py` is a CPU-only
+  synthetic; run locally it writes `results/information/cmi_pilot.json` in ~6 s and gives
+  the beta=0 lossy-conditioner estimate **0.8815** — the dossier's "0.88 nats" — byte-identical
+  across two runs. Archaeology: the number entered at `c976a8e` (2026-07-25, the initial
+  commit) and no run had ever been committed. Re-classified (a), left `pending` for
+  adjudication. The remaining (c) is `dataset.13k_released`: all three counts (~12k / 12,333
+  / ≈13k) entered together at `c976a8e` and nothing local can verify any of them.
+- **Registry now covers rev 3.** Five `claims.json` entries added (the B1 gate as category
+  (b) with no file; the partial B1 counts and the A2 layer-16 pair as `pending`); a
+  `count_true` deriver added to the checker. 27 claims, 0 quotable failing to resolve.
+- **Noted on the analyzer:** the `emo − X` contrasts in `b1_analyze.py` come from
+  `acl_core.paired_slope_contrast`, which resamples samples within dose — paired, not
+  scenario-blocked. The per-arm slope CIs are blocked. Recorded in `results/rev3/README.md`.
+- **Reruns launched 2026-09-04** on two fresh sandboxes, from scratch (the old work dirs and
+  probe pools expired with their leases): box 1 runs B1 (Qwen3.6-27B, 3 reps) then A2 on
+  Llama-3-8B-abliterated (k=220); box 2 runs A2 (Qwen3.6-27B, k=160) then A3 reusing A2's
+  pool. Same model revision `6a9e13bd` loaded on both. Checkpoints are pulled every 10 min
+  into `results/rev3/inflight_box{1,2}/`.
+- **Per-experiment reports with blind critiques** (`results/reports/`, 2026-09-04): seventeen
+  groups; each critique was written by an agent given only the claim wording, the script and
+  the JSON. Findings not in AUDIT.md are mapped to the plan in RESEARCH_PLAN §12 and, where a
+  plan sentence was contradicted by a file, corrected in place (⟨2026-09-04⟩ marks). The
+  largest: the present-vs-other dissociation under difference-of-means is 0 of 6 after
+  scale normalisation (report 15); three-point dose grids make every legacy "slope" an
+  endpoint contrast (reports 02, 03, 15); the legacy stability diagnostic used one split with
+  nested subsamples (report 14).
+- **Correction to the 2026-09-02 B1.1 entry (found by results/reports/16):** the split-half
+  gate is computed at `n_per_half = min(N//2, 600)` = **600**, not 789 (789 is the DIR/READ
+  half size). And it is measured at layer 43, which is not among the 30 ablated layers
+  (13–42); the stability of the directions actually projected out is unmeasured. Also: the
+  driver's `gen_B` calls `model.generate` without a seed, so B's replies in both the partial
+  checkpoint and the running rerun are not reproducible; and the `generation_side_manip_check`
+  control pointer names `acl_core.forced_choice_readout`, which the driver does not call.
+- **A2 driver bug found by results/reports/17 and patched (2026-09-04):** `a2_estimator.py`
+  paired the `pca_diff` estimator on the label it was fitting for the "other" label set, so
+  that direction was all zeros and `dec/16/other/pca_diff` (0.193) is a class-0 base rate.
+  Fixed to pair on the opposite label set; verified on synthetic data; deployed to both
+  sandboxes. Box 2's A2 was restarted at 07:01Z from its pool cache (4352/5760 generations
+  kept); box 1's chained Llama A2 will use the patched file. The covariance-corrected
+  estimators' falling reproducibility with n reproduces on synthetic fixed-truth data, so it
+  is estimator behaviour (Ledoit–Wolf λ shrinking with n), not a model finding.
+
+---
+
+## 2026-09-04 · B1 — E4 rerun, Qwen3.6-27B — **COMPLETE**, verdict `not_blocking`
+
+Driver `src/rev3/b1_e4rerun.py`; sandbox `sb-45376053750d2753`; 06:13–07:57Z. Output
+`results/rev3/b1_e4rerun_qwen36-27b.json` (provenance-stamped) + full cells + analyzer summary.
+Registry: `b1.stability_gate_dom`, `b1.mc_ablate_pass_6of6`, `b1.emo_vs_rand_sig_3of6`,
+`b1.verdict_not_blocking` — all resolve. Tables in `results/rev3/README.md`.
+
+- **Gate:** dom split-half **0.907** [0.904, 0.911] at n = 600/half
+  (logreg 0.567); passes 0.80. A new measurement, at layer 43, which is not an ablated
+  layer. The 2026-09-02 entry's 0.909 stays unsourced and is superseded.
+- **Manipulation checks:** 6/6 on point estimates, 4/6 on CI separation (afraid, calm fail).
+- **Blocking:** emo − rand excludes zero for 3/6 — afraid and sad reduced, **happy increased**;
+  desperate, calm, angry cross zero (calm has no transmission; desperate/angry consistent
+  with up to a third blocked). Pre-declared rule (≥ 4 of 6) → `not_blocking`.
+- **Reading, stated no more strongly than the file allows:** the rule's outcome is the plan's
+  §1.3 outcome 2 *in form*, but the sentence "lexical affect ablation does not block
+  contagion" is not licensed: it is a mixed result on an instrument that leaves A's tokens
+  and layers 43–63 untouched, with no MDE. The token-level and ceiling arms (§1.3
+  ⟨2026-09-04⟩) are the next run, not a write-up.
+- **B1 delta critique (results/reports/16):** the rerun is a second independent run, not a
+  resume (pool 1615 vs 1578); afraid's and happy's contrasts moved by more than their CIs
+  between the two runs. happy's +31.2 is a three-point-grid artifact (all arms peak at
+  α = 0.5). Perplexity range corrected to 9.8–21.2. Provenance: `code_sha` empty, `seeds.run`
+  misleading (B unseeded), two control pointers dead.
+- **A2 crashed after layer 16 (box 2, 08:02Z) on a second latent bug** — the cross-estimator
+  and speaker-geometry blocks sliced the first n rows of the emotion-ordered pool, so only
+  three classes were present and class indexing failed. Patched to a seeded subsample with
+  `n_cls` explicit; both A2 jobs restarted from their cached pools and features.
+
+---
+
+## 2026-09-04 · A2 — estimator battery, Qwen3.6-27B — **COMPLETE** (7 depths)
+
+Driver `src/rev3/a2_estimator.py` (two bugs patched mid-run, above); sandbox
+`sb-7aa3283deeba45cd`; 08:11–11:42Z. Output `results/rev3/a2_estimator_qwen36-27b.json`
+(provenance-stamped). Registry: `a2.focus_dom_split_half`, `a2.focus_logreg_split_half`,
+`a2.focus_logreg_vs_dom_cos`, `a2.focus_decode_gap` — all resolve. Tables in
+`results/rev3/README.md`.
+
+- **Focus layer 43, n = 2000/half, 10 splits, raw space:** difference-of-means
+  **0.974**, logistic **0.566**; logistic stops improving after
+  n = 600 (0.575 → 0.568 → 0.566). The same shape on 5 of 7 depths; dom 0.966–0.979 on all 7.
+- **Cross-estimator:** logreg ↔ dom 0.592 (0.54–0.60 on all depths) — the
+  quantity 2604.08169 reports as 0.98–0.99; ridge groups with the covariance-corrected
+  estimators (0.91), not with logreg.
+- **Decode:** logreg 0.951 vs dom 0.883 (one split, no CI).
+- **Regime:** n/d 0.83 everywhere; Fisher 0.09 → 0.19 and effective rank 327 → 230 across
+  depth while the split-half curves barely move — the §2.2 anomaly is not explained by n/d.
+- **Caveats carried from results/reports/17:** raw-space cosine only; n-grid points nested
+  within a seed; C not n-normalised and `logreg_cv` not swept; decode on one split with a
+  substituted rule. `stability.postfix_gate_27b` (category b) now has its re-measurement but
+  the 0.967 sentence itself stays pending until retired.
+- A3 started 11:43Z on the same box, reusing A2's pool (chain verified: "resuming with
+  5760/5760 generations cached").
+- **A2 delta critique (results/reports/17):** the logistic "plateau after n = 600" is not
+  resolvable at 10 seeds and *reverses* under C = 0.05, which rises on 6 of 7 depths and ends
+  above C = 0.5 at the focus layer — the curve's shape is the regularisation schedule. The
+  raw-space logreg↔dom cosine (0.59) is `w/sd` vs `(μ₊−μ₋)/sd²`, not the raw-CAA quantity
+  2604.08169 reports, so the two are not comparable yet. Within-present cosine 0.19 is the
+  1/(K−1) floor; dom's 0.32 shows a shared non-emotion component. n/d is constant across
+  depth by construction. Registry texts and README corrected; Paper A's non-convergence claim
+  is untested until C is tuned per n.
+
+---
+
+## 2026-09-04 · A3 — present-vs-other dissociation, Qwen3.6-27B — **COMPLETE; exhibit does not survive**
+
+Driver `src/rev3/a3_dissociation.py`; sandbox `sb-7aa3283deeba45cd`; 11:42–12:13Z; A2's pool.
+Output `results/rev3/a3_dissociation_qwen36-27b.json`; scale-free re-read
+`results/rev3/a3_scalefree_qwen36-27b.json` (`src/rev3/a3_scalefree.py`). Registry:
+`a3.exhibit_dom_raw`, `a3.exhibit_dom_scalefree`, `a3.published_config_reversal`,
+`a3.direction_stability`. Tables in `results/rev3/README.md`.
+
+- **Published configuration (logreg→logreg), non-circular probe:** present > other **0 of 6**;
+  other > present significant for 4 of 6 (raw), 3 of 6 (z0). The reversal the E2-CI critique
+  found on the old file reproduces on a fresh pool.
+- **dom → dom:** raw 4/6 (2 sig) → z0 2/6 (0 sig, 3 sig reversed) → zall 1/6.
+  The raw count was the rows' norms, as results/reports/15 predicted. **The 5-of-6 exhibit
+  is withdrawn; there is no present-vs-other dissociation on this data on any scale.**
+- Stability on this pool (n = 600/half): dom 0.915, logreg 0.576 — third
+  independent measurement today, all consistent.
+- Consequence for Paper A: §2.3 A3's "downstream consequence" section has no exhibit. What
+  remains for Paper A is the estimator-reproducibility result itself, now with the
+  C-dependence caveat from the A2 delta critique.
+- **A3 blind critique (results/reports/18):** every count reproduces; the collapse of the
+  exhibit holds under Cohen's d, within-scenario SD and rank as well as z0 (dom→dom 1/6,
+  0 sig, 3 reversed). Corrections: "norm artifact" overstated (row norms not stored; score-SD
+  ratio 1.65–2.4×); `zall` is biased and dropped from the claim; `paired_slope_contrast` is
+  neither scenario-blocked nor dose-paired (published-config reversals 3/6 after FDR, not 4);
+  the six emotions share one α = 0 baseline; the design cannot separate B-models-A from
+  attention to A's text. Registry, README, plan and `a3_scalefree.py` docstring corrected.
+
+---
+
+## 2026-09-04 · A2 — estimator battery, Llama-3-8B-abliterated — **COMPLETE** (7 depths)
+
+Sandbox `sb-45376053750d2753`; 07:58–13:24Z. Output `results/rev3/a2_estimator_llama3-abl.json`.
+Registry: `a2_8b.focus_dom_split_half`, `a2_8b.focus_logreg_split_half`,
+`a2_8b.nd_anomaly_reproduces`, `a2_8b.focus_logreg_vs_dom_cos`. Tables in `results/rev3/README.md`.
+
+- **Focus layer 21, n = 1200/half:** dom **0.941**, logreg **0.286** (C = 0.5 curve
+  peaks at n = 300–600 and falls at 1200 on 5 of 7 depths). logreg↔dom 0.382.
+- **The n/d anomaly reproduces on one pipeline:** better n/d on the 8B (0.95 vs 0.83), worse
+  logistic reproducibility (0.29 vs 0.57), similar dom. n/d is not the mechanism; the
+  regularisation schedule × activation geometry (lower effective rank, weaker SNR on the 8B)
+  is the live candidate, untested until the tuned-C arm runs on both models.
+- All of the day's planned runs are complete: B1, A2 (27B), A3, A2 (8B). Follow-ups
+  (`b1_followup.py`, `a2_followup.py`) written, self-tested, under independent verification.
+- **8B A2 delta critique (results/reports/19):** the logistic decline with n on the 8B is
+  significant (600 → 1200 negative on 6/7 depths, 10/10 seeds pooled) and `logreg_c005`
+  declines harder at all 7 — not a fixed-C artifact, unlike the 27B; the two models disagree
+  on mechanism. Matched n = 1200: logreg 0.286 vs 0.568, dom 0.941 vs 0.955. "n/d is not the
+  mechanism" reworded to "n/d does not order these two models". New: under dom the 8B's
+  present↔other cosine is 0.89 of within-present — the near-orthogonal-speaker result fails
+  under the stable estimator on this model. Registry, README, plan corrected.
+
+---
+
+## 2026-09-04 · B1 follow-up — **COMPLETE**, verdict `mixed` (sign-aware rule)
+
+Driver `src/rev3/b1_followup.py` (verified same day); sandbox `sb-45376053750d2753`;
+15:58–17:20Z; B1's own pool and features (directions identical; focus gate reproduces).
+Output `results/rev3/b1_followup_qwen36-27b.json`. Registry: `b1f.verdict_mixed`,
+`b1f.blocked_fraction`, `b1f.ceiling_equals_emo`, `b1f.text_arm`, `b1f.ablated_layers_gated`.
+
+- **Ablated layers gated:** all 30 at 0.882–0.920; none below 0.80.
+- **Blocking (emo − rand, B seeded, common random numbers):** afraid +0.25 [+0.16, +0.35],
+  sad +0.37 [+0.19, +0.56] of the none slope; desperate, happy, angry null (0–35% admitted);
+  calm untestable. happy's earlier +31 reversal is gone.
+- **Ceiling arm:** ablating everywhere ≈ ablating A's span (5/6) — residual ablation at
+  layers 13–42 caps at partial blocking; B recomputes affect above the window.
+- **Text arm:** neutral rewrite of A's message cuts B's slope for 4/6 (angry −68 vs −24 under
+  residual ablation); its own manipulation check fails for afraid and calm (paraphraser leak).
+- **Reading for §1.3:** none of the three pre-declared outcomes as worded. Nearest defensible:
+  *the residual emotion direction at mid-stack carries a minority of transmission (≤ ~35%,
+  detectable for 2 of 5); the rest travels with A's tokens and is rebuilt above layer 42.*
+- **B1 follow-up critique (results/reports/20):** counts flip on the variance choice — under
+  a scenario-clustered, dose-paired bootstrap angry is a third blocker and the ceiling arm's
+  one exception disappears (6/6 cross zero). Nulls are two-sided (amplification equally
+  admitted). The file's `mde` is the wrong estimand. The text arm's afraid result is 47%
+  refusals at α = 1. "B rebuilds above the window" is untested (ceiling extends positions,
+  not layers). §13.5 sentence replaced; registry corrected; `paired_slope_contrast` blocking
+  is now the single most load-bearing to-do.
+
+---
+
+## 2026-09-04 · A2 follow-up (tuned C / fixed λ / both spaces / CAA-raw cross-estimator) — **layers 16 and 43; layer 54 lost**
+
+Driver `src/rev3/a2_followup.py` (verified same day); sandbox `sb-45376053750d2753`;
+15:58–17:42Z for two layers; the box's lease expired ~17:55Z with layer 54 at 10/48 cells.
+Output `results/rev3/a2_followup_qwen36-27b.json`. Registry: `a2f.focus_logreg_fixed_lambda_flat`,
+`a2f.focus_tuned_c_does_not_close_gap`, `a2f.std_space_matches_raw`, `a2f.caa_raw_vs_logreg_raw`.
+
+- **Fixed effective penalty:** logistic flat 0.581 → 0.581 from n = 150 to 2000 at the focus
+  layer (3/10 seeds positive, mean -0.000); dom 0.732 → 0.974 on the same splits. The
+  non-convergence claim stands on the 27B once the schedule is controlled; the afternoon's
+  "it is the schedule" reading applied to the fixed-C curve only.
+- **Tuned C:** 0.608 at n = 2000 — does not close the gap.
+- **Both spaces:** standardised within +0.02–0.03 of raw, same shape.
+- **Like-for-like cross-estimator (CAA raw ↔ logreg raw):** 0.427 at focus, 0.498 at layer 16,
+  vs 0.98–0.99 in 2604.08169 (different trait/design).
+- Both sandboxes are now dead; every rev-3 output is local.
+- **A2 follow-up critique (results/reports/21):** every number verified and the C_n identity
+  holds bit-for-bit at n = 600 on the real data. "Flat" withdrawn — the fixed-penalty curve
+  moves < 0.03 over n = 150 → 2000 but dips at the focus layer and rises at layer 16; with a
+  fixed penalty the target is fixed, so this is no material convergence in the proportional
+  regime, not non-convergence in the limit, and depends on the single anchor. CV scored
+  accuracy, not stability. Space gaps 0.002–0.029. CAA cosine still not the published
+  quantity; its CI has no sampling content. Registry, README and plan reworded; Paper A's
+  sentence is now the critic's.
