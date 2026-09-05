@@ -503,7 +503,7 @@ partial-run flag.
 
 ## B1c — pre-registered all-layer ablation — **COMPLETE, 2026-09-04 22:05Z; verdict H1**
 
-Pre-registration `docs/planning/PREREG_B1c.md` (122af4c 19:02Z, addendum cc2dc32 19:22Z; run start 19:32Z — the driver's own prereg stamp is empty, see report 22). File `b1c_alllayer_qwen36-27b.json` (432 arm-rows, 29 scenarios, 6 arms × 4 doses × 3 reps × 6 emotions), checkpoint `b1c_cells_qwen36-27b.json`. Same probe pool and directions as B1 (sha 70129f86…); B sampled with common random numbers across arms. Gate ≥ 0.80 at all 51 ablated hidden states (0.882–0.927). Registry `b1c.*`.
+Pre-registration `docs/planning/PREREG_B1c.md` (122af4c 19:02Z, addendum cc2dc32 19:22Z; run start 19:32Z — the document was on the box at 19:32:17Z, sha identical to cc2dc32, but the driver's own prereg stamp is empty because its relative lookup missed it; see report 22). File `b1c_alllayer_qwen36-27b.json` (432 arm-rows, 29 scenarios, 6 arms × 4 doses × 3 reps × 6 emotions), checkpoint `b1c_cells_qwen36-27b.json`. Same probe pool and directions as B1 (sha 70129f86…); B sampled with common random numbers across arms. Gate ≥ 0.80 at all 51 ablated hidden states (0.882–0.927). Registry `b1c.*`.
 
 **Decision (PREREG §5): H1** — median blocked fraction of `emo_all − rand_all` over the five testable emotions 0.092, scenario-bootstrap CI [0.038, 0.254] (H1 needs median ≤ 0.50 and upper ≤ 0.65). MC-steer 6/6, MC-ablate failures 0, no quality exclusions.
 

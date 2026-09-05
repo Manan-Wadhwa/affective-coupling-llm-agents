@@ -98,6 +98,8 @@ recorded" means the file carries no such field.
 | `b1_followup_qwen36-27b.json` | **RESULT · COMPLETE** | ceiling + text arms, seeded B, all ablated layers gated; `mixed`; emo−rand blocks 25–37% for two (three blocked-bootstrap) |
 | `b1c_alllayer_qwen36-27b.json` | **RESULT · COMPLETE · PRE-REGISTERED** | all-layer ablation (hs 13–63) + text/text_keep arms; verdict **H1**, median blocked 0.09 [0.04, 0.25]; layers 43–63 add nothing; rewrite arms uninterpretable 6/6 |
 | `b1c_cells_qwen36-27b.json` | RAW · checkpoint | per-arm-row checkpoint of the above |
+| `a2_followup_qwen36-27b-nref2000.json` | **RESULT · layer 43 complete, layer 54 lost** | second fixed-penalty anchor (N_REF = 2000): no rise with n, level 0.007–0.022 below the 600 anchor |
+| `a2f_cells_qwen36-27b-nref2000.json` | RAW · partial checkpoint | 22 of 48 layer-54 cells (plain logreg and part of logreg_cv) |
 | `b1_cells_*`, `b1f_cells_*`, `b1_summary_*`, `b1_partial_summary.json` | CHECKPOINT / DERIVED / SUPERSEDED | per-cell arrays and analyzer outputs |
 | `a2_estimator_qwen36-27b.json` | **RESULT · COMPLETE** | 7 depths; focus dom 0.974 vs logreg 0.566 |
 | `a2_estimator_llama3-abl.json` | **RESULT · COMPLETE** | 7 depths; focus dom 0.941 vs logreg 0.286; n/d ordering reproduces |

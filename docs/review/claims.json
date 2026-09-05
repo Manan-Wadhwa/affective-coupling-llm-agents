@@ -1062,7 +1062,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "The driver's own prereg stamp is EMPTY (prereg.found=false: the document was not staged to the box); the pre-registration ordering rests on git commit times (122af4c 19:02Z, cc2dc32 19:22Z) versus _provenance.started_utc 19:32:20Z. H1 is the prereg's 'rank-1 insufficiency' outcome: it says the single direction does not carry the transfer, not what does (PREREG §7). The MC-ablate criterion (emo_all drop >= emo13_42 drop, rand drop < 0.02) passes, but the affect stays largely READABLE on A's span after ablation for four emotions (see b1c.readout_residual). Under-reported by the rule: calm's emo_all vs rand_all contrast (-41.6 [-74.9, -10.7]) is the largest and significant but calm is untestable (none slope +44 [-3, +99]); afraid's A-span readout under none is non-monotone in dose (0.25/0.49/0.58/0.40) and afraid alone has mc_ablate.separated = false. BH-FDR ran over 5 testable emotions, PREREG says six. probe_n 1615 vs PREREG §3's 2160 (B1's pool after its degeneracy filter). The prereg header date is IST, provenance is UTC.",
+   "note": "The driver's own prereg stamp is EMPTY (prereg.found=false). The document WAS on the box before launch: /marimo/acl/docs/planning/PREREG_B1c.md, sha256 5368b835..., byte-identical to the committed cc2dc32 version, mtime 19:32:17Z against runner start 19:32:18Z and _provenance.started_utc 19:32:20Z (verified on the box at 22:40Z); the driver's relative lookup did not resolve it from the runner's working directory. Ordering evidence: git commit times (122af4c 19:02Z, cc2dc32 19:22Z), the box file's mtime, and started_utc. H1 is the prereg's 'rank-1 insufficiency' outcome: it says the single direction does not carry the transfer, not what does (PREREG §7). The MC-ablate criterion (emo_all drop >= emo13_42 drop, rand drop < 0.02) passes, but the affect stays largely READABLE on A's span after ablation for four emotions (see b1c.readout_residual). Under-reported by the rule: calm's emo_all vs rand_all contrast (-41.6 [-74.9, -10.7]) is the largest and significant but calm is untestable (none slope +44 [-3, +99]); afraid's A-span readout under none is non-monotone in dose (0.25/0.49/0.58/0.40) and afraid alone has mc_ablate.separated = false. BH-FDR ran over 5 testable emotions, PREREG says six. probe_n 1615 vs PREREG §3's 2160 (B1's pool after its degeneracy filter). The prereg header date is IST, provenance is UTC.",
    "pointer": {
     "script": "src/rev3/b1c_alllayer.py",
     "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
@@ -1235,6 +1235,58 @@
     }
    },
    "expected": true
+  },
+  {
+   "id": "a2f2.lam_anchor2000_no_rise",
+   "text": "A2 follow-up, second fixed-penalty anchor (N_REF = 2000, so C_n = 0.5*2000/n and the per-sample penalty is 1/2000 at every n, weaker than the 600-anchor's 1/600): at the focus layer 43 in raw space the split-half cosine of the fixed-penalty logistic direction is 0.574, 0.578, 0.554, 0.556, 0.566 at n = 150, 300, 600, 1200, 2000 per half -- no net rise from 150 to 2000 (paired over the 10 shared splits: -0.008, 3 of 10 positive) but not flat: a significant dip 300 -> 600 (-0.024, 1/10 positive) and a partial recovery 600 -> 2000 (+0.012, 8/10 positive); difference-of-means climbs 0.732 -> 0.974 over the same n",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/23_rev3_a2_anchor2000.md",
+    "docs/planning/RESEARCH_PLAN.md#12"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Second anchor for the report-21 result. Same dip at n = 600 the report-21 critic flagged for the 600 anchor; the delta critique (report 23) adds that the recovery after the dip is significant, so 'no rise' means no net rise, not a flat curve. The stronger penalty gives the higher cosine, so the penalty that maximises stability is unbracketed and N_REF < 600 is untested. Standardised space: 0.599, 0.601, 0.576, 0.577, 0.588. Provenance defects in the file: model and model_revision are empty strings (known to-do), and the recorded c_n_formula sentence still says 'held at its C=0.5, n=600 value ... C_600 == 0.5 exactly' although N_REF was 2000 -- the number in the formula is right, the prose is stale. code_sha ccd27d64 (driver with --n-ref), acl_core 23c758a9; run 19:20-20:53Z on box 4; layer 54 lost at 22 of 48 cells when the operator's laptop suspended and the lease ended.",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b-nref2000.json",
+    "json_path": "by_layer.43.stability.logreg_lam.2000.raw.mean",
+    "config": {
+     "by_layer.43.stability.logreg_lam.150.raw.mean": 0.5741300524967927,
+     "by_layer.43.stability.logreg_lam.600.raw.mean": 0.5539367399048101,
+     "target_n": [
+      75,
+      150,
+      300,
+      600,
+      1200,
+      2000
+     ]
+    }
+   },
+   "expected": 0.5664,
+   "tol": 0.001
+  },
+  {
+   "id": "a2f2.anchor_level_shift",
+   "text": "A2 follow-up: the fixed-penalty plateau level depends mildly on the anchor -- the 2000-anchor curve sits below the 600-anchor curve at every n (gaps 0.003, 0.007, 0.019, 0.021, 0.022, 0.015 at n = 75, 150, 300, 600, 1200, 2000; paired over the 10 shared splits x 6 classes, 41, 55, 60, 59, 51, 36 of 60 differences negative); both plateaus lie at 0.55-0.60, both far from difference-of-means (0.97)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/23_rev3_a2_anchor2000.md",
+    "docs/planning/RESEARCH_PLAN.md#12"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Comparison across two result files (results/rev3/a2_followup_qwen36-27b.json anchor 600, and this file anchor 2000) that share split seeds; the pointer resolves the 2000-anchor number at n = 600, the largest paired gap (0.5539 vs 0.5752). Corrected after the delta critique: the first wording said '0.007-0.022 at every n' and '55-60 of 60 for n <= 1200', both false at n = 75 and the count at n = 1200.",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b-nref2000.json",
+    "json_path": "by_layer.43.stability.logreg_lam.600.raw.mean"
+   },
+   "expected": 0.5539,
+   "tol": 0.001
   }
  ]
 }
