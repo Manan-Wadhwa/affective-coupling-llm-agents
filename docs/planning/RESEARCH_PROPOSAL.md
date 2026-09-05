@@ -5,7 +5,7 @@ with its status board and rescopes) and `docs/review/claims.json` (the registry,
 entries, every quotable number machine-checked). Every number below carries a registry id or
 a report number in `results/reports/`; nothing is quoted from memory. Status labels: **established**
 (quotable, critiqued, survived), **partial** (quotable but scoped), **refuted / withdrawn**,
-**open**. B1e (running as this is written) is marked *pending* and will be folded in.
+**open**. B1e and the 8B replication landed at 11:19Z and 11:21Z and are folded in.
 
 ## 1. The question, restated
 
@@ -67,10 +67,13 @@ Paper C (the Jacobian lens / verbalisation) has not started and is not proposed 
   subspace of the same footprint blocks transfer for afraid, sad and angry as much as the
   emotion direction did — because it is *fitted* (65× a random frame's variance, a third
   overlap with the affect frame), not because of norm. **Established as a confound.**
-- **Pending:** B1e (pre-registered `PREREG_B1e.md`) asks whether a fitted, label-free rank-1
-  direction blocks afraid and sad the way the emotion direction does. Its measured footprint is
-  0.74× the emotion direction's, so H3 (specific) would be footprint-confounded and H3′
-  (footprint) would be strong.
+- **B1e returned H3 (report 28, `b1e.*`):** a fitted, label-free rank-1 direction (footprint
+  0.85×) is inert for every emotion; the emotion direction blocks afraid by 25% and sad by 29%
+  against it (q 0.001 / 0.028); the top principal direction at 5.8× blocks angry and calm but
+  not afraid or sad. **Established:** B1c's partial blocking is emotion-specific, and
+  readable-affect removal dissociates from transfer blocking.
+- **8B replication (report 29, `b1c8.*`):** the same five emotions transfer and the same two
+  block (15%, 31%); the pre-registered MC criterion returned instrument_failed on a tie.
 - **Open, three designs in a row:** the token channel. Every rewrite arm failed its own check
   (the neutral rewrite keeps 67–98% of readable affect; the affect-preserving rewrite changes
   transfer itself). No claim about text vs activation is quotable.
@@ -103,8 +106,7 @@ information (the footprint/fitted confound), which the field's random-direction 
 not catch.
 
 **Decisive next runs, in order (each pre-registered before its driver exists):**
-1. **B1e** (running): fitted label-free rank-1 control. Settles whether B1c's afraid/sad
-   blocking is emotion-specific.
+1. ~~B1e~~ done: H3.
 2. **Attention-masking arm** (PREREG_B1c §7): mask B's attention to A's span instead of
    projecting — separates "B re-reads A's tokens" from "B reads A's residual stream".
 3. **A manipulation check independent of the ablated subspace**: a held-out probe fitted on

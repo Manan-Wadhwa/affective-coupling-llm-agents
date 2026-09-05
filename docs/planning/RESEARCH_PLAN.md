@@ -849,17 +849,20 @@ afraid, sad and angry as much as the emotion direction did. The emotion-specific
 that control is 0.14 [−0.03, 0.29]. The critic's correction: norm alone is not the confound (B1c's random direction removed
 twice the emotion direction's norm and was inert); the permuted frame bites because it is
 *fitted* — 65× a random frame's variance, a third overlap with the affect frame (report 27,
-`b1d.frame_geometry`). B1c's afraid/sad result therefore needs a fitted, label-free rank-1
-control (the same estimator on permuted labels) before it is called emotion-specific; that is
-PREREG_B1e's `permdir_all` arm. Open for Paper B: that control; an attention-masking arm (PREREG §7); a
+`b1d.frame_geometry`). B1c's afraid/sad result therefore needed a fitted, label-free rank-1
+control; **B1e ran it (report 28) and returned H3**: the control is inert, afraid and sad are
+blocked 25% and 29% against it, and the top principal direction at 5.8× the footprint blocks
+angry but not afraid or sad. B1c's partial blocking is emotion-specific; B1d's permuted frame
+blocked afraid/sad through its overlap with the affect frame and angry through high-variance
+removal. The 8B replication (report 29) shows the same two emotions blocked. Open for Paper B: that control; an attention-masking arm (PREREG §7); a
 manipulation check independent of the ablated subspace; a rewrite design that survives its check.
 
 ### 13.4 Runs launched under this rescope
 
 | run | box | purpose | status |
 |---|---|---|---|
-| B1c design on the 8B (`b1c_alllayer.py --model failspy/Llama-3-8B-Instruct-abliterated`, replication of PREREG_B1c on a second model; not a new pre-registration) | `sb-202c42d30b800e74` (box 6) | generality of the transfer and of rank-1 insufficiency for the deadline paper | ⏳ launched 2026-09-05 10:45Z; pool generation + gate + 432 arm-rows, ETA ≈ 12:45Z |
-| **B1e** (`b1e_footprint.py`, GPU; pre-registered `PREREG_B1e.md` @ 0228b41 + addenda) | `sb-3fa82560d3da265a` (box 5) | fitted label-free rank-1 control (`permdir_all`) and top-PC control (`pc1_all`) against B1c's `emo_all`; decision on afraid + sad | ⏳ launched 2026-09-05 09:45Z after a verifier GO (driver b9e4904); permdir footprint 0.74× emo, so H3 would be footprint-confounded, H3′ strong; ETA ≈ 11:30Z |
+| B1c design on the 8B (`b1c_alllayer.py --model failspy/Llama-3-8B-Instruct-abliterated`, replication of PREREG_B1c on a second model; not a new pre-registration) | `sb-202c42d30b800e74` (box 6) | generality of the transfer and of rank-1 insufficiency for the deadline paper | ✅ complete 11:21Z (report 29, `b1c8.*`): same five emotions transfer; afraid 15% / sad 31% blocked; the MC-ablate rule returns instrument_failed on a tie between windows |
+| **B1e** (`b1e_footprint.py`, GPU; pre-registered `PREREG_B1e.md` @ 0228b41 + addenda) | `sb-3fa82560d3da265a` (box 5) | fitted label-free rank-1 control (`permdir_all`) and top-PC control (`pc1_all`) against B1c's `emo_all`; decision on afraid + sad | ✅ complete 11:19Z: verdict **H3** (report 28, `b1e.*`): the fitted label-free direction (0.85× footprint) is inert; afraid 25% / sad 29% blocked against it (q 0.001 / 0.028); pc1 at 5.8× blocks angry, not afraid/sad — footprint discharged |
 | A2 reruns (`runner_box6.sh`) | `sb-202c42d30b800e74` (box 6) | 8B fixed-λ arm (layers 14, 21, 27; anchor 600); 27B layer 54 at anchors 600 and 2000 | ✅ all done by 07:48Z: 8B 3 layers (report 24), layer 54 at both anchors (report 25); the first 8B launch failed on k (pool built with k = 220) and was relaunched |
 | **B1d** (`b1d_subspace.py`, GPU; pre-registered `PREREG_B1d.md` @ c3a38b4) | `sb-3fa82560d3da265a` (box 5) | rank-5 class-mean subspace ablation hs 13–63 with permuted-label and random-frame controls; decision `sub_all − perm_all` | ✅ complete 08:31Z: verdict **instrument_failed** (report 27, `b1d.*`): the rank-5 subspace is not a clean instrument (readout baseline shifts; passes §4.2 for 3/6), and the label-permuted control itself blocks transfer for afraid/sad/angry — footprint alone blocks. Median `sub − perm` 0.14 [−0.03, 0.29] |
 | **B1c** (`b1c_alllayer.py`, GPU; B1's probe pool; pre-registered `PREREG_B1c.md` @ cc2dc32) | `sb-58e32f35598fd1b0` (box 3) | all-layer ablation hs 13–63, `rand_all`, `text`/`text_keep`, 4 doses, median-fraction decision rule | ✅ complete 22:05Z: verdict **H1** (0.09 [0.04, 0.25]); 8 `b1c.*` entries quotable; report 22 + blind critique; see §13.5 |

@@ -1724,6 +1724,135 @@
    },
    "expected": 0.581,
    "tol": 0.001
+  },
+  {
+   "id": "b1e.verdict_H3",
+   "text": "B1e (pre-registered PREREG_B1e.md with two pre-launch addenda, stamped in the file: sha da043b93..., found = true; run 09:38-11:18Z on box 5): against a fitted, label-free rank-1 control (the same difference-of-means estimator on permuted labels, cosine 0.004 to the emotion direction, removed norm 0.85x the emotion direction's), the emotion direction's blocking is emotion-specific for both pre-specified emotions -- verdict H3: afraid emo_all - permdir_all -52.5 [-68.9, -35.8], blocked fraction 0.25 [0.17, 0.33]; sad -28.4 [-54.2, -7.0], 0.29 [0.07, 0.56]; BH-FDR q 0.001 and 0.028; MC-steer 6/6; the control's dose-0 readout shift is < 0.01 for every emotion",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/28_rev3_b1e_footprint.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "PREREG_B1e addendum 2 warned an H3 would be footprint-confounded if the control removed much less norm; measured 0.85x (0.50 vs 0.59), and the top-principal-direction arm at 5.8x is also inert for afraid and sad (b1e.pc1_dissociation), so footprint does not explain the afraid/sad block. The none and emo_all arms reproduce B1c and B1d bit for bit (afraid emo_all +159.92).",
+   "pointer": {
+    "script": "src/rev3/b1e_footprint.py",
+    "file": "results/rev3/b1e_footprint_qwen36-27b.json",
+    "json_path": "verdict",
+    "config": {
+     "counts.n_mc_steer_pass": 6,
+     "counts.n_permdir_dose0_bad": 0,
+     "counts.n_block": 2,
+     "counts.n_antiblock": 0,
+     "footprint.ratio_permdir_over_emo": 0.8456040502629618
+    }
+   },
+   "expected": "H3"
+  },
+  {
+   "id": "b1e.permdir_inert",
+   "text": "B1e: the permuted-label rank-1 direction, removed at all 51 hidden states 13-63, changes no emotion's dose-response (permdir_all vs none within [-12, +17] for all six, none significant) and removes no readable affect (share removed <= 0.09 for every emotion), while the emotion direction fitted on the same half removes 16-79% of the readable affect",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/28_rev3_b1e_footprint.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Derived: number of summary.<emotion>.permdir_all_vs_none.sig that are true. This is the control B1d's rank-5 permuted frame was not: rank 1, no overlap with the affect direction (cosine 0.004), and inert.",
+   "pointer": {
+    "script": "src/rev3/b1e_footprint.py",
+    "file": "results/rev3/b1e_footprint_qwen36-27b.json"
+   },
+   "derive": {
+    "fn": "count_true",
+    "args": {
+     "path": "permdir_all_vs_none.sig"
+    }
+   },
+   "expected": 0,
+   "tol": 0
+  },
+  {
+   "id": "b1e.pc1_dissociation",
+   "text": "B1e: the top principal direction of A's span (removed norm 5.8x the emotion direction's, no emotion label) blocks angry's transfer by 61% (pc1_all vs none -120 [-154, -87]) and calm's (-43 [-91, -0.04], untestable) while leaving afraid and sad untouched (+1.5 [-21, +25]; +13 [-17, +43]) -- even though it removes 79% and 71% of their readable affect on A's span; so readable-affect removal and transfer blocking dissociate, and angry's transfer is sensitive to high-variance-direction removal that afraid's and sad's are not",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/28_rev3_b1e_footprint.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Explains B1d's permuted rank-5 frame: it blocked afraid/sad through its overlap with the affect frame (a third, b1d.frame_geometry) and angry through high-variance removal. pc1 also biases the readout at dose 0 for desperate (0.11 -> 0.66) and happy (0.29 -> 0.02), so pc1's shares are confounded the way B1d's were.",
+   "pointer": {
+    "script": "src/rev3/b1e_footprint.py",
+    "file": "results/rev3/b1e_footprint_qwen36-27b.json",
+    "json_path": "summary.angry.pc1_all_vs_none.diff",
+    "config": {
+     "summary.afraid.pc1_all_vs_none.sig": false,
+     "summary.sad.pc1_all_vs_none.sig": false,
+     "footprint.ratio_pc1_over_emo": 5.843811529831919
+    }
+   },
+   "expected": -120.383,
+   "tol": 0.01
+  },
+  {
+   "id": "b1c8.transfer_replicates",
+   "text": "B1c's design on Llama-3-8B-Instruct-abliterated (probe pool n = 1079, focus layer 21, ablation hs 6-31, 26 blocks; a replication of a pre-registered design on a second model, not a new pre-registration): B's dose-response to A's steered affect is positive with CIs excluding zero for the same five emotions as on the 27B (desperate +57, afraid +122, happy +66, sad +102, angry +102; calm +36 [-4, +76] untestable); MC-steer 6/6; all 26 ablated layers pass the 0.80 gate (0.82-0.88)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/29_rev3_b1c_8b.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Generality of the phenomenon. The pool is smaller (1079 kept of 2160) and the readout floors differ (afraid's A-span readout 0.04 -> 0.12 at the top dose, a weak instrument on this model).",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_llama3-abl.json",
+    "json_path": "counts.n_testable",
+    "config": {
+     "counts.n_mc_steer_pass": 6,
+     "probe_n": 1079,
+     "focus": 21
+    }
+   },
+   "expected": 5
+  },
+  {
+   "id": "b1c8.verdict_and_block",
+   "text": "B1c on the 8B: the pre-registered rule returns instrument_failed because the MC-ablate criterion 'emo_all drop >= emo13_42 drop' fails for 4 of 6 emotions on a tie -- the all-layer and the 6-20 windows produce identical A-span readouts (drops 0.176 vs 0.176, 0.079 vs 0.079 ...), so layers 21-31 add nothing and the >= comparison turns on floating-point noise; the blocked fractions are therefore descriptive: emo_all vs rand_all afraid -18.1 [-28.7, -7.5] (15% of the none slope) and sad -31.5 [-48.2, -14.8] (31%) are significant, desperate, happy and angry null, the random direction inert -- the same two emotions block as on the 27B (21% and 33%); median 0.096 [-0.05, 0.21]",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/29_rev3_b1c_8b.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "The tie failure is a defect of the pre-registered criterion, not of the ablation; it is reported as the rule says. The rewrite arms change the transfer on the 8B as well (text and text_keep slopes both far below none) and are uninterpretable.",
+   "pointer": {
+    "script": "src/rev3/b1c_alllayer.py",
+    "file": "results/rev3/b1c_alllayer_llama3-abl.json",
+    "json_path": "verdict",
+    "config": {
+     "counts.n_mc_ablate_fail": 4,
+     "counts.n_block": 2,
+     "counts.blocking_emotions": [
+      "afraid",
+      "sad"
+     ],
+     "summary.afraid.emo_all_vs_rand_all.sig": true,
+     "summary.sad.emo_all_vs_rand_all.sig": true
+    }
+   },
+   "expected": "instrument_failed"
   }
  ]
 }

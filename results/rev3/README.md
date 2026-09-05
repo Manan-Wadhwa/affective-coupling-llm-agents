@@ -553,6 +553,14 @@ Pre-registration `docs/planning/PREREG_B1c.md` (122af4c 19:02Z, addendum cc2dc32
 - The permuted-label control blocks transfer for afraid, sad, angry as much as the rank-1 direction did: footprint alone blocks. Descriptive median `sub − perm` 0.137 [−0.027, 0.286].
 - `none` and `emo_all` reproduce B1c bit for bit. Next controlled step: a footprint-matched rank-1 control for B1c's afraid/sad claim.
 
+## B1e — pre-registered fitted label-free rank-1 control — **COMPLETE, 2026-09-05 11:19Z; verdict H3**
+
+`PREREG_B1e.md` (0228b41 + two addenda; stamped in the file). `b1e_footprint_qwen36-27b.json` (288 arm-rows; arms none / emo_all / permdir_all / pc1_all; hs 13–63; B1c's pool). Footprint emo 0.59, permdir 0.50 (0.85×), pc1 3.47 (5.8×). `emo_all − permdir_all`: afraid −52.5 [−68.9, −35.8] (25%), sad −28.4 [−54.2, −7.0] (29%), q 0.001 / 0.028; permdir − none null for all six; pc1 − none: angry −120 (61%), calm −43, afraid +1.5, sad +13. Registry `b1e.*`; report 28.
+
+## B1c's design on Llama-3-8B-abliterated — **COMPLETE, 2026-09-05 11:21Z; instrument_failed (tie)**
+
+`b1c_alllayer_llama3-abl.json` (432 arm-rows; pool 1079; focus 21; hs 6–20 / 6–31; gate 0.82–0.88). Transfer for the same five emotions (+57 … +122); afraid −18.1 [−28.7, −7.5] (15%) and sad −31.5 [−48.2, −14.8] (31%) vs random; MC-ablate 4/6 fail on identical readouts between the two windows. Registry `b1c8.*`; report 29.
+
 ## Provenance gaps introduced by these files (to close, not to hide)
 
 1. ~~B1 stability gate 0.909 — no committed artifact~~ — closed by the rerun's `b1_e4rerun_qwen36-27b.json` (0.907; a new measurement).
