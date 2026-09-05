@@ -184,8 +184,12 @@ substitution.
    today (0.907/0.567, 0.915/0.575, 0.915/0.576). Caveats: raw-space cosine only; dom's six
    directions share a non-emotion component (within-present cosine 0.12 above the 1/(K−1)
    floor), so reproducibility is not validity.
-2. *Non-convergence with n* — **no material convergence over the reachable range, on the
-   27B, with the schedule controlled** ⟨A2 follow-up + report 21⟩. With the per-sample
+2. *Non-convergence with n* — **no material convergence over the reachable range, with the
+   schedule controlled, on both models; mechanism measured** ⟨reports 21, 23–26; wording in §12's
+   2026-09-05 note⟩. Superseding the sentence below: the 8B's fixed-penalty curve peaks at 150
+   and falls to 0.28; layer 54 drops once then flattens; layer 16 rises; every fit is a perfect
+   separator, so the direction is the penalty's tie-break and drifts from the mean difference.
+   Earlier text ⟨A2 follow-up + report 21⟩: With the per-sample
    penalty held at its n = 600 value the logistic row moves by less than 0.03 from n = 150 to
    2000 at the focus layer (0.581 → 0.581; not flat — it dips 300 → 600 and rises at layer 16)
    while difference-of-means rises 0.732 → 0.974 on identical splits; cross-validated C
@@ -659,10 +663,10 @@ or a run, never a sentence.
 | 0.7 Demote *Subliminal Learning* | ✅ | README "Corrections of fact" |
 | Phase 0 exit gate | ❌ not met | (c) non-empty; and §12 lists sentences the repo asserted that its own files contradict, now corrected in place |
 | §1 E3 analysis | ✅ | §1.1–1.2; `e3.*` retracted in registry; report 03 |
-| §1.3 B1 — E4 rerun + follow-up + **B1c (pre-registered)** | ✅ all three complete; B1c verdict **H1** ⟨2026-09-04 22:05Z⟩ | Follow-up (`b1_followup_qwen36-27b.json`, 17:20Z): all 30 ablated layers gated ≥ 0.88; sign-aware verdict `mixed` (afraid 25%, sad 37% blocked; 3 nulls admit 0–35%; calm untestable); ceiling arm ≈ emo arm (residual ablation caps at partial blocking); text arm cuts B's slope for 4/6. Five `b1f.*` entries quotable. §1.3's three outcomes were mis-specified — see §13.5 | `results/rev3/b1_e4rerun_qwen36-27b.json` (07:57Z, provenance-stamped): gate 0.907 at layer 43, MC 6/6 (4/6 separated), emo − rand significant 3/6 (afraid, sad reduce; **happy increases**), pre-declared rule → `not_blocking`. Registry: four `b1.*` entries quotable. Not yet licensed: any sentence about *where* affect travels — needs the token-level and ceiling arms (§1.3 ⟨2026-09-04⟩), seeded B generation, gating at the ablated layers, an MDE |
+| §1.3 B1 — E4 rerun + follow-up + **B1c, B1d (pre-registered)** + B1e (running) | ✅ four complete; B1c **H1** ⟨2026-09-04 22:05Z⟩, B1d **instrument_failed** ⟨2026-09-05 08:31Z⟩; B1e launched 09:45Z | Follow-up (`b1_followup_qwen36-27b.json`, 17:20Z): all 30 ablated layers gated ≥ 0.88; sign-aware verdict `mixed` (afraid 25%, sad 37% blocked; 3 nulls admit 0–35%; calm untestable); ceiling arm ≈ emo arm (residual ablation caps at partial blocking); text arm cuts B's slope for 4/6. Five `b1f.*` entries quotable. §1.3's three outcomes were mis-specified — see §13.5 | `results/rev3/b1_e4rerun_qwen36-27b.json` (07:57Z, provenance-stamped): gate 0.907 at layer 43, MC 6/6 (4/6 separated), emo − rand significant 3/6 (afraid, sad reduce; **happy increases**), pre-declared rule → `not_blocking`. Registry: four `b1.*` entries quotable. Not yet licensed: any sentence about *where* affect travels — needs the token-level and ceiling arms (§1.3 ⟨2026-09-04⟩), seeded B generation, gating at the ablated layers, an MDE |
 | A0 prior art | ✅ | `docs/review/A0_PRIOR_ART.md` — survives, narrowed (RAPTOR cited; disjoint-half reproducibility, non-convergence with n, logreg-vs-dom stability, published-flip remain open) |
 | A1 generalise | ⬜ | |
-| A2 characterise regime + follow-up | ✅ both models complete · ✅ follow-up on the 27B (layers 16, 43) | 27B: `a2_estimator_qwen36-27b.json` (dom 0.974 / logreg 0.566 at n=2000, focus 43). 8B: `a2_estimator_llama3-abl.json` (dom 0.941 / logreg 0.286 at n=1200, focus 21). Eight `a2*.focus_*` entries quotable. The n/d anomaly reproduces on one pipeline (`a2_8b.nd_anomaly_reproduces`). Open: tuned-C arm (a2_followup, launching), std-space cosine, per-fit λ |
+| A2 characterise regime + follow-up + margin diagnostic | ✅ both models · ✅ follow-up 27B layers 16/43/54 at two anchors, 8B layers 14/21/27 · ✅ margin diagnostic (reports 21, 23–26) | 27B: `a2_estimator_qwen36-27b.json` (dom 0.974 / logreg 0.566 at n=2000, focus 43). 8B: `a2_estimator_llama3-abl.json` (dom 0.941 / logreg 0.286 at n=1200, focus 21). Eight `a2*.focus_*` entries quotable. The n/d anomaly reproduces on one pipeline (`a2_8b.nd_anomaly_reproduces`). Open: tuned-C arm (a2_followup, launching), std-space cosine, per-fit λ |
 | A3 dissociation | ✅ run complete · ❌ exhibit withdrawn | `results/rev3/a3_dissociation_qwen36-27b.json` + `a3_scalefree_qwen36-27b.json` (12:13Z): published config 0 of 6; dom→dom raw 4/6 → z0 2/6 (0 sig, 3 reversed) → zall 1/6. The present-vs-other dissociation is not in the data on any scale; four `a3.*` registry entries quotable |
 | A4 reporting protocol, A5 write | ⬜ | |
 | B2–B5, B7, B9, B10 | ⬜ | B3 partially carried as B1's `cross` arm |

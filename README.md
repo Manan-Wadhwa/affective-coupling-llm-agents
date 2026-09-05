@@ -9,6 +9,27 @@ representation — and does it reach its behavior?
 Llama-3.1-8B was wrong.* Emotion probing, activation injection, the
 Jacobian lens, and information-theoretic coupling.
 
+## Where we stand — rev 3, 2026-09-05
+
+The forward-looking summary is [`docs/planning/RESEARCH_PROPOSAL.md`](docs/planning/RESEARCH_PROPOSAL.md);
+the operative plan with its status board is [`docs/planning/RESEARCH_PLAN.md`](docs/planning/RESEARCH_PLAN.md);
+every result has a report and a blind critique in [`results/reports/`](results/reports/README.md), and every
+number a pointer in [`docs/review/claims.json`](docs/review/claims.json) (76 entries, 0 quotable failing).
+What the blind critiques changed is in [`docs/review/CRITIQUE_LEDGER.md`](docs/review/CRITIQUE_LEDGER.md).
+
+| finding (rev 3) | number | registry · report |
+|---|---|---|
+| Difference-of-means directions reproduce across independent fits; logistic directions do not | 27B focus layer, n = 2000/half: dom 0.974 vs logreg 0.566; 8B: 0.941 vs 0.286 | `a2.focus_*`, `a2_8b.*` · 16, 19 |
+| A fixed per-sample penalty does not make the logistic direction converge with n | 27B layer 43: no net rise 150 → 2000 at two anchors; layer 54: one drop then flat; 8B: 0.37 → 0.28 | `a2f.*`, `a2f2.*`, `a2f54.*`, `a2f8.*` · 21, 23–25 |
+| Why: every logistic fit at every n used is a perfect separator; the direction is the penalty's tie-break and drifts away from the mean difference as n grows | accuracy 1.000 everywhere; cos(logistic, dom) 0.97 → 0.63 (27B), 0.91 → 0.43 (8B) | `a2m.*` · 26 |
+| Affect transfer between agents exists and is dose-dependent (representation level) | 5 of 6 emotions, reproduced three times with identical directions | `b1f.*`, `b1c.*`, `b1d.*` · 20, 22, 27 |
+| The rank-1 emotion direction is not the channel (pre-registered H1) | median 9% of the transfer removed at all 51 layers [4%, 25%]; afraid 21%, sad 33% | `b1c.*` · 22 |
+| A rank-5 affect subspace is not a clean instrument, and a fitted label-free control blocks as much as the emotion direction (pre-registered instrument_failed) | permuted control: afraid −49.5, sad −26.7, angry −44.3 vs emotion direction −51.9, −27.7 | `b1d.*` · 27 |
+| Pending: a fitted label-free **rank-1** control (B1e, pre-registered, running) | — | `docs/planning/PREREG_B1e.md` |
+
+Not quotable: anything about the text channel (three rewrite designs failed their own checks); the
+behavioural reach; the earlier headline results listed under "What is retracted" below.
+
 ## Status — Phase 0, repairing the record
 
 Rev 3 of the research plan opens with a phase that produces no new science and holds the
@@ -84,6 +105,9 @@ provenance stamping.
 |---|---|---|
 | `src/rev3/a2_estimator.py` | A2 | split-half stability across layer × estimator × n, with CIs, plus the regime diagnostics that the n/d story alone does not explain |
 | `src/rev3/b1_e4rerun.py` | B1 | the E4 rerun: difference-of-means directions, a **generation-side** manipulation check, norm-matched random *and* orthogonal controls, a declared dose grid, degeneracy at every dose |
+| `src/rev3/b1_followup.py`, `b1c_alllayer.py`, `b1d_subspace.py`, `b1e_footprint.py` | B1 family | ceiling/text arms and seeded B (follow-up); pre-registered all-layer rank-1 ablation (B1c); pre-registered rank-5 subspace ablation with permuted-label and random-frame controls (B1d); pre-registered fitted label-free rank-1 control (B1e) |
+| `src/rev3/a2_followup.py`, `a2_margin_diag.py` | A2 add-ons | tuned-C, fixed per-sample penalty at two anchors, like-for-like cross-estimator; separability / margin / penalty-sensitivity diagnostic |
+| `src/rev3/reblock_contrasts.py`, `b1d_frame_geometry.py` | re-reads | every rev-3 contrast under the scenario-blocked, dose-paired bootstrap; geometry of the B1d frames |
 
 ## Re-measurement (2026-08-31)
 

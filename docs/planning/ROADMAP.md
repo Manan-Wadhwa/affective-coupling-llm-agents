@@ -1,5 +1,11 @@
 # Roadmap: from workshop draft to main-conference submission
 
+> ⟨2026-09-05⟩ This roadmap predates rev 3. The headline it tries to "flip" (a behavioural null) is
+> no longer the headline: see `RESEARCH_PROPOSAL.md` for where the programme stands (Paper A's
+> estimator-mechanism result is established; Paper B's channel question is open with a new
+> confound) and for the next runs in order. Thrust 1's multi-turn accumulation result was retracted
+> (README, "What is retracted").
+
 Two-stage target: **NeurIPS workshop** (checkpoint — the narrative must land here) →
 **ICLR main conference** (same spine + breadth + rigor). The workshop version de-risks
 and timestamps the story; the main-track version scales it.
