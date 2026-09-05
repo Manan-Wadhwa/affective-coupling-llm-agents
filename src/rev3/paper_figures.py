@@ -7,6 +7,9 @@ import json, os, sys
 import numpy as np
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from cycler import cycler
+OI = ["#0072B2", "#E69F00", "#009E73", "#CC79A7", "#56B4E9", "#D55E00", "#F0E442", "#000000"]
+plt.rcParams["axes.prop_cycle"] = cycler(color=OI)
 R = "results/rev3"; OUT = "docs/writeups/figs"; os.makedirs(OUT, exist_ok=True)
 J = lambda f: json.load(open(os.path.join(R, f)))
 EMOS = ["desperate", "afraid", "happy", "calm", "sad", "angry"]
@@ -58,7 +61,7 @@ def fig3():
     d = J("b1c_alllayer_qwen36-27b.json"); S = d["summary"]; doses = [0.0, 0.33, 0.67, 1.0]
     fig, axes = plt.subplots(2, 3, figsize=(11, 6), sharex=True)
     for ax, e in zip(axes.ravel(), EMOS):
-        for arm, lab, style in [("none", "none", "k-o"), ("emo13_42", "emotion direction, hs 13–42", "C0-s"), ("emo_all", "emotion direction, hs 13–63", "C3-^"), ("rand_all", "random direction, hs 13–63", "C7--D")]:
+        for arm, lab, style in [("none", "none", "k-o"), ("emo13_42", "emotion direction, hs 13–42", "C0-s"), ("emo_all", "emotion direction, hs 13–63", "C5-^"), ("rand_all", "random direction, hs 13–63", "C3--D")]:
             mb = S[e][arm]["mean_by_dose"]; ax.plot(doses, [mb[str(x)] for x in doses], style, ms=4, label=lab)
         sl = S[e]["none"]["present_slope"]; ax.set_title(f"{e}  (none slope {sl['slope']:+.0f} [{sl['ci'][0]:+.0f}, {sl['ci'][1]:+.0f}])", fontsize=9); ax.grid(alpha=.3)
     for ax in axes[1]: ax.set_xlabel("steering dose on A")
