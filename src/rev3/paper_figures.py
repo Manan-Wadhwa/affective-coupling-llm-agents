@@ -25,7 +25,7 @@ def fig1():
     a27, a8 = J("a2_estimator_qwen36-27b.json"), J("a2_estimator_llama3-abl.json")
     f27, f54, f8 = J("a2_followup_qwen36-27b.json"), J("a2_followup_qwen36-27b-l54.json"), J("a2_followup_llama3-abl.json")
     panels = [("Qwen3.6-27B, layer 43 (focus)", a27, 43, f27), ("Qwen3.6-27B, layer 54", a27, 54, f54), ("Llama-3-8B-abl, layer 21 (focus)", a8, 21, f8)]
-    fig, axes = plt.subplots(1, 3, figsize=(12, 3.6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(12, 3.2), sharey=True)
     for ax, (title, a, L, f) in zip(axes, panels):
         for src, est, lab, style, col in [(a, "logreg", "logistic, C = 0.5", "o-", OI[0]), (f, "logreg_cv", "logistic, tuned C", "s--", OI[1]),
                                      (f, "logreg_lam", "logistic, fixed per-sample penalty (anchor 600)", "^-", OI[3]), (a, "dom", "difference of means", "D-", OI[2])]:
@@ -44,7 +44,7 @@ def fig1():
 
 def fig2():
     m27, m8 = J("a2_margin_qwen36-27b-l43-v2.json")["by_layer"]["43"], J("a2_margin_llama3-abl-l21-v2.json")["by_layer"]["21"]
-    fig, axes = plt.subplots(1, 2, figsize=(9, 3.6))
+    fig, axes = plt.subplots(1, 2, figsize=(9, 3.2))
     for ax, (title, b) in zip(axes, [("Qwen3.6-27B, layer 43", m27), ("Llama-3-8B-abl, layer 21", m8)]):
         ns = sorted(int(n) for n in b)
         for key, lab, style, col in [("sh_lam", "split-half: logistic, fixed per-sample penalty (anchor 600)", "^-", OI[3]), ("sh_weak2", "split-half: logistic, C = 500", "v-", OI[4]),
@@ -61,7 +61,7 @@ def fig2():
 def fig3():
     d = J("b1c_alllayer_qwen36-27b.json"); S = d["summary"]; doses = [0.0, 0.33, 0.67, 1.0]
     R = J("paper_revision_stats.json")["b1c_27b"]["per_emotion"]
-    fig, axes = plt.subplots(2, 3, figsize=(11, 6.4), sharex=True)
+    fig, axes = plt.subplots(2, 3, figsize=(11, 5.2), sharex=True)
     for ax, e in zip(axes.ravel(), EMOS):
         for arm, lab, style, col in [("none", "none", "-o", "k"), ("emo13_42", "emotion direction, hs 13–42", "-s", OI[0]), ("emo_all", "emotion direction, hs 13–63", "-^", OI[5]), ("rand_all", "random direction, hs 13–63", "--D", OI[3])]:
             bd = R[e]["bands"][arm]; m = [bd[str(x)]["mean"] for x in doses]; lo = [bd[str(x)]["ci"][0] for x in doses]; hi = [bd[str(x)]["ci"][1] for x in doses]
@@ -81,7 +81,7 @@ def fig4(extra=None):
             ("B1d: affect subspace − none (rank 5)", "b1d_27b", "sub_all"), ("B1d: permuted-label subspace − none (rank 5)", "b1d_27b", "perm_all"),
             ("B1d: random 5-frame − none (rank 5)", "b1d_27b", "randsub_all"), ("B1e: permuted-label dir − none (rank 1)", "b1e_27b", "permdir_all"),
             ("B1e: top principal dir − none (rank 1)", "b1e_27b", "pc1_all")]
-    fig, ax = plt.subplots(figsize=(11, 4.2)); w = 0.86 / len(rows); x = np.arange(len(EMOS))
+    fig, ax = plt.subplots(figsize=(11, 3.6)); w = 0.86 / len(rows); x = np.arange(len(EMOS))
     for i, (lab, tag, arm) in enumerate(rows):
         pts, lo, hi, marks = [], [], [], []
         for em in EMOS:

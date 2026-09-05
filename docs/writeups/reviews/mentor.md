@@ -112,3 +112,15 @@ This is a better paper than its polish suggests, and I want to be clear about wh
 6. **Close the loop from geometry to consequence.** Your finding is that a widely used direction estimator is unstable at cosine 0.57. The natural next question, and the one that would make this a much-cited paper rather than a well-respected one, is: what does a reader lose by using it? One extra experiment — refit the logistic direction on ten splits, run your full ablation pipeline with each, and report the spread in the blocked fraction — would convert a geometric observation into a downstream error bar that practitioners cannot ignore. You already have every component needed to run it.
 
 This is careful, honest, well-instrumented work on a question that matters, and the methodological core is publishable. Spend the revision cycle on the pool arithmetic, the footprint definition, and the figures, and it will read as strongly as it actually is.
+
+---
+
+## Recalibration — IAB @ NeurIPS 2026
+
+**(1) Original score:** 6/10, confidence 4/5.
+
+**(2) Recalibrated at the IAB bar:** **8/10, confidence 4/5.**
+
+**(3)** At a non-archival workshop that welcomes preliminary findings and negative results, and whose scope is agent–agent interaction, this now sits comfortably above the bar. Six of my seven growth areas are genuinely fixed, not papered over: Section 2's "Two pools" names the 4,253/3,898-item estimator pools, resolving what most worried me; Table 3 defines footprint once and reconciles the "twice the norm / 1.22" pair as 1.15–1.26 absolute = 2.0×; Tables 1–2 carry one significance convention (∗ FDR, · unadjusted); Figure 3's caption is now written from its panels, calm's reversal included. Two additions I did not ask for matter more than anything I did: the other-speaker probe (slopes +59 to +119 against +48 to +212) withdraws the "B's own state" construct claim, and the d′ = 100 control makes the instability explicitly an n < d phenomenon rather than a universal one. Losing a headline to a non-circular control is the strongest thing in the paper.
+
+**(4) Still change before camera-ready:** the title and abstract still say "affective transfer between LLM agents", which Section 4 no longer licenses — carry the withdrawn construct claim up into the framing.

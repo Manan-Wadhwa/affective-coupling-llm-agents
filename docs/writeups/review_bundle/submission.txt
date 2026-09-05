@@ -1,4 +1,4 @@
-                Affective transfer between LLM agents:
+       Steered affect moves a conversational partner’s activations:
     the estimator, three pre-registered ablations, and which controls
                                    bite
                                                  Manan Wadhwa∗
@@ -6,63 +6,59 @@
 
 
                                                       Abstract
-             When one language-model agent is steered into an emotion and talks to another, a linear
-        probe’s projection of the second agent’s reply activations moves with the dose, for five of six
-        emotions on Qwen3.6-27B and on Llama-3-8B. We ask what carries it, and find that the standard
-        linear tools mislead in ways their usual checks do not catch. The logistic-regression direction
-        most work uses to read and write such states reproduces across disjoint halves of the data at
-        only 0.57 (27B, n = 2000 per half) and 0.29 (8B, n = 1200), while difference-of-means reaches
-        0.97 and 0.94 on the same splits; holding the per-sample penalty fixed does not close the gap.
-        The reason, in the n < d regime every probe study we know of works in, is that every logistic
-        fit is a perfect separator: its direction is the penalty’s tie-break among separating hyperplanes,
-        and it drifts away from the mean-difference direction as the sample grows (cosine 0.97 to 0.63).
-        The instability is largely geometric (the two estimators’ projections on held-out items correlate
-        at 0.90–0.96, and logistic decodes held-out items better) and it is the regime: projected onto 100
-        principal components, where n ≫ d′ , the fits stop separating and the logistic direction reproduces
-        at 0.90. With the reproducible direction, three pre-registered ablations test the linear account
-        of the channel. Removing the emotion direction at every readable layer leaves a median 91% of
-        the transfer against a random-direction control (85% against baseline); a rank-5 affect subspace
-        fails its own instrument check; a rank-5 subspace fitted by the same estimator on permuted
-        labels blocks three emotions as strongly as the affect subspace does, while a random 5-frame
-        of half its footprint and a permuted-label rank-1 direction are inert. The emotion direction’s
-        blocks of afraid (25%) and sad (29%) survive the rank-1 permuted control; across models only
-        sad’s replicates. Whether rank or footprint makes the rank-5 control bite is untested, and the
-        receiver’s “other-speaker” projection rises with dose as much as its own, so the probe does not
-        separate the receiver’s state from its model of the sender’s.
+          When one language-model agent is steered into an emotion and talks to another, a linear
+      probe’s projection of the second agent’s reply activations moves with the dose, for five of six
+      emotions on Qwen3.6-27B and on Llama-3-8B. We ask what carries it, and find that the standard
+      linear tools mislead in ways their usual checks do not catch. The logistic-regression direction
+      most work uses to read and write such states reproduces across disjoint halves at only 0.57
+      (27B, n = 2000 per half) and 0.29 (8B), while difference-of-means reaches 0.97 and 0.94 on
+      the same splits, and a fixed per-sample penalty does not close the gap. In the n < d regime
+      probe studies work in, every logistic fit is a perfect separator: its direction is the penalty’s
+      tie-break, drifting from the mean difference as n grows (cosine 0.97 to 0.63); projected onto 100
+      principal components, where n ≫ d′ , the fits stop separating and the direction reproduces at
+      0.90. The cost is largely geometric: the two estimators’ held-out projections correlate at 0.90–
+      0.96. With the reproducible direction, three pre-registered ablations test the linear account of
+      the channel. Removing the emotion direction at every readable layer leaves a median 91% of
+      the transfer against a random-direction control (85% against baseline); a rank-5 affect subspace
+      fails its own instrument check; a rank-5 subspace fitted by the same estimator on permuted
+      labels blocks three emotions as strongly as the affect subspace does, while a random 5-frame
+      of half its footprint and a permuted-label rank-1 direction are inert. The emotion direction’s
+      blocks of afraid (25%) and sad (29%) survive the rank-1 permuted control; across models only
+      sad’s replicates. Whether rank or footprint makes the rank-5 control bite is untested, and the
+      receiver’s “other-speaker” projection rises with dose as much as its own, so the probe does not
+      separate the receiver’s state from its model of the sender’s.
 
 
-1       Introduction
+1    Introduction
 Systems of several language-model agents built from one model family are now common, and the
 agents talk to each other [3, 8]. If one of them is in an emotional state, does anything of that state
 reach the others? A transfer that changes the receiver’s internal representation would be invisible in
 transcripts and visible only in activations, which makes it a question for representation-level tools:
 steering vectors to induce a state in the sender [7, 10, 13, 14], probes to read it in the receiver, and
 ablations to test what carries it.
-    ∗
-    Revised draft of 2026-09-06 after three adversarial reviews, a mentor review, a citation audit and a statistical-
+    Those tools rest on one object, a direction in activation space. This paper’s single idea is that
+the direction has to be trusted twice, once to read and once to intervene, and that both uses fail
+   ∗
+     Revised draft of 2026-09-06 after three adversarial reviews, a mentor review, a citation audit and a statistical-
 consistency audit (all in the repository). Every number is registered in docs/review/claims.json under the identifier
 printed after it in monospace; the registry is machine-checked against the result files. Figures and tables are generated
 from those files by src/rev3/paper_figures.py and src/rev3/paper_revision_stats.py.
 
 
-
                                                            1
-     Those tools rest on one object, a direction in activation space. This paper’s single idea is that
-the direction has to be trusted twice, once to read and once to intervene, and that both uses fail
-in ways the usual checks miss. Read with a logistic-regression coeﬀicient row, the state looks like a
+in ways the usual checks miss. Read with a logistic-regression coeﬀicient row, the state looks like a
 moving target: the direction does not reproduce across independent fits, and the reason is not the
 sample size or the penalty but separability, so the fitted row is a tie-break rather than an estimate
 [9, 12]. Intervene with the reproducible direction and the standard control, a norm-matched random
 vector, stays inert, while a rank-5 subspace fitted by the same estimator with the labels destroyed
 blocks transfer as strongly as the affect subspace itself.
      The evidence is an estimator study across two models and three depths and three pre-registered
-experiments on the channel, each critiqued blind before its wording entered this paper, and then
-reviewed adversarially. The transfer itself is robust to sampling: five of six emotions on each model,
-in one independent sampling replication and two determinism checks on the 27B. The channel is not
-what the linear picture suggests. Removing the emotion direction everywhere it can be read leaves
-most of the transfer, and only afraid and sad lose a fifth to a third; a rank-5 affect subspace cannot
-be used as an instrument, because it shifts the readout used to check it; a rank-1 permuted-label
-direction is inert while a rank-5 permuted-label frame is not.
+experiments on the channel, each critiqued blind before its wording entered this paper. The response
+itself is robust to sampling: five of six emotions on each model. The channel is not what the linear
+picture suggests: removing the emotion direction everywhere it can be read leaves most of the
+response, only afraid and sad lose a fifth to a third, a rank-5 affect subspace cannot serve as an
+instrument because it shifts the readout used to check it, and a rank-1 permuted-label direction is
+inert while a rank-5 permuted-label frame is not.
      The practical consequence is a change to the controls register of any ablation study of a concept
 direction: beside the random direction, run the same estimator on permuted labels at the rank of
 the intervention, report the footprint of every arm, and check the manipulation with an instrument
@@ -71,6 +67,7 @@ than we hoped: the transfer exists, the rank-1 direction carries part of it for 
 sad’s part replicates across models, and what carries the rest is open.
 
 Contributions.
+
   • Dose-responsive movement of the receiver’s present-emotion projection for five of six emo-
     tions on two models, with common-random-number sampling and scenario-blocked inference;
     the receiver’s other-speaker projection moves comparably, which bounds the construct claim
@@ -85,6 +82,7 @@ Contributions.
     control (H3), with replications of two designs on the second model (Section 5).
   • Every arm against baseline in one table with one significance standard, including the two
     random controls the argument depends on, and the resulting rule for controls (Section 6).
+
 Every number in this paper is registered with a pointer to the committed script and result file that
 produced it; the identifier appears in monospace after the number. Seven of our own interpretive
 sentences were withdrawn under blind critique, and the reviews of the first version forced eighteen
@@ -93,20 +91,20 @@ more corrections; both lists are in the repository.
 Relation to prior work. That logistic probe directions can be unstable is not our discovery.
 Marks and Tegmark [9] identified the deficiency and proposed mass-mean probing, noting that logis-
 tic regression converges toward the maximum-margin separator on separable data, the implicit bias
+analysed by Soudry et al. [12]; Gao et al. [5] name directional stability as a requirement for probe-
+then-steer pipelines and propose ridge-tuned logistic regression, reporting mean pairwise robustness
+
 
                                                   2
-analysed by Soudry et al. [12]; Gao et al. [5] name directional stability as a requirement for probe-
-then-steer pipelines and propose ridge-tuned logistic regression, reporting mean pairwise robustness
-of 0.87–0.98 under 20% training-data ablations. Our contribution is the quantity: reproducibility
-across disjoint halves, on the same estimator family, plateaus at 0.55–0.61 on the 27B and falls to
-0.28–0.38 on the 8B, and the fixed-penalty arm does not rise with the sample size while difference-
-of-means rises to 0.94–0.98 on the same splits. Two overlapping 80% subsamples share most of
-their examples; two disjoint halves share none. Braun et al. [2] corroborate for mean-difference
-steering vectors: refit on resampled draws of 5–30 activations they vary widely, and agree at cosine
-above 0.99 from 200–500 draws, which is the estimator we also find reproducible. Herbster et al.
-[6] report mean-difference and logistic directions as near-identical (0.98–0.99) for compassion; in a
-quantity close to theirs we find 0.43 and 0.33–0.37. Raju [11] measure stability of a representation
-across feature dimensions, a different axis.
+of 0.87–0.98 under 20% training-data ablations. Our contribution is the quantity: reproducibility
+across disjoint halves, which share no examples where two 80% subsamples share most, plateaus at
+0.55–0.61 on the 27B and falls to 0.28–0.38 on the 8B while difference-of-means rises to 0.94–0.98
+on the same splits. Braun et al. [2] corroborate for mean-difference steering vectors: refit on re-
+sampled draws of 5–30 activations they vary widely, and agree at cosine above 0.99 from 200–500
+draws, which is the estimator we also find reproducible. Herbster et al. [6] report mean-difference
+and logistic directions as near-identical (0.98–0.99) for compassion; in a quantity close to theirs we
+find 0.43 and 0.33–0.37. Raju [11] measure stability of a representation across feature dimensions,
+a different axis.
 
 
 2    Setup
@@ -142,9 +140,13 @@ ten independent splits, and report the mean per-class cosine between the two fit
 (Figure 1). At the 27B focus layer with n = 2000 per half, difference-of-means reaches 0.974 and
 logistic regression (C = 0.5) 0.566 (a2.focus_dom_split_half, a2.focus_logreg_split_half); at layer 54,
 0.979 against 0.554 (a2f54.*); on the 8B focus layer at n = 1200, 0.941 against 0.286 (a2_8b.*).
+Tuning C per fit by cross-validation reaches 0.61 on the 27B (a2f.focus_tuned_c_does_not_close_gap)
+and 0.38 at the 8B focus layer (0.37–0.41 across three depths; a2f8.lam_declines, note).
+
+
 
                                                   3
-                                                    Qwen3.6-27B, layer 43 (focus)                                      Qwen3.6-27B, layer 54                      Llama-3-8B-abl, layer 21 (focus)
+                                                          Qwen3.6-27B, layer 43 (focus)                                               Qwen3.6-27B, layer 54                                        Llama-3-8B-abl, layer 21 (focus)
                                          1.0
 
 
@@ -156,13 +158,13 @@ split-half cosine (10 disjoint splits)
                                          0.7
                                          0.6
                                          0.5
-                                         0.4              logistic, C = 0.5
-                                                          logistic, tuned C
-                                         0.3              logistic, fixed per-sample penalty (anchor 600)
-                                                          difference of means
+                                         0.4                     logistic, C = 0.5
+                                                                 logistic, tuned C
+                                         0.3                     logistic, fixed per-sample penalty (anchor 600)
+                                                                 difference of means
                                          0.2
-                                               75   150          300         600         1200      2000     75   150        300       600      1200   2000   75      150        300        600       1200
-                                                                 n per half                                                  n per half                                      n per half
+                                               75          150          300         600         1200      2000           75     150        300         600        1200    2000          75            150         300           600   1200
+                                                                        n per half                                                          n per half                                                        n per half
 
 
 Figure 1: Logistic directions do not reproduce; difference-of-means does. Split-half cosine
@@ -171,9 +173,28 @@ focus layer of the 8B. Difference-of-means rises toward 1 with n; logistic at C 
 per-sample penalty (anchor 600) plateau near 0.55–0.6 on the 27B and fall to 0.28–0.33 on the 8B;
 tuned C reaches 0.61 (27B) and 0.38 (8B). Bands are bootstrap CIs over splits.
 
+                                                                                      Qwen3.6-27B, layer 43                                                                 Llama-3-8B-abl, layer 21
+                                                         1.0     training accuracy = 1.000 at every n (all fits separate their half)             1.0     training accuracy = 1.000 at every n (all fits separate their half)
 
-Tuning C per fit by cross-validation reaches 0.61 on the 27B (a2f.focus_tuned_c_does_not_close_gap)
-and 0.38 at the 8B focus layer (0.37–0.41 across three depths; a2f8.lam_declines, note).
+                                                         0.8                                                                                     0.8
+
+                                                cosine   0.6                                                                                     0.6
+
+                                                         0.4                                                                                     0.4
+
+                                                         0.2                                                                                     0.2
+                                                                 75             150             300                600        1200     2000              75               150                300            600                1200
+                                                                                                 n per half                                                                           n per half
+                                                                                  split-half: logistic, fixed per-sample penalty (anchor 600)                 split-half: difference of means
+                                                                                  split-half: logistic, C = 500                                               cos(logistic, difference of means), same half
+
+
+Figure 2: The logistic direction is a separator’s tie-break that drifts away from the
+mean difference. Within one half, the cosine between the fixed-penalty logistic direction and the
+difference-of-means direction falls as n grows, while difference-of-means becomes reproducible across
+halves and the logistic direction does not, under the fixed schedule (anchor 600) or a thousandfold
+weaker penalty (C = 500) alike. Every fit has training accuracy 1.000.
+
 
 Holding the per-sample penalty fixed does not help. A natural objection is that a fixed
 C changes the effective penalty as n grows. With Cn = 0.5 Nref /n, so that the per-sample
@@ -188,7 +209,10 @@ on the 8B): a proportional-regime statement, not an asymptotic one.
 
 Why. Every multinomial logistic fit on every half at every n used, under the fixed schedule and
 C = 0.5, 50 and 500 alike (the two weak arms being one tolerance-limited solution), separates
-its training half perfectly: accuracy exactly 1.000 in every cell, arm and seed; worst single-fit log-
+
+
+                                                                                                                                            4
+its training half perfectly: accuracy exactly 1.000 in every cell, arm and seed; worst single-fit log-
 loss 0.0055; at most 80 iterations (a2m.separable_every_n, a2m.8b_same_regime, a2m.v2_ten_seeds). The
 likelihood is saturated from n = 75: the direction is the penalty’s tie-break among separating
 hyperplanes. Weakening the penalty a hundredfold or a thousandfold leaves the direction un-
@@ -201,31 +225,6 @@ that contrastive activation addition uses agrees with the logistic direction at 
 0.37 (8B) (a2f.caa_raw_vs_logreg_raw, a2f8.cross_estimator), against the 0.98–0.99 that Herbster et al.
 [6] report for compassion. Not claimed: that the fit sits at the max-margin limit (the weak arms
 are tolerance-limited), or a support-vector mechanism for the drift.
-
-
-                                                                                                                             4
-                                        Qwen3.6-27B, layer 43                                                                 Llama-3-8B-abl, layer 21
-              1.0   training accuracy = 1.000 at every n (all fits separate their half)              1.0   training accuracy = 1.000 at every n (all fits separate their half)
-
-              0.8                                                                                    0.8
-
-     cosine   0.6                                                                                    0.6
-
-              0.4                                                                                    0.4
-
-              0.2                                                                                    0.2
-                    75            150            300           600           1200         2000             75               150              300              600                1200
-                                                 n per half                                                                             n per half
-                                    split-half: logistic, fixed per-sample penalty (anchor 600)                 split-half: difference of means
-                                    split-half: logistic, C = 500                                               cos(logistic, difference of means), same half
-
-
-Figure 2: The logistic direction is a separator’s tie-break that drifts away from the
-mean difference. Within one half, the cosine between the fixed-penalty logistic direction and the
-difference-of-means direction falls as n grows, while difference-of-means becomes reproducible across
-halves and the logistic direction does not, under the fixed schedule (anchor 600) or a thousandfold
-weaker penalty (C = 500) alike. Every fit has training accuracy 1.000.
-
 
 Is this just n < d, and does it cost anything? Separation is guaranteed for generic data
 whenever n < d, so the mechanism is regime-conditional and the paper’s recommendation holds
@@ -254,49 +253,47 @@ summary for two emotions: happy rises +71 [+50, +94] over the first dose step an
 over the last, calm +38 [−3, +78] then −34 [−77, +13], while desperate, sad and angry rise at both
 steps (rev.dose_shape). The transfer is robust to sampling: the B1 follow-up run, with independently
 sampled replies, gives the same five testable emotions and afraid/sad as the blocked ones (b1f.*);
-
-
-                                                                                                 5
-                                                      B1c: B's dose-response under ablation of A's span (29 scenarios × 3 reps; bands: scenario-bootstrap 95% CIs; steps: paired 0→0.33 and 0.67→1 changes)
-                                                    desperate: slope +84 [+59, +111]; steps +22, +10           afraid: slope +212 [+169, +253]; steps +34, +5              happy: slope +48 [+8, +88]; steps +71, +0
-                                                                                                         50
-                                  −40                                                                                                                             325
-
+B1c, B1d and B1e share the pool, the directions and the seed recipe and agree bit for bit on
+their shared arms, which is a determinism check, not a replication (b1d.replicates_b1c_arms). The
+manipulation check on A passes for all six emotions in each run. On the 8B the same five emotions
+respond (b1c8.transfer_replicates), with a steering manipulation half as strong and less specific, so
+only the pattern is compared.
 
 
 
-B's present-emotion projection
-                                                                                                           0
-                                  −60                                                                                                                             300
-                                  −80                                                                  −50                                                        275
-                                 −100                                                                  −100                                                       250
-                                 −120                                                                                                                             225
-                                                                                                       −150                         none
-                                 −140                                                                                               emotion direction, hs 13–42
-                                                                                                                                                                  200
-                                                                                                                                    emotion direction, hs 13–63
-                                 −160                                                                  −200                         random direction, hs 13–63
-                                                                                                                                                                  175
-                                                        calm: slope +44 [-3, +99]; steps +38, -34               sad: slope +98 [+64, +132]; steps +46, +21              angry: slope +196 [+155, +235]; steps +103, +49
-                                                                                                           0
-                                              225
+                                                  5
+                                                           B1c: B's dose-response under ablation of A's span (29 scenarios × 3 reps; bands: scenario-bootstrap 95% CIs; steps: paired 0→0.33 and 0.67→1 changes)
+                                                         desperate: slope +84 [+59, +111]; steps +22, +10           afraid: slope +212 [+169, +253]; steps +34, +5              happy: slope +48 [+8, +88]; steps +71, +0
 
 
 
 
-             B's present-emotion projection
-                                                                                                        −25                                                       250
-                                              200
-                                              175                                                       −50                                                       200
-                                              150                                                       −75
-                                                                                                                                                                  150
-                                              125                                                      −100
-                                              100                                                                                                                 100
-                                                                                                       −125
-                                               75                                                      −150                                                        50
-                                               50
-                                                     0.0     0.2       0.4 0.6 0.8              1.0            0.0     0.2       0.4 0.6 0.8                1.0          0.0     0.2       0.4 0.6 0.8            1.0
-                                                                   steering dose on A                                        steering dose on A                                        steering dose on A
+     B's present-emotion projection
+                                       −25                                                                    50
+                                       −50                                                                     0                                                       300
+                                       −75                                                                   −50
+                                      −100                                                                  −100                                                       250
+                                                                                                                                         none
+                                      −125                                                                  −150                         emotion direction, hs 13–42
+                                                                                                                                         emotion direction, hs 13–63   200
+                                      −150                                                                  −200                         random direction, hs 13–63
+
+                                                             calm: slope +44 [-3, +99]; steps +38, -34               sad: slope +98 [+64, +132]; steps +46, +21              angry: slope +196 [+155, +235]; steps +103, +49
+
+
+
+
+                  B's present-emotion projection
+                                                                                                                0
+                                                   200                                                                                                                 250
+                                                                                                            −50                                                        200
+                                                   150                                                                                                                 150
+                                                                                                            −100
+                                                   100                                                                                                                 100
+                                                                                                            −150                                                        50
+                                                    50
+                                                          0.0     0.2       0.4 0.6 0.8              1.0            0.0     0.2       0.4 0.6 0.8                1.0          0.0     0.2       0.4 0.6 0.8            1.0
+                                                                        steering dose on A                                        steering dose on A                                        steering dose on A
 
 
 Figure 3: The projection responds to steering; two of six responses are not monotone,
@@ -308,12 +305,6 @@ with its CI and the paired changes over the first and last dose steps. Happy sat
 first step and calm reverses at the top dose; calm’s separation is the largest in the figure but calm
 is untestable.
 
-B1c, B1d and B1e share the pool, the directions and the seed recipe and agree bit for bit on
-their shared arms, which is a determinism check, not a replication (b1d.replicates_b1c_arms). The
-manipulation check on A passes for all six emotions in each run. On the 8B the same five emotions
-respond (b1c8.transfer_replicates), with a steering manipulation half as strong and less specific, so
-only the pattern is compared.
-
 What the probe measures. B’s other-speaker projection, the matching probe for the inter-
 locutor’s emotion, rises with A’s dose as well: slopes +59, +119, +65, +93, +96 for desper-
 ate, afraid, happy, sad and angry against present-probe slopes +84, +212, +48, +98, +196
@@ -323,9 +314,22 @@ this work’s claim that the present shift exceeds the other shift did not survi
 (report 18 in the repository).
 
 
+5    Three pre-registered ablations
+All directions are fitted per layer on the DIR half: the emotion direction at each hidden state
+13–63 is that layer’s own difference-of-means direction; “readable” means the layer passes the pre-
+registered split-half gate (≥ 0.80), which every layer from 13 upward does and the window starts
+at 0.2× depth by design.
+
+B1c: the rank-1 direction (verdict H1). Projecting the difference-of-means emotion direction
+out of A’s span at every hidden state 13–63 during B’s prefill removes, against the random-direction
+control, a median 9% of the dose-response over the five testable emotions (scenario-bootstrap CI of
+the median [4%, 25%]; the per-emotion values are 0.06, 0.21, 0.05, 0.33, 0.09, and the median with
+calm included is 15%; b1c.verdict_H1, b1c.median_fraction, rev.b1c_emo_vs_none_fdr). Against baseline
+the median is 9% (17% with calm). Afraid (21%, q = 0.001) and sad (33%, q = 0.048) are the only
+blocks that clear the false-discovery rule against the random control; against baseline afraid clears
 
 
-                                                                                                                               6
+                                                                                                                                    6
 Table 1: Pre-registered decision contrasts, as blocked fractions of the none-arm slope (B1c: emotion
 direction − random direction; B1d: affect subspace − permuted-label subspace; B1e: emotion
 direction − permuted-label direction). ∗ : BH-FDR q < 0.05 within the contrast’s own family of
@@ -339,30 +343,17 @@ five testable emotions; · : unadjusted CI excludes zero only. Calm (u) is untes
 Table 2: Every hooked arm against baseline (none), as blocked fractions of the none-arm slope,
 scenario-blocked and dose-paired; marks as in Table 1, families being the arm’s five testable emo-
 tions (rev.b1c_random_vs_none, rev.b1c_emo_vs_none_fdr, rev.b1d_controls_vs_none).
- run    arm − none                             desperate     afraid     happy     calmu       sad      angry
- B1c    emotion direction (rank 1, hs 13–63)    +0.08        +0.24∗     -0.24    (+0.98)·    +0.28·    +0.09
- B1c    emotion direction (rank 1, hs 13–42)    +0.03        +0.27∗     -0.11    (+0.79)·    +0.33∗    +0.12∗
- B1c    random direction (rank 1)               +0.02        +0.03      -0.28    (+0.04)      -0.04     -0.00
- B1d    affect subspace (rank 5)                +0.16        +0.11·     -0.05    (+1.32)·    +0.54∗    +0.40∗
- B1d    permuted-label subspace (rank 5)        +0.03        +0.23∗     -0.10     (-0.24)    +0.27∗    +0.23∗
- B1d    random 5-frame (rank 5)                 +0.05        +0.02      -0.17     (-0.12)     -0.01    +0.06
- B1e    permuted-label direction (rank 1)       +0.02         -0.00     -0.10     (-0.04)     -0.01    +0.00
- B1e    top principal direction (rank 1)        +0.16         -0.01     +0.30    (+0.98)·     -0.13    +0.61∗
+ run   arm − none                              desperate     afraid     happy     calmu       sad      angry
+ B1c   emotion direction (rank 1, hs 13–63)     +0.08        +0.24∗     -0.24    (+0.98)·    +0.28·    +0.09
+ B1c   emotion direction (rank 1, hs 13–42)     +0.03        +0.27∗     -0.11    (+0.79)·    +0.33∗    +0.12∗
+ B1c   random direction (rank 1)                +0.02        +0.03      -0.28    (+0.04)      -0.04     -0.00
+ B1d   affect subspace (rank 5)                 +0.16        +0.11·     -0.05    (+1.32)·    +0.54∗    +0.40∗
+ B1d   permuted-label subspace (rank 5)         +0.03        +0.23∗     -0.10     (-0.24)    +0.27∗    +0.23∗
+ B1d   random 5-frame (rank 5)                  +0.05        +0.02      -0.17     (-0.12)     -0.01    +0.06
+ B1e   permuted-label direction (rank 1)        +0.02         -0.00     -0.10     (-0.04)     -0.01    +0.00
+ B1e   top principal direction (rank 1)         +0.16         -0.01     +0.30    (+0.98)·     -0.13    +0.61∗
 
 
-5      Three pre-registered ablations
-All directions are fitted per layer on the DIR half: the emotion direction at each hidden state
-13–63 is that layer’s own difference-of-means direction; “readable” means the layer passes the pre-
-registered split-half gate (≥ 0.80), which every layer from 13 upward does and the window starts
-at 0.2× depth by design.
-
-B1c: the rank-1 direction (verdict H1). Projecting the difference-of-means emotion direction
-out of A’s span at every hidden state 13–63 during B’s prefill removes, against the random-direction
-control, a median 9% of the dose-response over the five testable emotions (scenario-bootstrap CI of
-the median [4%, 25%]; the per-emotion values are 0.06, 0.21, 0.05, 0.33, 0.09, and the median with
-calm included is 15%; b1c.verdict_H1, b1c.median_fraction, rev.b1c_emo_vs_none_fdr). Against baseline
-the median is 9% (17% with calm). Afraid (21%, q = 0.001) and sad (33%, q = 0.048) are the only
-blocks that clear the false-discovery rule against the random control; against baseline afraid clears
 (q = 0.001) and sad does not (q = 0.115) (b1c.partial_block_replicates). Extending the ablation
 to layers 43–63 changes no dose-response detectably, with the extra blocking bounded under 0.08
 for afraid, angry, happy and sad (a driver-declared contrast; b1c.no_gain_beyond_layer42). The unit-
@@ -371,25 +362,6 @@ norm random direction, removing twice the norm, is inert against baseline for al
 emotions the blocked fraction rises with the share of readable affect the ablation removes (r ≈ 0.85
 on five points, p ≈ 0.07, descriptive; b1c.readout_residual): the rank-1 direction is insuﬀicient to
 carry the transfer.
-
-
-
-
-                                                    7
-Table 3: The directions and frames, one row each: rank, footprint (norm removed per masked
-position, averaged over ablated layers) with its ratio to the emotion direction in the same run,
-dose-0 shift of the A-span readout (largest over emotions), and share of readable affect removed
-at the top dose (range over emotions). (b1c.random_control_inert, b1d.footprint, b1e.verdict_H3,
-b1e.pc1_dissociation, rev.b1d_controls_vs_none)
- run   arm                        rank           footprint (ratio)             dose-0 shift   readable affect removed
- B1c   emotion direction           1               0.46–0.66 (1)                 ≤ 0.01             0.16–0.79
- B1c   random direction            1              1.15–1.26 (2.0)                ≤ 0.01               ≤ 0.03
- B1d   affect subspace             5                 6.9 (10.5)               +0.39 / −0.25         0.11–1.25
- B1d   permuted-label subspace     5                6.5–6.9 (10)                 ≤ 0.08             0.07–0.52
- B1d   random 5-frame              5                3.1–3.2 (5)                  ≤ 0.01               ≤ 0.03
- B1e   permuted-label direction    1     0.50 (0.85; afraid 0.84, sad 0.77)      ≤ 0.01               ≤ 0.09
- B1e   top principal direction     1                 3.47 (5.8)               +0.55 / −0.28          0.71–1.5
-
 
 B1d: the rank-5 subspace (verdict instrument_failed). Projecting out the rank-5 class-
 mean affect subspace, which captures 16–21% of the pool’s variance and has cosine 0.71–0.81 to the
@@ -405,6 +377,55 @@ registered contrast, affect minus permuted subspace, clears no false-discovery t
 b1d.median_fraction_descriptive); the affect subspace differs from the rank-1 direction in opposite
 directions (afraid +29.3 slope units, i.e. less blocking; angry −60.6, more; b1d.rank5_vs_rank1).
 
+
+
+
+                                                    7
+Table 3: The directions and frames, one row each: rank, footprint (norm removed per masked
+position, averaged over ablated layers) with its ratio to the emotion direction in the same run,
+dose-0 shift of the A-span readout (largest over emotions), and share of readable affect removed
+at the top dose (range over emotions). (b1c.random_control_inert, b1d.footprint, b1e.verdict_H3,
+b1e.pc1_dissociation, rev.b1d_controls_vs_none)
+            run                                 arm                                                  rank                       footprint (ratio)                                    dose-0 shift                        readable affect removed
+            B1c                                 emotion direction                                      1                  0.46–0.66 (1)                                             ≤ 0.01                                            0.16–0.79
+            B1c                                 random direction                                       1                 1.15–1.26 (2.0)                                            ≤ 0.01                                              ≤ 0.03
+            B1d                                 affect subspace                                        5                    6.9 (10.5)                                           +0.39 / −0.25                                        0.11–1.25
+            B1d                                 permuted-label subspace                                5                   6.5–6.9 (10)                                             ≤ 0.08                                            0.07–0.52
+            B1d                                 random 5-frame                                         5                   3.1–3.2 (5)                                              ≤ 0.01                                              ≤ 0.03
+            B1e                                 permuted-label direction                               1        0.50 (0.85; afraid 0.84, sad 0.77)                                  ≤ 0.01                                              ≤ 0.09
+            B1e                                 top principal direction                                1                    3.47 (5.8)                                           +0.55 / −0.28                                         0.71–1.5
+
+
+                                                  B1c: emotion dir − none (rank 1)                     B1d: random 5-frame − none (rank 5)                                                 * BH-FDR q < 0.05 over the five testable emotions
+                                                  B1c: random dir − none (rank 1)                      B1e: permuted-label dir − none (rank 1)                                                            · unadjusted CI excludes zero only
+
+
+
+
+blocked fraction of the none-arm slope
+                                                  B1d: affect subspace − none (rank 5)                 B1e: top principal dir − none (rank 1)                                                                    bars clipped at 1.75 (calm)
+                                          1.5     B1d: permuted-label subspace − none (rank 5)                                                           ·
+
+                                          1.0                                                                                                    ·                       ·
+
+                                                                                                                                                                                 *                                                *
+                                          0.5                                                                                                                                                                      *
+                                                                                   *             *                                                                           ·        *                                  *
+                                                                                          ·
+                                          0.0
+
+                                         −0.5
+                                                           desperate                          afraid                      happy                      calm (untestable)               sad                               angry
+
+
+
+Figure 4: Every arm against baseline: which ablations block, and which controls bite.
+Blocked fraction of the none-arm slope for every hooked arm of the three 27B experiments (Table 2).
+The permuted-label rank-5 subspace blocks afraid, sad and angry at BH-FDR q < 0.05; the random
+direction, the random 5-frame and the permuted-label rank-1 direction block nothing; the top
+principal direction blocks angry. Error bars are CI-implied ranges; calm’s bars are clipped.
+
+
 B1e: a permuted-label rank-1 control (verdict H3). The same estimator on permuted
 labels gives a rank-1 direction with cosine 0.004 to the emotion direction (measured before launch,
 not stamped in the file) and 0.85× its footprint on average (0.84 afraid, 0.77 sad); removed at all
@@ -418,47 +439,13 @@ readout by up to 0.55 (b1e.pc1_dissociation): readable-affect removal and blocki
 rank-5 permuted frame blocks where B1e’s rank-1 permuted direction does not; they differ in rank
 and in footprint (10× against 0.85× the emotion direction’s), and which matters is untested: the
 band between the random 5-frame (5×, inert) and the permuted frame (10×, blocks) has no fitted
-control in it. The secondary readout on B’s reply agrees for sad and not for afraid (Appendix A).
+control in it. The secondary readout on B’s reply agrees for sad and not for afraid (Appendix B).
 
-Replication on the 8B. B1c’s design blocks the same two emotions on the 8B by unadjusted
+
+                                                                                                                                     8
+Replication on the 8B. B1c’s design blocks the same two emotions on the 8B by unadjusted
 CIs (afraid 15%, sad 31% against the random direction; b1c8.verdict_and_block), with the other
 three too wide to tell agreement from disagreement; its manipulation-check rule returned instru-
-
-
-                                                   8
-                                                B1c: emotion dir − none (rank 1)                     B1d: random 5-frame − none (rank 5)                                                 * BH-FDR q < 0.05 over the five testable emotions
-                                                B1c: random dir − none (rank 1)                      B1e: permuted-label dir − none (rank 1)                                                            · unadjusted CI excludes zero only
-                                                B1d: affect subspace − none (rank 5)                 B1e: top principal dir − none (rank 1)                                                                    bars clipped at 1.75 (calm)
-                                          1.5   B1d: permuted-label subspace − none (rank 5)
-
-
-
-
-blocked fraction of the none-arm slope
-                                                                                                                                                       ·
-
-                                          1.0                                                                                                  ·                       ·
-
-                                                                                                                                                                                                                                *
-                                                                                                                                                                               *
-                                          0.5                                                                                                                                                                    *
-                                                                                 *             *                                                                           ·        *                                  *
-                                                                                        ·
-                                          0.0
-
-
-                                         −0.5
-                                                         desperate                          afraid                      happy                      calm (untestable)               sad                               angry
-
-
-
-Figure 4: Every arm against baseline: which ablations block, and which controls bite.
-Blocked fraction of the none-arm slope for every hooked arm of the three 27B experiments (Table 2).
-The permuted-label rank-5 subspace blocks afraid, sad and angry at BH-FDR q < 0.05; the random
-direction, the random 5-frame and the permuted-label rank-1 direction block nothing; the top
-principal direction blocks angry. Error bars are CI-implied ranges; calm’s bars are clipped.
-
-
 ment_failed because the upper ablation window changes the readout by nothing measurable on this
 model and the strict criterion has no tolerance band. B1e’s design returns H3 on the 8B with sad
 blocked by 36% (q 0.002, secondary readout agreeing) and afraid by 14% (q 0.08, no block against
@@ -468,7 +455,7 @@ adds no discriminating power there. Only sad replicates across models on both ou
 unreplicated (b1e8.verdict_H3_matched).
 
 
-6                                          What the controls teach
+6    What the controls teach
 Table 2 puts every arm on one scale. The random direction, the random 5-frame and the permuted-
 label rank-1 direction are inert; the permuted-label rank-5 frame blocks three emotions at the
 false-discovery threshold, as strongly as the affect subspace blocks two of them; the top principal
@@ -482,30 +469,30 @@ labels at the rank of the intervention, report every arm’s footprint and dose-
 check the manipulation with an instrument that does not share the ablation’s target.
 
 
-7                                          Limitations and what is not claimed
+7    Limitations and what is not claimed
 The present-emotion projection does not separate B’s own state from B’s representation of A’s; the
 other-speaker projection moves comparably. One probe pool and one direction estimate underlie all
-
-
-                                                                                                                                   9
-ablation runs on the 27B, and no ablation interval reflects the direction’s own sampling variability
+ablation runs on the 27B, and no ablation interval reflects the direction’s own sampling variability
 (the deployed directions’ split-half cosine is 0.88–0.93 at 600 per half). The A-span readout is
 forced-choice and shares a target with the subspace ablation. The dose-response slope summarises
 a saturating curve for happy and afraid and a reversing one for calm. All intervals are percentile
 bootstraps over 29 scenario clusters; multiplicity is controlled within experiments, not across the
 three experiments and two models. The estimator mechanism is regime-conditional (n < d): the
 low-dimensional check reproduces it and n > d on the full width is not reached. Provenance limits
-and the defects recorded under review are listed in Appendix A. Not tested: the token channel (three
-rewrite designs failed their own manipulation check: the neutral rewrite kept 67–98% of the readable
-affect and the affect-preserving rewrite changed the transfer itself; b1c.text_arms_uninterpretable),
-the behavioural reach, layers below 13, and an ablation rerun with the logistic direction.
+and the defects recorded under review are listed in Appendix B; seeds, hyperparameters, hardware
+and software are in Appendix A. Not tested: the token channel (three rewrite designs failed their
+own manipulation check: the neutral rewrite kept 67–98% of the readable affect and the affect-
+preserving rewrite changed the transfer itself; b1c.text_arms_uninterpretable), the behavioural reach,
+layers below 13, and an ablation rerun with the logistic direction.
 
 
 8    Conclusion
 The idea to take away is not that affect transfers between agents, though something does, nor that
 logistic probes are unstable, which was known. It is that the two failures we found are the same
 failure seen twice. A logistic direction on separable activations is decided by the penalty’s tie-break,
-so two independent fits agree only as far as their tie-breaks do; and a control direction is informative
+
+                                                   9
+so two independent fits agree only as far as their tie-breaks do; and a control direction is informative
 only if it is decided the way the intervention direction was. Random vectors are decided by nothing,
 which is why they are inert and why they miss what a fitted control catches. Any study that reads
 a concept with a probe and intervenes with its direction should report disjoint-half reproducibility
@@ -517,16 +504,18 @@ state it reads, and the next experiments are the two that would settle the open 
 a footprint-scaled random frame, and an intervention that separates the receiver re-reading the
 sender’s tokens from the receiver reading the sender’s residual stream.
 
-Reproducibility statement. Code, pre-registrations, result files and the claim registry are in
-the accompanying repository (research-use licence). Models: Qwen3.6-27B revision 6a9e13bd and
-Llama-3-8B-Instruct-abliterated revision dd67dd05, run with torch 2.11.0+cu130 and transformers
-5.14.1 on one NVIDIA RTX PRO 6000 (96 GB) per run; a 27B ablation experiment takes about
-two hours (432 or 288 arm-rows of 29 scenarios each, 19–21 s per arm-row), the 8B one under
-thirty minutes. Seeds: pool generation seed 0; per-generation seeds are a CRC32 of (seed, emotion,
-dose, replicate, arm, part) with the arm field empty for the receiver’s reply so that arms share
-random numbers; ten split seeds (0–9) for every split-half number; bootstrap seed 0 with 5,000
-draws. Hyperparameters: doses {0, 0.33, 0.67, 1} at a fixed activation-RMS scale, three replicates,
-29 scenarios, 110 new tokens per message at temperature 0.9; logistic regression with lbfgs, max_iter
+
+A Reproducibility statement
+Code, pre-registrations, result files and the claim registry are in the accompanying repository
+(research-use licence). Models: Qwen3.6-27B revision 6a9e13bd and Llama-3-8B-Instruct-abliterated
+revision dd67dd05, run with torch 2.11.0+cu130 and transformers 5.14.1 on one NVIDIA RTX
+PRO 6000 (96 GB) per run; a 27B ablation experiment takes about two hours (432 or 288 arm-
+rows of 29 scenarios each, 19–21 s per arm-row), the 8B one under thirty minutes. Seeds: pool
+generation seed 0; per-generation seeds are a CRC32 of (seed, emotion, dose, replicate, arm,
+part) with the arm field empty for the receiver’s reply so that arms share random numbers;
+ten split seeds (0–9) for every split-half number; bootstrap seed 0 with 5,000 draws. Hyper-
+parameters: doses {0, 0.33, 0.67, 1} at a fixed activation-RMS scale, three replicates, 29 scenar-
+ios, 110 new tokens per message at temperature 0.9; logistic regression with lbfgs, max_iter
 3000, C ∈ {0.5, Cn = 0.5 Nref /n with Nref ∈ {600, 2000}, 50, 500} and cross-validated C on a
 decade grid scored for accuracy; split-half n ∈ {75, 150, 300, 600, 1200, 2000} per half where the
 pool allows. Statistics: scenario-blocked percentile bootstraps because scenarios are the sampling
@@ -536,76 +525,75 @@ bootstrap and every count of runs is stated. The probe pools and scenario lists 
 the results.
 
 
-
-                                                   10
-A Details and defects recorded under review
+B     Details and defects recorded under review
 Each item below is in the registry note of the claim it qualifies.
 
-  • B1c. The contrast between the 30-layer and 51-layer windows was declared in the driver,
-    not in the pre-registration; its null is unpowered for desperate and calm. The testability
-    rule (none-arm CI excludes zero) is pre-registered (PREREG_B1c §5). Calm’s contrast is
-    the largest and is excluded by that rule; medians are reported with and without it. Afraid’s
-    top-dose readout is non-monotone. The pre-registration stamp is empty because the driver
-    resolved its path relative to the wrong directory; the document was on the machine one
-    second before the run started, and its commit (cc2dc32, 19:22Z) precedes the run’s start
-    (19:32Z) in the repository history. The pool has 1,615 items against the registered 2,160; the
-    false-discovery rate ran over five emotions rather than six.
-  • B1d. The permuted-label subspace removed only 6.5% of afraid’s readable affect and still
-    blocked its transfer, so overlap with the readable-affect direction does not explain its blocking;
-    recomputing the instrument share with each arm’s own floor keeps three failures but changes
+    • B1c. The contrast between the 30-layer and 51-layer windows was declared in the driver,
+      not in the pre-registration; its null is unpowered for desperate and calm. The testability
+      rule (none-arm CI excludes zero) is pre-registered (PREREG_B1c §5). Calm’s contrast is
+      the largest and is excluded by that rule; medians are reported with and without it. Afraid’s
+      top-dose readout is non-monotone. The pre-registration stamp is empty because the driver
+      resolved its path relative to the wrong directory; the document was on the machine one
+      second before the run started, and its commit (cc2dc32, 19:22Z) precedes the run’s start
+      (19:32Z) in the repository history. The pool has 1,615 items against the registered 2,160; the
+      false-discovery rate ran over five emotions rather than six.
+    • B1d. The permuted-label subspace removed only 6.5% of afraid’s readable affect and still
+      blocked its transfer, so overlap with the readable-affect direction does not explain its blocking;
+
+
+                                                   10
+    recomputing the instrument share with each arm’s own floor keeps three failures but changes
     which emotions fail. The median’s confidence interval resamples scenarios only.
-  • B1e. The control removes less norm than the emotion direction and less than B1c’s inert
-    random direction (1.22), so it is a fitted label-free null, not a footprint-matched one. The rule
-    tests the point fraction and sad’s range starts at 0.07. The secondary readout on B’s reply
-    contradicts afraid’s block and agrees for sad. The control’s cosine to the emotion direction
-    (0.004) was measured by the pre-launch verifier and is not stamped in the result file.
-  • 8B replications. Both are out-of-pre-registration replications (the documents name the 27B
-    and its layers). The steering manipulation is half as strong and less specific on the 8B, afraid’s
-    readout sits below chance, and slopes are unnormalised probe scores, so only patterns are
-    compared. In B1e on the 8B the control is matched on average only (sad 0.86×), both
-    directions remove about the isotropic norm, and B1c’s random direction already reproduced
-    the contrasts; afraid does not block against baseline there.
-  • Estimator study. The weak-penalty arms (C = 50 and 500) give the same solution to three
-    decimals, so they are tolerance-limited and bound nothing about the C → ∞ limit. Cross-
-    estimator cosines use subsamples that overlap by about half the pool, so their intervals over-
-    state precision. The layer-43 and layer-54 files come from three driver builds; the shared cells
-    agree bit for bit.
+ • B1e. The control removes less norm than the emotion direction and less than B1c’s inert
+   random direction (1.22), so it is a fitted label-free null, not a footprint-matched one. The rule
+   tests the point fraction and sad’s range starts at 0.07. The secondary readout on B’s reply
+   contradicts afraid’s block and agrees for sad. The control’s cosine to the emotion direction
+   (0.004) was measured by the pre-launch verifier and is not stamped in the result file.
+ • 8B replications. Both are out-of-pre-registration replications (the documents name the 27B
+   and its layers). The steering manipulation is half as strong and less specific on the 8B, afraid’s
+   readout sits below chance, and slopes are unnormalised probe scores, so only patterns are
+   compared. In B1e on the 8B the control is matched on average only (sad 0.86×), both
+   directions remove about the isotropic norm, and B1c’s random direction already reproduced
+   the contrasts; afraid does not block against baseline there.
+ • Estimator study. The weak-penalty arms (C = 50 and 500) give the same solution to three
+   decimals, so they are tolerance-limited and bound nothing about the C → ∞ limit. Cross-
+   estimator cosines use subsamples that overlap by about half the pool, so their intervals over-
+   state precision. The layer-43 and layer-54 files come from three driver builds; the shared cells
+   agree bit for bit.
 
 
 References
- [1] Yoav Benjamini and Yosef Hochberg. Controlling the false discovery rate: A practical and
-     powerful approach to multiple testing. Journal of the Royal Statistical Society: Series B, 57
-     (1):289–300, 1995.
+[1] Yoav Benjamini and Yosef Hochberg. Controlling the false discovery rate: A practical and
+    powerful approach to multiple testing. Journal of the Royal Statistical Society: Series B, 57
+    (1):289–300, 1995.
 
- [2] Joschka Braun, Carsten Eickhoff, David Krueger, Seyed Ali Bahrainian, and Dmitrii
-     Krasheninnikov. Understanding (Un)Reliability of steering vectors in language models. arXiv
-     preprint arXiv:2505.22637, 2025.
+[2] Joschka Braun, Carsten Eickhoff, David Krueger, Seyed Ali Bahrainian, and Dmitrii
+    Krasheninnikov. Understanding (Un)Reliability of steering vectors in language models. arXiv
+    preprint arXiv:2505.22637, 2025.
 
- [3] Funda Durupinar. How affect propagates among LLM agents: Emergent emotional contagion
-     in crowd simulation. arXiv preprint arXiv:2607.25140, 2026.
+[3] Funda Durupinar. How affect propagates among LLM agents: Emergent emotional contagion
+    in crowd simulation. arXiv preprint arXiv:2607.25140, 2026.
 
+[4] Bradley Efron and Robert J. Tibshirani. An Introduction to the Bootstrap. Chapman and Hall,
+    1993.
 
+[5] Ziqi Gao, Yaotian Zhu, Qingcheng Zeng, Xu Zhao, Ziqing Wang, Feng Ruan, and Kaize Ding.
+    RAPTOR: Ridge-adaptive logistic probes. arXiv preprint arXiv:2602.00158, 2026.
 
-                                                 11
- [4] Bradley Efron and Robert J. Tibshirani. An Introduction to the Bootstrap. Chapman and Hall,
-     1993.
+[6] Niklas Herbster, Martin Zborowski, Alberto Tosato, Gauthier Gidel, and Tommaso Tosato.
+    Activation steering for aligned open-ended generation without sacrificing coherence. arXiv
+    preprint arXiv:2604.08169, 2026.
 
- [5] Ziqi Gao, Yaotian Zhu, Qingcheng Zeng, Xu Zhao, Ziqing Wang, Feng Ruan, and Kaize Ding.
-     RAPTOR: Ridge-adaptive logistic probes. arXiv preprint arXiv:2602.00158, 2026.
+[7] Kenneth Li, Oam Patel, Fernanda Viégas, Hanspeter Pfister, and Martin Wattenberg.
+    Inference-time intervention: Eliciting truthful answers from a language model. arXiv preprint
+    arXiv:2306.03341, 2023.
 
- [6] Niklas Herbster, Martin Zborowski, Alberto Tosato, Gauthier Gidel, and Tommaso Tosato.
-     Activation steering for aligned open-ended generation without sacrificing coherence. arXiv
-     preprint arXiv:2604.08169, 2026.
+[8] Yunbo Long, Liming Xu, Lukas Beckenbauer, Yuhan Liu, and Alexandra Brintrup. EvoEmo:
+    Towards evolved emotional policies for adversarial LLM agents in multi-turn price negotiation.
+    arXiv preprint arXiv:2509.04310, 2025.
 
- [7] Kenneth Li, Oam Patel, Fernanda Viégas, Hanspeter Pfister, and Martin Wattenberg.
-     Inference-time intervention: Eliciting truthful answers from a language model. arXiv preprint
-     arXiv:2306.03341, 2023.
-
- [8] Yunbo Long, Liming Xu, Lukas Beckenbauer, Yuhan Liu, and Alexandra Brintrup. EvoEmo:
-     Towards evolved emotional policies for adversarial LLM agents in multi-turn price negotiation.
-     arXiv preprint arXiv:2509.04310, 2025.
-
- [9] Samuel Marks and Max Tegmark. The geometry of truth: Emergent linear structure in large
+                                                11
+ [9] Samuel Marks and Max Tegmark. The geometry of truth: Emergent linear structure in large
      language model representations of true/false datasets. arXiv preprint arXiv:2310.06824, 2023.
 
 [10] Nina Panickssery, Nick Gabrieli, Julian Schulz, Meg Tong, Evan Hubinger, and Alexander Matt
