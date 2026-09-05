@@ -27,15 +27,16 @@ def fig1():
     panels = [("Qwen3.6-27B, layer 43 (focus)", a27, 43, f27), ("Qwen3.6-27B, layer 54", a27, 54, f54), ("Llama-3-8B-abl, layer 21 (focus)", a8, 21, f8)]
     fig, axes = plt.subplots(1, 3, figsize=(12, 3.6), sharey=True)
     for ax, (title, a, L, f) in zip(axes, panels):
-        for src, est, lab, style in [(a, "logreg", "logistic, C = 0.5", "o-"), (f, "logreg_cv", "logistic, tuned C", "s--"),
-                                     (f, "logreg_lam", "logistic, fixed per-sample penalty", "^-"), (a, "dom", "difference of means", "D-")]:
+        for src, est, lab, style, col in [(a, "logreg", "logistic, C = 0.5", "o-", OI[0]), (f, "logreg_cv", "logistic, tuned C", "s--", OI[1]),
+                                     (f, "logreg_lam", "logistic, fixed per-sample penalty (anchor 600)", "^-", OI[3]), (a, "dom", "difference of means", "D-", OI[2])]:
             try:
                 ns, m, ci = stab(src, L, est)
             except KeyError:
                 continue
             lo = [c[0] for c in ci]; hi = [c[1] for c in ci]
-            ax.plot(ns, m, style, label=lab, ms=4); ax.fill_between(ns, lo, hi, alpha=.15)
-        ax.set_xscale("log"); ax.set_xticks([75, 150, 300, 600, 1200, 2000]); ax.set_xticklabels([75, 150, 300, 600, 1200, 2000], fontsize=8)
+            ax.plot(ns, m, style, label=lab, ms=4, color=col); ax.fill_between(ns, lo, hi, alpha=.15, color=col)
+        ticks = [75, 150, 300, 600, 1200, 2000] if L != 21 else [75, 150, 300, 600, 1200]
+        ax.set_xscale("log"); ax.set_xticks(ticks); ax.set_xticklabels(ticks, fontsize=8); ax.set_xlim(60, 2600 if L != 21 else 1500)
         ax.set_title(title, fontsize=10); ax.set_xlabel("n per half"); ax.grid(alpha=.3)
     axes[0].set_ylabel("split-half cosine (10 disjoint splits)"); axes[0].set_ylim(0.2, 1.0); axes[0].legend(fontsize=7.5, loc="lower right")
     fig.tight_layout(); fig.savefig(f"{OUT}/fig1_splithalf_vs_n.png", dpi=180); fig.savefig(f"{OUT}/fig1_splithalf_vs_n.pdf"); plt.close(fig)
@@ -46,10 +47,10 @@ def fig2():
     fig, axes = plt.subplots(1, 2, figsize=(9, 3.6))
     for ax, (title, b) in zip(axes, [("Qwen3.6-27B, layer 43", m27), ("Llama-3-8B-abl, layer 21", m8)]):
         ns = sorted(int(n) for n in b)
-        for key, lab, style in [("sh_lam", "split-half: logistic, fixed penalty", "^-"), ("sh_weak2", "split-half: logistic, C = 500", "v-"),
-                                ("sh_dom", "split-half: difference of means", "D-"), ("cos_lam_dom", "cos(logistic, difference of means), same half", "o:")]:
+        for key, lab, style, col in [("sh_lam", "split-half: logistic, fixed per-sample penalty (anchor 600)", "^-", OI[3]), ("sh_weak2", "split-half: logistic, C = 500", "v-", OI[4]),
+                                ("sh_dom", "split-half: difference of means", "D-", OI[2]), ("cos_lam_dom", "cos(logistic, difference of means), same half", "o:", OI[5])]:
             m = [b[str(n)][key]["mean"] for n in ns]; ci = [b[str(n)][key]["ci"] for n in ns]
-            ax.plot(ns, m, style, label=lab, ms=4); ax.fill_between(ns, [c[0] for c in ci], [c[1] for c in ci], alpha=.15)
+            ax.plot(ns, m, style, label=lab, ms=4, color=col); ax.fill_between(ns, [c[0] for c in ci], [c[1] for c in ci], alpha=.15, color=col)
         acc = min(b[str(n)]["lam_train_acc"]["min"] if "min" in b[str(n)]["lam_train_acc"] else b[str(n)]["lam_train_acc"]["mean"] for n in ns)
         ax.text(0.02, 0.95, f"training accuracy = {acc:.3f} at every n (all fits separate their half)", transform=ax.transAxes, fontsize=7.5, va="top")
         ax.set_xscale("log"); ax.set_xticks(ns); ax.set_xticklabels(ns, fontsize=8); ax.set_ylim(0.2, 1.02); ax.set_title(title, fontsize=10); ax.set_xlabel("n per half"); ax.grid(alpha=.3)
@@ -59,38 +60,41 @@ def fig2():
 
 def fig3():
     d = J("b1c_alllayer_qwen36-27b.json"); S = d["summary"]; doses = [0.0, 0.33, 0.67, 1.0]
-    fig, axes = plt.subplots(2, 3, figsize=(11, 6), sharex=True)
+    R = J("paper_revision_stats.json")["b1c_27b"]["per_emotion"]
+    fig, axes = plt.subplots(2, 3, figsize=(11, 6.4), sharex=True)
     for ax, e in zip(axes.ravel(), EMOS):
-        for arm, lab, style in [("none", "none", "k-o"), ("emo13_42", "emotion direction, hs 13–42", "C0-s"), ("emo_all", "emotion direction, hs 13–63", "C5-^"), ("rand_all", "random direction, hs 13–63", "C3--D")]:
-            mb = S[e][arm]["mean_by_dose"]; ax.plot(doses, [mb[str(x)] for x in doses], style, ms=4, label=lab)
-        sl = S[e]["none"]["present_slope"]; ax.set_title(f"{e}  (none slope {sl['slope']:+.0f} [{sl['ci'][0]:+.0f}, {sl['ci'][1]:+.0f}])", fontsize=9); ax.grid(alpha=.3)
+        for arm, lab, style, col in [("none", "none", "-o", "k"), ("emo13_42", "emotion direction, hs 13–42", "-s", OI[0]), ("emo_all", "emotion direction, hs 13–63", "-^", OI[5]), ("rand_all", "random direction, hs 13–63", "--D", OI[3])]:
+            bd = R[e]["bands"][arm]; m = [bd[str(x)]["mean"] for x in doses]; lo = [bd[str(x)]["ci"][0] for x in doses]; hi = [bd[str(x)]["ci"][1] for x in doses]
+            ax.plot(doses, m, style, ms=4, label=lab, color=col); ax.fill_between(doses, lo, hi, alpha=.12, color=col)
+        sl = S[e]["none"]["present_slope"]; sh = R[e]["shape"]
+        ax.set_title(f"{e}: slope {sl['slope']:+.0f} [{sl['ci'][0]:+.0f}, {sl['ci'][1]:+.0f}]; steps {sh['step_0_to_033']['diff']:+.0f}, {sh['step_067_to_1']['diff']:+.0f}", fontsize=8.5); ax.grid(alpha=.3)
     for ax in axes[1]: ax.set_xlabel("steering dose on A")
     for ax in axes[:, 0]: ax.set_ylabel("B's present-emotion projection")
-    axes[0, 0].legend(fontsize=7.5); fig.suptitle("B1c: B's dose-response under all-layer ablation of A's span (29 scenarios × 3 reps)", fontsize=10)
+    axes[0, 1].legend(fontsize=7.5, loc="lower right"); fig.suptitle("B1c: B's dose-response under ablation of A's span (29 scenarios × 3 reps; bands: scenario-bootstrap 95% CI of the per-dose mean; title steps: paired dose 0→0.33 and 0.67→1 changes)", fontsize=9)
     fig.tight_layout(); fig.savefig(f"{OUT}/fig3_b1c_dose_response.png", dpi=180); fig.savefig(f"{OUT}/fig3_b1c_dose_response.pdf"); plt.close(fig)
 
 
 def fig4(extra=None):
     c, dd = J("b1c_alllayer_qwen36-27b.json")["summary"], J("b1d_subspace_qwen36-27b.json")["summary"]
-    rows = [("B1c: emotion dir − random dir (rank 1)", c, "emo_all_vs_rand_all"), ("B1d: affect subspace − permuted subspace (rank 5)", dd, "sub_all_vs_perm_all"),
-            ("B1d: permuted subspace − none (rank 5, no emotion info)", dd, "perm_all_vs_none")]
-    if extra is not None:
-        e = J(extra)["summary"]
-        rows += [("B1e: emotion dir − permuted-label dir (rank 1)", e, "emo_all_vs_permdir_all"), ("B1e: permuted-label dir − none (rank 1)", e, "permdir_all_vs_none")]
-    fig, ax = plt.subplots(figsize=(10, 3.8)); w = 0.8 / len(rows); x = np.arange(len(EMOS))
-    for i, (lab, S, key) in enumerate(rows):
-        pts, lo, hi = [], [], []
+    R = J("paper_revision_stats.json")
+    rows = [("B1c: emotion dir − none (rank 1)", "b1c_27b", "emo_all"), ("B1c: random dir − none (rank 1)", "b1c_27b", "rand_all"),
+            ("B1d: affect subspace − none (rank 5)", "b1d_27b", "sub_all"), ("B1d: permuted-label subspace − none (rank 5)", "b1d_27b", "perm_all"),
+            ("B1d: random 5-frame − none (rank 5)", "b1d_27b", "randsub_all"), ("B1e: permuted-label dir − none (rank 1)", "b1e_27b", "permdir_all"),
+            ("B1e: top principal dir − none (rank 1)", "b1e_27b", "pc1_all")]
+    fig, ax = plt.subplots(figsize=(11, 4.2)); w = 0.86 / len(rows); x = np.arange(len(EMOS))
+    for i, (lab, tag, arm) in enumerate(rows):
+        pts, lo, hi, marks = [], [], [], []
         for em in EMOS:
-            bf = S[em].get("blocked_fraction", {}).get(key)
-            if bf is None or bf.get("point") is None:
-                con = S[em].get(key); ns = S[em]["none"]["present_slope"]["slope"]
-                if con is None: pts.append(np.nan); lo.append(0); hi.append(0); continue
-                p = -con["diff"] / ns; r = sorted(-cc / ns for cc in con["ci"]); pts.append(p); lo.append(p - r[0]); hi.append(r[1] - p)
-            else:
-                p = bf["point"]; r = bf["range"]; pts.append(p); lo.append(p - r[0]); hi.append(r[1] - p)
-        ax.bar(x + (i - len(rows) / 2 + 0.5) * w, pts, w, yerr=[lo, hi], capsize=2, label=lab, alpha=.85)
+            en = R[tag]["per_emotion"][em]; con = en["arm_vs_none"][arm]; p = con["blocked_fraction"]; r = con["blocked_range"]
+            pts.append(p); lo.append(p - r[0]); hi.append(r[1] - p)
+            q = R[tag]["bh_q_over_testable"].get(arm, {}).get(em); marks.append("*" if (q is not None and q < 0.05) else ("·" if con["sig"] else ""))
+        xs = x + (i - len(rows) / 2 + 0.5) * w
+        ax.bar(xs, [min(v, 1.75) for v in pts], w, yerr=[lo, hi], capsize=1.5, label=lab, alpha=.9, error_kw={"lw": .8})
+        for xx, v, mk in zip(xs, pts, marks):
+            if mk: ax.text(xx, min(v, 1.75) + (0.05 if v >= 0 else -0.12), mk, ha="center", fontsize=9)
     ax.axhline(0, color="k", lw=.8); ax.set_xticks(x); ax.set_xticklabels([f"{e}{' (untestable)' if e == 'calm' else ''}" for e in EMOS], fontsize=8)
-    ax.set_ylabel("blocked fraction of the none-arm slope"); ax.set_ylim(-0.6, 1.8); ax.grid(axis="y", alpha=.3); ax.legend(fontsize=7.5, loc="upper left")
+    ax.set_ylabel("blocked fraction of the none-arm slope"); ax.set_ylim(-0.7, 1.9); ax.grid(axis="y", alpha=.3); ax.legend(fontsize=7, loc="upper left", ncol=2)
+    ax.text(0.99, 0.97, "* BH-FDR q < 0.05 over the five testable emotions\n· unadjusted CI excludes zero only\nbars clipped at 1.75 (calm)", transform=ax.transAxes, ha="right", va="top", fontsize=7)
     fig.tight_layout(); fig.savefig(f"{OUT}/fig4_blocked_fractions.png", dpi=180); fig.savefig(f"{OUT}/fig4_blocked_fractions.pdf"); plt.close(fig)
 
 

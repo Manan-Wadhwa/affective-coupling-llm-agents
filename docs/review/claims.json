@@ -1910,6 +1910,109 @@
    },
    "expected": 0,
    "tol": 0
+  },
+  {
+   "id": "rev.b1c_random_vs_none",
+   "text": "B1c (27B), computed for the revision: the unit-norm random direction against baseline (scenario-blocked, dose-paired) is null for all six emotions -- desperate -1.7 [-12.9, +9.5], afraid -6.9 [-16.1, +3.4], happy +13.5 [-0.1, +28.4], calm -1.7 [-19.0, +16.1], sad +4.0 [-6.7, +14.5], angry +0.5 [-13.7, +14.8]; BH-FDR q >= 0.26 over the five testable emotions",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex",
+    "results/rev3/README.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Answers reviewers 1-3: the random control's inertness is now a computed contrast, not an eyeball; happy's +13.5 (28% of its slope) is the closest to significance (p 0.053).",
+   "pointer": {
+    "script": "src/rev3/paper_revision_stats.py",
+    "file": "results/rev3/paper_revision_stats.json",
+    "json_path": "b1c_27b.per_emotion.happy.arm_vs_none.rand_all.diff",
+    "config": {
+     "b1c_27b.per_emotion.happy.arm_vs_none.rand_all.sig": false,
+     "b1c_27b.per_emotion.afraid.arm_vs_none.rand_all.sig": false
+    }
+   },
+   "expected": 13.518,
+   "tol": 0.01
+  },
+  {
+   "id": "rev.b1c_emo_vs_none_fdr",
+   "text": "B1c (27B): the emotion direction against baseline -- afraid -51.8 [-66.3, -37.5] (q 0.001), sad -27.7 [-57.8, -0.4] (q 0.115), angry -17.5 [-40.1, +2.4] (q 0.126), desperate and happy null; BH-FDR over the five testable emotions. Median blocked fraction of the decision contrast (emotion minus random) 0.092 over the five testable emotions and 0.152 with calm included",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex",
+    "results/rev3/README.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Against baseline with BH-FDR only afraid clears 0.05 on the 27B; sad's pre-registered decision contrast against the random arm clears it (q 0.048, report 22) but its baseline contrast does not. Reported both ways in the revision.",
+   "pointer": {
+    "script": "src/rev3/paper_revision_stats.py",
+    "file": "results/rev3/paper_revision_stats.json",
+    "json_path": "b1c_27b.per_emotion.sad.arm_vs_none.emo_all.diff",
+    "config": {
+     "b1c_medians.decision_contrast_5_testable": 0.09219863217613466,
+     "b1c_medians.decision_contrast_all_6": 0.15219828387420486
+    }
+   },
+   "expected": -27.725,
+   "tol": 0.01
+  },
+  {
+   "id": "rev.b1d_controls_vs_none",
+   "text": "B1d (27B): the random 5-frame against baseline is null for all six emotions (largest angry -11.7 [-26.3, +3.7]; q >= 0.51), while the permuted-label 5-frame's blocks of afraid (-49.5), sad (-26.7) and angry (-44.3) clear BH-FDR over the five testable emotions (q 0.001, 0.035, 0.013); dose-0 A-span readout shifts: affect subspace +0.39 (desperate), -0.17 (happy), -0.25 (calm); permuted frame <= 0.08; random frame <= 0.004",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex",
+    "results/rev3/README.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Answers reviewer 1's W1/W2 and reviewer 2's W3: the arm that separates 'fitted' from 'big' is reported with numbers, and the FDR line for the permuted frame is over its own family (arm vs none), which it clears; the q = 0.051 previously quoted belongs to the affect-minus-permuted contrast.",
+   "pointer": {
+    "script": "src/rev3/paper_revision_stats.py",
+    "file": "results/rev3/paper_revision_stats.json",
+    "json_path": "b1d_27b.bh_q_over_testable.perm_all.afraid",
+    "config": {
+     "b1d_27b.bh_q_over_testable.perm_all.sad": 0.035333333333333335,
+     "b1d_27b.per_emotion.angry.arm_vs_none.randsub_all.sig": false,
+     "b1d_27b.per_emotion.desperate.dose0_readout_shift.sub_all": 0.39169129176147677
+    }
+   },
+   "expected": 0.001,
+   "tol": 0.001
+  },
+  {
+   "id": "rev.other_probe_rises",
+   "text": "B1c (27B): the projection of B's reply on the OTHER-speaker probe (B's representation of A's state) also rises with A's dose, with scenario-blocked slopes desperate +59 [+45, +74], afraid +119 [+97, +143], happy +65 [+49, +82], sad +93 [+78, +109], angry +96 [+82, +110] against present-probe slopes +84, +212, +48, +98, +196 (calm +3 [-15, +22] vs +44)",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex",
+    "results/rev3/README.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Reviewer 2's W4: the present-emotion projection does not by itself separate B's own state from B's model of A's; the other-speaker projection moves comparably (more for happy). The paper's construct claim is narrowed accordingly.",
+   "pointer": {
+    "script": "src/rev3/paper_revision_stats.py",
+    "file": "results/rev3/paper_revision_stats.json",
+    "json_path": "b1c_27b.per_emotion.sad.other_probe_none_slope.slope"
+   },
+   "expected": 93.06,
+   "tol": 0.05
+  },
+  {
+   "id": "rev.dose_shape",
+   "text": "B1c (27B), none arm, scenario-paired dose steps: happy rises +71 [+50, +94] from dose 0 to 0.33 and +0.1 [-24, +25] from 0.67 to 1 (saturating); calm +38 [-3, +78] then -34 [-77, +13] (reversing); afraid +34 [+16, +56] then +5 [-17, +27] (saturating); desperate, sad and angry rise at both steps (angry +103 then +49 [+6, +91])",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex",
+    "results/rev3/README.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Reviewers 1-3 and the mentor: the four-dose OLS slope summarises a step (happy) and an inverted U (calm) as 'dose-dependent'. The revision reports the two steps beside every slope.",
+   "pointer": {
+    "script": "src/rev3/paper_revision_stats.py",
+    "file": "results/rev3/paper_revision_stats.json",
+    "json_path": "b1c_27b.per_emotion.happy.shape.step_067_to_1.diff"
+   },
+   "expected": 0.14,
+   "tol": 0.05
   }
  ]
 }
