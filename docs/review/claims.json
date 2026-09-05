@@ -1853,6 +1853,61 @@
     }
    },
    "expected": "instrument_failed"
+  },
+  {
+   "id": "b1e8.verdict_H3_matched",
+   "text": "B1e's design on Llama-3-8B-abliterated (a replication of PREREG_B1e on a second model; prereg stamped, sha da043b93...; 288 arm-rows, 28 min): verdict H3 with a footprint-MATCHED control -- the permuted-label direction removes 0.96x the norm the emotion direction removes (0.124 vs 0.129 per position, layer mean) and is inert for every emotion (permdir_all vs none within [-12, +14], none significant; shares of readable affect removed <= 0.05; dose-0 shifts <= 0.02); against it the emotion direction blocks sad by 36% (-36.8 [-57.1, -16.7], BH-FDR q 0.002; the secondary readout on B's reply agrees, -0.075, significant) and afraid by 14% (-17.4 [-32.7, -1.7], range 0.01-0.27, q 0.08 -- below the registered 0.05 threshold; secondary null)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/30_rev3_b1e_8b.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "This is the matched-footprint comparison the 27B run lacked (report 28's critique): on the 8B the control removes as much as the emotion direction and still does nothing, so for sad the footprint caveat is discharged on this model; afraid passes the pre-registered point rule but not the descriptive FDR line and its range touches 0.01. The pc1 arm is a poor control on the 8B (its top principal direction is unstable across halves, |cos| median 0.08; footprint 1.45x; inert except a small desperate effect). MC-steer 6/6 but the manipulation is half as strong as on the 27B (report 29).",
+   "pointer": {
+    "script": "src/rev3/b1e_footprint.py",
+    "file": "results/rev3/b1e_footprint_llama3-abl.json",
+    "json_path": "verdict",
+    "config": {
+     "footprint.ratio_permdir_over_emo": 0.955071944689014,
+     "counts.n_permdir_dose0_bad": 0,
+     "counts.n_mc_steer_pass": 6,
+     "counts.blocking_emotions": [
+      "afraid",
+      "sad"
+     ],
+     "summary.sad.emo_all_vs_permdir_all.sig": true,
+     "summary.sad.emo_all_vs_permdir_all_secondary.sig": true
+    }
+   },
+   "expected": "H3"
+  },
+  {
+   "id": "b1e8.permdir_inert",
+   "text": "B1e on the 8B: the footprint-matched permuted-label direction changes no emotion's dose-response (derived: significant permdir_all vs none contrasts = 0 of 6)",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/30_rev3_b1e_8b.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Companion to b1e.permdir_inert on the 27B, where the control removed less; here it removes 0.96x.",
+   "pointer": {
+    "script": "src/rev3/b1e_footprint.py",
+    "file": "results/rev3/b1e_footprint_llama3-abl.json"
+   },
+   "derive": {
+    "fn": "count_true",
+    "args": {
+     "path": "permdir_all_vs_none.sig"
+    }
+   },
+   "expected": 0,
+   "tol": 0
   }
  ]
 }

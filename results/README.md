@@ -101,6 +101,7 @@ recorded" means the file carries no such field.
 | `b1d_subspace_qwen36-27b.json` | **RESULT · COMPLETE · PRE-REGISTERED** | rank-5 class-mean subspace ablation hs 13–63 with permuted-label and random-frame controls; verdict **instrument_failed**; the permuted control itself blocks (footprint confound) |
 | `b1d_cells_qwen36-27b.json` | RAW · checkpoint | per-arm-row checkpoint of the above |
 | `b1e_footprint_qwen36-27b.json`, `b1e_cells_*` | **RESULT · COMPLETE · PRE-REGISTERED** | fitted label-free rank-1 control: verdict **H3** — B1c's afraid/sad blocking is emotion-specific; pc1 blocks angry, not afraid/sad |
+| `b1e_footprint_llama3-abl.json`, `b1e_cells_llama3-abl.json` | **RESULT · COMPLETE** (B1e design on the 8B) | H3 with a footprint-matched control (0.96×): sad 36% blocked (q 0.002), afraid 14% (q 0.08) |
 | `b1c_alllayer_llama3-abl.json`, `b1c_cells_llama3-abl.json` | **RESULT · COMPLETE** (replication on the 8B) | transfer for the same five emotions; afraid 15% / sad 31% blocked; rule returns instrument_failed on a readout tie |
 | `a2_followup_qwen36-27b-nref2000.json` | **RESULT · layer 43 complete, layer 54 lost** | second fixed-penalty anchor (N_REF = 2000): no net rise with n (dip at 600, partial recovery), level 0.003–0.022 below the 600 anchor |
 | `a2f_cells_qwen36-27b-nref2000.json` | RAW · partial checkpoint | 22 of 48 layer-54 cells (plain logreg and part of logreg_cv) |

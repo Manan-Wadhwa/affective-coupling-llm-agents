@@ -561,6 +561,10 @@ Pre-registration `docs/planning/PREREG_B1c.md` (122af4c 19:02Z, addendum cc2dc32
 
 `b1c_alllayer_llama3-abl.json` (432 arm-rows; pool 1079; focus 21; hs 6–20 / 6–31; gate 0.82–0.88). Transfer for the same five emotions (+57 … +122); afraid −18.1 [−28.7, −7.5] (15%) and sad −31.5 [−48.2, −14.8] (31%) vs random; MC-ablate 4/6 fail on identical readouts between the two windows. Registry `b1c8.*`; report 29.
 
+## B1e's design on the 8B — **COMPLETE, 2026-09-05 11:59Z; H3, footprint-matched control**
+
+`b1e_footprint_llama3-abl.json` (288 arm-rows; 8B pool from report 29). permdir footprint 0.96× emo, inert everywhere; sad −36.8 [−57.1, −16.7] (36%, q 0.002), afraid −17.4 [−32.7, −1.7] (14%, q 0.08). pc1 unstable on this model (1.45×). Registry `b1e8.*`; report 30.
+
 ## Provenance gaps introduced by these files (to close, not to hide)
 
 1. ~~B1 stability gate 0.909 — no committed artifact~~ — closed by the rerun's `b1_e4rerun_qwen36-27b.json` (0.907; a new measurement).

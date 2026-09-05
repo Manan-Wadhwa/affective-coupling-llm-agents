@@ -484,3 +484,6 @@ Fitted label-free rank-1 control (permuted-label dom direction, cosine 0.004 to 
 
 ## 2026-09-05 11:21Z — B1c's design on the 8B complete (box 6): transfer replicates; rule returns instrument_failed on a tie
 `b1c_alllayer_llama3-abl.json`: five of six emotions transfer (same five as the 27B); afraid 15% and sad 31% blocked by the rank-1 direction vs random; MC-ablate fails 4/6 because the upper window changes the readout by nothing measurable and the strict ≥ has no tolerance band (corrected after report 29's critique: not a floating-point tie). Only the pattern is comparable across models: the 8B's manipulation is half as strong and less specific. Registry `b1c8.*` (2); report 29.
+
+## 2026-09-05 11:59Z — B1e's design on the 8B (box 6): H3 with a footprint-matched control
+`b1e_footprint_llama3-abl.json`: permdir removes 0.96× the emotion direction's norm and is inert; sad blocked 36% against it (q 0.002, secondary agrees), afraid 14% (q 0.08, marginal). Registry `b1e8.*`; report 30.
