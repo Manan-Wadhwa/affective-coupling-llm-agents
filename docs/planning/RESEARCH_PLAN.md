@@ -837,15 +837,23 @@ the transfer. The Paper B sentence becomes:
 > transfer; whether a higher-rank affect subspace or B's re-derivation from A's tokens carries
 > the rest is not distinguished by this design.*
 
-Open for Paper B: a rank-k subspace ablation and an attention-masking arm (PREREG §7); a
-footprint-matched control with its own contrast; a rewrite design that survives its check.
+**⟨2026-09-05 08:31Z⟩ B1d ran the rank-5 branch and returned instrument_failed** (report 27):
+the class-mean subspace shifts the readout at dose 0 and passes the §4.2 check for only 3/6
+emotions, so the readout and the ablation share a target; and the label-permuted control of the
+same footprint (removed norm 6.5–6.9 vs 0.66 for the rank-1 direction) blocks transfer for
+afraid, sad and angry as much as the emotion direction did. The emotion-specific increment over
+that control is 0.14 [−0.03, 0.29]. So: footprint alone blocks; B1c's afraid/sad rank-1 result
+keeps its small footprint and inert random control but now needs a footprint-matched rank-1
+control (top principal direction, or a permuted-label rank-1 direction) before it is called
+emotion-specific. Open for Paper B: that control; an attention-masking arm (PREREG §7); a
+manipulation check independent of the ablated subspace; a rewrite design that survives its check.
 
 ### 13.4 Runs launched under this rescope
 
 | run | box | purpose | status |
 |---|---|---|---|
 | A2 reruns (`runner_box6.sh`) | `sb-202c42d30b800e74` (box 6) | 8B fixed-λ arm (layers 14, 21, 27; anchor 600); 27B layer 54 at anchors 600 and 2000 | ✅ all done by 07:48Z: 8B 3 layers (report 24), layer 54 at both anchors (report 25); the first 8B launch failed on k (pool built with k = 220) and was relaunched |
-| **B1d** (`b1d_subspace.py`, GPU; pre-registered `PREREG_B1d.md` @ c3a38b4) | `sb-3fa82560d3da265a` (box 5) | rank-5 class-mean subspace ablation hs 13–63 with permuted-label and random-frame controls; decision `sub_all − perm_all` | ⏳ launched 2026-09-05 06:33Z after an independent verifier's GO (driver 940e418, prereg addendum fd20f51); ETA ≈ 09:00Z |
+| **B1d** (`b1d_subspace.py`, GPU; pre-registered `PREREG_B1d.md` @ c3a38b4) | `sb-3fa82560d3da265a` (box 5) | rank-5 class-mean subspace ablation hs 13–63 with permuted-label and random-frame controls; decision `sub_all − perm_all` | ✅ complete 08:31Z: verdict **instrument_failed** (report 27, `b1d.*`): the rank-5 subspace is not a clean instrument (readout baseline shifts; passes §4.2 for 3/6), and the label-permuted control itself blocks transfer for afraid/sad/angry — footprint alone blocks. Median `sub − perm` 0.14 [−0.03, 0.29] |
 | **B1c** (`b1c_alllayer.py`, GPU; B1's probe pool; pre-registered `PREREG_B1c.md` @ cc2dc32) | `sb-58e32f35598fd1b0` (box 3) | all-layer ablation hs 13–63, `rand_all`, `text`/`text_keep`, 4 doses, median-fraction decision rule | ✅ complete 22:05Z: verdict **H1** (0.09 [0.04, 0.25]); 8 `b1c.*` entries quotable; report 22 + blind critique; see §13.5 |
 | A2 add-ons (`a2_followup.py`, CPU) | `sb-ea69c0d19be26d97` (box 4) | second fixed-λ anchor n = 2000 at layers 43, 54; layer 54 at n = 600; fixed-λ arm on the 8B (layers 14, 21, 27) | ⚠️ layer 43 of the n = 2000 anchor complete (20:53Z; `a2f2.*`, report 23); layer 54 partial (22/48 cells); the layer-54 @ 600 and 8B sweeps **lost** — the operator's laptop suspended 22:24Z–05:51Z and both leases ended meanwhile |
 | A2 follow-up (`a2_followup.py`, CPU; features regenerated from the saved 27B pool by `a2_regen_feats.py`) | `sb-45376053750d2753` | tuned-C / fixed-λ logistic; std-space cosines; CAA-raw cross-estimator with CI; λ per fit | ✅ layers 16 + 43 complete (17:42Z); layer 54 lost when box 1's lease expired ~17:55Z. Four `a2f.*` entries quotable |

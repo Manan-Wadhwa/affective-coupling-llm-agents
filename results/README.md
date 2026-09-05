@@ -98,6 +98,8 @@ recorded" means the file carries no such field.
 | `b1_followup_qwen36-27b.json` | **RESULT · COMPLETE** | ceiling + text arms, seeded B, all ablated layers gated; `mixed`; emo−rand blocks 25–37% for two (three blocked-bootstrap) |
 | `b1c_alllayer_qwen36-27b.json` | **RESULT · COMPLETE · PRE-REGISTERED** | all-layer ablation (hs 13–63) + text/text_keep arms; verdict **H1**, median blocked 0.09 [0.04, 0.25]; layers 43–63 add nothing; rewrite arms uninterpretable 6/6 |
 | `b1c_cells_qwen36-27b.json` | RAW · checkpoint | per-arm-row checkpoint of the above |
+| `b1d_subspace_qwen36-27b.json` | **RESULT · COMPLETE · PRE-REGISTERED** | rank-5 class-mean subspace ablation hs 13–63 with permuted-label and random-frame controls; verdict **instrument_failed**; the permuted control itself blocks (footprint confound) |
+| `b1d_cells_qwen36-27b.json` | RAW · checkpoint | per-arm-row checkpoint of the above |
 | `a2_followup_qwen36-27b-nref2000.json` | **RESULT · layer 43 complete, layer 54 lost** | second fixed-penalty anchor (N_REF = 2000): no net rise with n (dip at 600, partial recovery), level 0.003–0.022 below the 600 anchor |
 | `a2f_cells_qwen36-27b-nref2000.json` | RAW · partial checkpoint | 22 of 48 layer-54 cells (plain logreg and part of logreg_cv) |
 | `a2_followup_llama3-abl.json` | **RESULT · COMPLETE** | 8B fixed-penalty arm (layers 14, 21, 27): split-half cosine falls with n at fixed per-sample penalty; dom rises to 0.94 |

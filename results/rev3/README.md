@@ -536,6 +536,23 @@ Pre-registration `docs/planning/PREREG_B1c.md` (122af4c 19:02Z, addendum cc2dc32
 - Rewrite arms uninterpretable 6/6 (neutral rewrite keeps 67–98% of A's readable affect; `text_keep − none` significant for desperate +31, happy −51, calm −66, sad −69; afraid loses 26%/20% of rewrites to refusals).
 - Reading: the rank-1 `dom` direction is insufficient to carry the transfer at any layer 13–63; what carries the rest is untested (PREREG §7). Report and blind critique: `results/reports/22_rev3_b1c_alllayer.md`.
 
+## B1d — pre-registered rank-5 subspace ablation — **COMPLETE, 2026-09-05 08:31Z; verdict instrument_failed**
+
+`PREREG_B1d.md` (c3a38b4 + addendum fd20f51, stamped inside the result: sha 784cd649, found = true). File `b1d_subspace_qwen36-27b.json` (360 arm-rows; arms none / emo_all / sub_all / perm_all / randsub_all; hs 13–63; B1c's pool). Gates: dom 0.88–0.93, subspace 0.856–0.931. Registry `b1d.*` (7); report 27.
+
+| emotion | none | emo_all | sub_all | perm_all | randsub | sub − perm | perm − none | share removed sub / perm |
+|---|---|---|---|---|---|---|---|---|
+| desperate | +84 | +77 | +70 | +82 | +80 | −11.5 [−28.0, +5.1] | −2.2 | 0.11 / 0.07 |
+| afraid | +212 | +160 | +189 | +162 | +208 | **+27.0 [+3.8, +48.2]** | **−49.5 [−70.2, −27.3]** | 0.61 / 0.07 |
+| happy | +48 | +59 | +50 | +53 | +56 | −2.4 [−41.8, +36.0] | +4.9 | 1.25 / 0.52 |
+| calm · untestable | +44 | +1 | −14 | +55 | +49 | −69.2 [−104.8, −32.6] | +10.7 | 1.19 / 0.39 |
+| sad | +98 | +70 | +45 | +71 | +99 | **−25.7 [−49.0, −3.3]** | **−26.7 [−49.0, −4.5]** | 1.06 / 0.50 |
+| angry | +196 | +178 | +118 | +152 | +184 | **−33.8 [−65.3, −4.5]** | **−44.3 [−80.4, −11.9]** | 0.38 / 0.30 |
+
+- Instrument: `sub_all` passes §4.2 for 3/6 and shifts the dose-0 readout (desperate 0.11 → 0.50, calm 0.28 → 0.02) — the readout and the ablation share a target. Removed norm 6.9 (sub) / 6.5–6.9 (perm) / 3.2 (random 5-frame) / 0.66 (rank-1).
+- The permuted-label control blocks transfer for afraid, sad, angry as much as the rank-1 direction did: footprint alone blocks. Descriptive median `sub − perm` 0.137 [−0.027, 0.286].
+- `none` and `emo_all` reproduce B1c bit for bit. Next controlled step: a footprint-matched rank-1 control for B1c's afraid/sad claim.
+
 ## Provenance gaps introduced by these files (to close, not to hide)
 
 1. ~~B1 stability gate 0.909 — no committed artifact~~ — closed by the rerun's `b1_e4rerun_qwen36-27b.json` (0.907; a new measurement).
