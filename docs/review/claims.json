@@ -1287,6 +1287,58 @@
    },
    "expected": 0.5539,
    "tol": 0.001
+  },
+  {
+   "id": "a2f8.lam_declines",
+   "text": "A2 follow-up on Llama-3-8B-abliterated (pool n = 3898, d = 4096; anchor N_REF = 600, per-sample penalty 1/600 at every n): with the penalty schedule controlled, the logistic direction's split-half cosine FALLS with n at all three layers -- focus layer 21 raw 0.363, 0.369, 0.325, 0.306, 0.276 at n = 75, 150, 300, 600, 1200 per half (paired over the 10 shared splits, 150 -> 1200: -0.093, 0 of 10 positive); layer 14: 0.367 -> 0.318 (-0.050, 1/10); layer 27: 0.357 -> 0.281 (-0.076, 0/10); difference-of-means rises 0.70 -> 0.94 over the same n",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/24_rev3_a2_followup_8b.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "n = 2000 per half is impossible on this pool (3898/2 = 1949) and is skipped. Plain logreg (C = 0.5) peaks at n = 300-600 and declines slightly (L21 0.306 -> 0.286); tuned C rises to 0.37-0.41. So the 8B's n/d ordering violation from A2 is not a fixed-C artefact: it survives a fixed per-sample penalty and is stronger under it. Provenance defects as before: model/model_revision empty (the regen log records rev dd67dd05); the box's acl_core is the pre-rank-k copy (3da064ad), immaterial to this CPU driver; code_sha 2a45c175.",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_llama3-abl.json",
+    "json_path": "by_layer.21.stability.logreg_lam.1200.raw.mean",
+    "config": {
+     "by_layer.21.stability.logreg_lam.150.raw.mean": 0.3690328519829681,
+     "n_pool": 3898,
+     "target_n": [
+      75,
+      150,
+      300,
+      600,
+      1200,
+      2000
+     ]
+    }
+   },
+   "expected": 0.276,
+   "tol": 0.001
+  },
+  {
+   "id": "a2f8.cross_estimator",
+   "text": "A2 follow-up on the 8B: at n = 1200 per half the CAA (class-mean-difference, raw) direction and the raw logistic direction agree at cosine 0.34 [0.33, 0.34] at layer 21 (0.37 at layer 14, 0.33 at layer 27), while CAA and difference-of-means agree at 0.90-0.92; logistic vs difference-of-means 0.37-0.42",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/24_rev3_a2_followup_8b.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Same like-for-like cross-estimator design as the 27B (0.427 there, report 21); 10 independent subsamples; cross_estimator_degenerate is false at all three layers.",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_llama3-abl.json",
+    "json_path": "by_layer.21.cross_estimator.caa_raw|logreg_raw.mean"
+   },
+   "expected": 0.336,
+   "tol": 0.002
   }
  ]
 }

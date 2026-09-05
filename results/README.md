@@ -100,6 +100,8 @@ recorded" means the file carries no such field.
 | `b1c_cells_qwen36-27b.json` | RAW · checkpoint | per-arm-row checkpoint of the above |
 | `a2_followup_qwen36-27b-nref2000.json` | **RESULT · layer 43 complete, layer 54 lost** | second fixed-penalty anchor (N_REF = 2000): no net rise with n (dip at 600, partial recovery), level 0.003–0.022 below the 600 anchor |
 | `a2f_cells_qwen36-27b-nref2000.json` | RAW · partial checkpoint | 22 of 48 layer-54 cells (plain logreg and part of logreg_cv) |
+| `a2_followup_llama3-abl.json` | **RESULT · COMPLETE** | 8B fixed-penalty arm (layers 14, 21, 27): split-half cosine falls with n at fixed per-sample penalty; dom rises to 0.94 |
+| `a2f_cells_llama3-abl.json` | RAW · checkpoint | per-cell checkpoint of the above |
 | `b1_cells_*`, `b1f_cells_*`, `b1_summary_*`, `b1_partial_summary.json` | CHECKPOINT / DERIVED / SUPERSEDED | per-cell arrays and analyzer outputs |
 | `a2_estimator_qwen36-27b.json` | **RESULT · COMPLETE** | 7 depths; focus dom 0.974 vs logreg 0.566 |
 | `a2_estimator_llama3-abl.json` | **RESULT · COMPLETE** | 7 depths; focus dom 0.941 vs logreg 0.286; n/d ordering reproduces |

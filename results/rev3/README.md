@@ -442,6 +442,10 @@ should be checked before any per-class claim.
 
 ---
 
+## A2 follow-up on Llama-3-8B-abliterated — fixed per-sample penalty, tuned C, both spaces — **COMPLETE (layers 14, 21, 27), 2026-09-05 06:35Z**
+
+File `a2_followup_llama3-abl.json` (anchor 600; n = 2000 skipped, pool 3898). Raw-space split-half cosines, focus layer 21: plain logreg 0.267 / 0.297 / 0.306 / 0.306 / 0.286, tuned C 0.302 / 0.352 / 0.379 / 0.372 / 0.384, **fixed penalty 0.363 / 0.369 / 0.325 / 0.306 / 0.276**, dom 0.526 / 0.697 / 0.820 / 0.895 / 0.941 at n = 75 / 150 / 300 / 600 / 1200. Fixed-penalty 150 → 1200 paired: −0.050 (L14), −0.093 (L21), −0.076 (L27); 1, 0, 0 of 10 splits positive. Cross-estimator at n = 1200: CAA-raw ↔ logreg-raw 0.37 / 0.34 / 0.33, CAA ↔ dom 0.90–0.92. Registry `a2f8.*`; report 24.
+
 ## A2 follow-up — tuned C, fixed effective penalty, both spaces, like-for-like cross-estimator — **layers 16 and 43 complete; layer 54 lost to the lease**
 
 **Files:** `a2_followup_qwen36-27b.json` (provenance-stamped, `code_sha` set, written after
