@@ -1411,7 +1411,7 @@
   },
   {
    "id": "a2m.separable_every_n",
-   "text": "A2 margin diagnostic (27B, layers 43 and 54; the same standardisation, solver, splits and seeds as the follow-up's fits): every multinomial logistic fit on every half at every n from 75 to 2000 per half is a perfect separator of its training half -- training accuracy 1.000, training log-loss <= 0.002, converged in 8-25 lbfgs iterations, minimum multinomial margin 3.4-6.8 -- under the fixed per-sample penalty (C_n = 0.5*600/n), the fixed C = 0.5, and a 100x weaker penalty (C = 50) alike",
+   "text": "A2 margin diagnostic (27B, layers 43 and 54; the same standardisation, solver, splits and seeds as the follow-up's fits): every multinomial logistic fit on every half at every n from 75 to 2000 per half is a perfect separator of its training half -- training accuracy exactly 1.000 in every cell, arm and seed; seed-mean training log-loss <= 0.002 (worst single fit on the 27B 0.003), seed-mean iterations 8-25, minimum multinomial margin >= 3.3 (seed means 3.4-6.8) -- under the fixed per-sample penalty (C_n = 0.5*600/n), the fixed C = 0.5, and a 100x weaker penalty (C = 50) alike",
    "appears_in": [
     "results/rev3/README.md",
     "docs/review/RESULTS_LOG.md",
@@ -1420,7 +1420,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "n per half <= 2000 < d = 5120 throughout, so separability is expected; the point is that the likelihood term is saturated at every n: the fitted direction is the penalty's tie-break among separating hyperplanes (the minimum-norm / max-margin direction), not a likelihood-driven estimate, at every n the follow-up battery used. This is what the report-24/25 critic's 'likelihood takes over as n grows' reading assumed and the files could not test. Five split seeds (the first five of the follow-up's ten); sh_lam reproduces a2_followup's logreg_lam per seed to 1e-9 (selftest and the L43/L54 values: 0.581 vs 0.581 at n = 2000).",
+   "note": "n per half <= 2000 < d = 5120 throughout, so separability is expected; the point is that the likelihood term is saturated at every n: the fitted direction is the penalty's tie-break among separating hyperplanes (the minimum-norm / max-margin direction), not a likelihood-driven estimate, at every n the follow-up battery used. This is what the report-24/25 critic's 'likelihood takes over as n grows' reading assumed and the files could not test. Five split seeds (the first five of the follow-up's ten); sh_lam reproduces a2_followup's logreg_lam per seed to 1e-9 (selftest and the L43/L54 values: 0.581 vs 0.581 at n = 2000). Corrected after the delta critique (report 26): the first wording quoted seed means as bounds (worst per-seed min-margin 3.275 at layer 54, n = 2000).",
    "pointer": {
     "script": "src/rev3/a2_margin_diag.py",
     "file": "results/rev3/a2_margin_qwen36-27b-l43.json",
@@ -1446,7 +1446,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "So the plateau of the logistic split-half cosine at ~0.55-0.60 is the reproducibility of the max-margin separator itself in the n << d regime, not a penalty artefact: there is no likelihood-driven direction for the fit to move toward. Difference-of-means on the same halves reaches 0.974 / 0.979.",
+   "note": "So the logistic direction at these n is the penalty's tie-break among separating hyperplanes, not a likelihood estimate. Whether it sits at the max-margin (C -> inf) limit is NOT shown: C = 50 is one point, ||W|| moves only 1.9 -> 3.0, and cos(lam, weak) degrades with n (0.9995 -> 0.981 on the 27B, 0.998 -> 0.964 on the 8B), so the direction is increasingly penalty-sensitive; since the split-half cosine falls with C, the 0.55-0.60 plateau is an UPPER bound on the max-margin limit (the C = 50 value is 0.52). Wording corrected after the delta critique (report 26), which rejected 'the reproducibility of the max-margin separator itself'. Difference-of-means on the same halves reaches 0.974 / 0.979.",
    "pointer": {
     "script": "src/rev3/a2_margin_diag.py",
     "file": "results/rev3/a2_margin_qwen36-27b-l43.json",
@@ -1470,7 +1470,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "With few points the max-margin separator is close to the mean-difference direction; with more points it is pinned by support vectors and departs from it. The minimum margin falls 6.7 -> 3.4 and ||W|| rises 1.07 -> 1.94 over the same n. This is the mechanism behind the A2/A2-follow-up plateau: two halves' max-margin directions agree at ~0.58 because they share the population means only partly and the support sets not at all. Interpretation ours; numbers from the file.",
+   "note": "Consistent with, but not establishing, a support-vector mechanism (few points: separator near the mean difference; more points: pinned elsewhere) -- the file records no support-vector count or active set, and an equally good account is that at n << d every estimator is shrunk toward the same near-minimum-norm object and each resolves its own population target as n grows. Minimum margin falls 6.7 -> 3.4 and ||W|| rises 1.07 -> 1.94 over the same n. Interpretation flagged as a story by the delta critique (report 26); numbers from the file.",
    "pointer": {
     "script": "src/rev3/a2_margin_diag.py",
     "file": "results/rev3/a2_margin_qwen36-27b-l43.json",
@@ -1485,7 +1485,7 @@
   },
   {
    "id": "a2m.8b_same_regime",
-   "text": "A2 margin diagnostic on the 8B (layer 21, pool 3898, d = 4096): the same regime -- every fit a perfect separator (accuracy 1.000, log-loss <= 0.005, <= 78 iterations) at n = 75 ... 1200 per half; the 100x weaker penalty gives the same direction (cosine 0.998 -> 0.964) and no better reproducibility (split-half 0.288 vs 0.282 at n = 1200); the separator departs from the difference-of-means direction faster than on the 27B (cosine 0.913, 0.821, 0.668, 0.551, 0.434 at n = 75 ... 1200, against 0.974 -> 0.677 on the 27B at the same n) while difference-of-means reaches 0.941",
+   "text": "A2 margin diagnostic on the 8B (layer 21, pool 3898, d = 4096): the same regime -- every fit a perfect separator (accuracy exactly 1.000; seed-mean log-loss <= 0.005, worst single fit 0.0055; seed-mean iterations up to 78, worst 80) at n = 75 ... 1200 per half; the 100x weaker penalty gives the same direction (cosine 0.998 -> 0.964) and no better reproducibility (split-half 0.288 vs 0.282 at n = 1200); the separator departs from the difference-of-means direction faster than on the 27B (cosine 0.913, 0.821, 0.668, 0.551, 0.434 at n = 75 ... 1200, against 0.974 -> 0.677 on the 27B at the same n) while difference-of-means reaches 0.941",
    "appears_in": [
     "results/rev3/README.md",
     "docs/review/RESULTS_LOG.md",
@@ -1494,7 +1494,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "The 8B's fixed-penalty DECLINE (report 24) is therefore the separator moving from a mean-difference-like direction at small n (cos 0.91, split-half 0.37) to a support-vector-pinned direction at larger n whose own reproducibility is ~0.29 (the weak-penalty split-half). The likelihood never takes over: training loss <= 0.005 throughout. The report-24 critic's mechanism was half right (the solution leaves the small-n object) and half wrong (it is not the likelihood pulling it).",
+   "note": "The 8B's fixed-penalty DECLINE (report 24) is therefore the separator moving from a mean-difference-like direction at small n (cos 0.91, split-half 0.37) to a direction at larger n that is further from the mean difference and whose reproducibility under a 100x weaker penalty is ~0.29 (whether it is support-vector-pinned is not measured). The likelihood never takes over: training loss <= 0.005 throughout. The report-24 critic's mechanism was half right (the solution leaves the small-n object) and half wrong (it is not the likelihood pulling it).",
    "pointer": {
     "script": "src/rev3/a2_margin_diag.py",
     "file": "results/rev3/a2_margin_llama3-abl-l21.json",
