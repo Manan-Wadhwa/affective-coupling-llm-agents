@@ -68,3 +68,7 @@ Complete for 27B layers 43 and 54 and 8B layer 21. Feeds RESEARCH_PLAN §2.1 (Pa
 - **C5:** the reproduction is stronger than I claimed (1e-15 on real data); recorded.
 - **(4):** the critic's Paper A item-2 sentence is adopted in RESEARCH_PLAN §2.1 verbatim.
 - **Defects** (5 seeds, no CI, one weak C, missing `n_cls` assert): recorded as §12 to-dos; the script is not edited post hoc for these files.
+
+
+## Addendum — v2 with ten seeds, CIs and a second weak penalty (2026-09-05 09:04Z; `a2_margin_*-v2.json`)
+Answering the critique's defects. Layer 43, n = 2000: `lam` 0.581 [0.570, 0.589] vs C = 500 0.522 [0.499, 0.535]; cos(lam, dom) 0.633 [0.618, 0.641]; accuracy 1.000 everywhere, worst log-loss 0.0022. 8B layer 21, n = 1200: `lam` 0.276 [0.255, 0.290] vs C = 500 0.278 [0.253, 0.293]; cos(lam, dom) 0.435 [0.423, 0.450]; worst log-loss 0.0056. The five-seed numbers sit inside these intervals. **New caveat:** C = 500 reproduces C = 50 exactly (cos(weak, weak2) = 1.000 and the same ‖W‖ at every n), so lbfgs stops in the same flat region of the separable objective at both and the weak arms say nothing about the C → ∞ limit — which strengthens the critic's point that the max-margin identification is unproven. The lam-vs-weak gap on the 27B (0.58 vs 0.52, CIs disjoint) stands: raising C lowers reproducibility. Layer 54 v2 follows when it lands.

@@ -1699,6 +1699,31 @@
    },
    "expected": 0.345,
    "tol": 0.001
+  },
+  {
+   "id": "a2m.v2_ten_seeds",
+   "text": "A2 margin diagnostic v2 (ten seeds, percentile CIs over seeds, a second weak penalty C = 500): at 27B layer 43, n = 2000 per half, the fixed-penalty logistic split-half cosine is 0.581 [0.570, 0.589] against 0.522 [0.499, 0.535] under C = 500, and cos(lam, dom) is 0.633 [0.618, 0.641]; on the 8B at n = 1200, 0.276 [0.255, 0.290] vs 0.278 [0.253, 0.293] and cos(lam, dom) 0.435 [0.423, 0.450]; every fit still separates its half perfectly (accuracy 1.000; worst log-loss 0.0022 / 0.0056). C = 500 reproduces C = 50 to three decimals in direction and in ||W|| at every n (cos(weak, weak2) = 1.000), so the two weak arms are the same tolerance-limited solution and bound nothing about the C -> infinity limit",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/26_rev3_a2_margin.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Answers report 26's critique on seeds and CIs; the weak-penalty identity is a new caveat: lbfgs stops in the same flat region of the separable objective at C = 50 and C = 500, so 'penalty-independent' rests on the lam-vs-weak comparison only, and the max-margin limit remains unreached. The five-seed v1 numbers are within these CIs.",
+   "pointer": {
+    "script": "src/rev3/a2_margin_diag.py",
+    "file": "results/rev3/a2_margin_qwen36-27b-l43-v2.json",
+    "json_path": "by_layer.43.2000.sh_lam.mean",
+    "config": {
+     "by_layer.43.2000.sh_weak2.mean": 0.5216393575312455,
+     "by_layer.43.2000.cos_weak_weak2.mean": 0.9999989230642358,
+     "by_layer.43.2000.lam_train_acc.mean": 1.0
+    }
+   },
+   "expected": 0.581,
+   "tol": 0.001
   }
  ]
 }
