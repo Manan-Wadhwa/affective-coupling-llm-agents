@@ -47,13 +47,17 @@ def run(X, y, targets, seeds, label):
             dl1, dl2 = raw_dirs(L1, n_cls), raw_dirs(L2, n_cls); dd1, dd2 = raw_dirs(D1, n_cls), raw_dirs(D2, n_cls)
             # projections of held-out half (h2) on the half-1 directions, per class, correlation between estimators
             Xo = X[h2]; corr = float(np.mean([np.corrcoef(Xo @ dl1[i], Xo @ dd1[i])[0, 1] for i in range(n_cls)]))
+            def unit(M): return M / (np.linalg.norm(M, axis=1, keepdims=True) + 1e-9)
+            sl1, sl2 = unit(L1["C"]), unit(L2["C"]); sd1, sd2 = unit(D1["C"]), unit(D2["C"])   # standardised-coordinate rows
             cells.append({"sh_logreg": float(np.mean(np.sum(dl1 * dl2, 1))), "sh_dom": float(np.mean(np.sum(dd1 * dd2, 1))),
+                          "sh_logreg_std": float(np.mean(np.sum(sl1 * sl2, 1))), "sh_dom_std": float(np.mean(np.sum(sd1 * sd2, 1))),
+                          "cos_logreg_dom_std": float(np.mean(np.sum(sl1 * sd1, 1))),
                           "train_acc_logreg": L1["train_acc"], "heldout_acc_logreg": heldout_acc({"C": L1["C"], "mu": L1["mu"], "sd": L1["sd"], "b": L1["b"]}, X[h2], y[h2]),
                           "heldout_acc_dom": heldout_acc(D1, X[h2], y[h2]), "proj_corr_logreg_dom_heldout": corr,
                           "cos_logreg_dom_same_half": float(np.mean(np.sum(dl1 * dd1, 1)))})
         agg = {k: {"mean": float(np.mean([c[k] for c in cells])), "ci": [float(x) for x in np.percentile([c[k] for c in cells], [2.5, 97.5])]} for k in cells[0]}
         agg["n_seeds"] = len(cells); out[str(n)] = agg
-        print(f"[lowd {label}] n={n:5d} sh logreg {agg['sh_logreg']['mean']:.3f} dom {agg['sh_dom']['mean']:.3f} | train acc {agg['train_acc_logreg']['mean']:.3f} heldout logreg {agg['heldout_acc_logreg']['mean']:.3f} dom {agg['heldout_acc_dom']['mean']:.3f} | proj corr {agg['proj_corr_logreg_dom_heldout']['mean']:.3f} cos same-half {agg['cos_logreg_dom_same_half']['mean']:.3f}", flush=True)
+        print(f"[lowd {label}] n={n:5d} sh(std) logreg {agg['sh_logreg_std']['mean']:.3f} dom {agg['sh_dom_std']['mean']:.3f} | sh(raw) logreg {agg['sh_logreg']['mean']:.3f} dom {agg['sh_dom']['mean']:.3f} | train acc {agg['train_acc_logreg']['mean']:.3f} heldout logreg {agg['heldout_acc_logreg']['mean']:.3f} dom {agg['heldout_acc_dom']['mean']:.3f} | proj corr {agg['proj_corr_logreg_dom_heldout']['mean']:.3f} cos same-half {agg['cos_logreg_dom_same_half']['mean']:.3f}", flush=True)
     return out
 
 

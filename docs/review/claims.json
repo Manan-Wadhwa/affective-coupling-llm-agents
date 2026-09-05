@@ -2013,6 +2013,69 @@
    },
    "expected": 0.14,
    "tol": 0.05
+  },
+  {
+   "id": "a2l.lowd_recovers",
+   "text": "Low-dimensional control (27B layer 43; activations projected on their top-100 principal components fitted on the whole 4,253-item pool; same splits and seeds): with n per half from 75 to 2000 (n/d' up to 20) the logistic fits stop separating their halves perfectly from n = 600 (training accuracy 0.999, 0.989, 0.974 at n = 600, 1200, 2000), the logistic direction's split-half cosine in standardised coordinates rises 0.39 -> 0.90 and difference-of-means 0.33 -> 0.94, and the same-half cosine between the two estimators stays at 0.91-0.94 across n instead of falling (full width: 0.90 -> 0.62); held-out six-way accuracy in 100 dimensions is 0.92 against 0.94 at full width",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Reviewer 2's W1: the separator tie-break is the n < d regime, not a property of these activations; when n >> d' the logistic direction converges like difference-of-means. At d' = 300 (n/d' <= 6.7) both estimators are still poor at small n and reach 0.84 / 0.83 at n = 2000. Raw-space cosines are not meaningful in PCA coordinates (the raw_direction convention divides by per-coordinate variance) and are ignored.",
+   "pointer": {
+    "script": "src/rev3/a2_lowd_control.py",
+    "file": "results/rev3/a2_lowd_qwen36-27b-l43-v2.json",
+    "json_path": "by_dim.100.cells.2000.sh_logreg_std.mean",
+    "config": {
+     "by_dim.100.cells.2000.sh_dom_std.mean": 0.9376348834605178,
+     "by_dim.100.cells.2000.train_acc_logreg.mean": 0.9743,
+     "by_dim.full.cells.2000.cos_logreg_dom_std.mean": 0.617123134106413
+    }
+   },
+   "expected": 0.9008,
+   "tol": 0.001
+  },
+  {
+   "id": "a2l.heldout_and_projcorr",
+   "text": "27B layer 43, full width: the logistic probe decodes held-out items better than difference-of-means at every n (six-way accuracy 0.82, 0.87, 0.89, 0.92, 0.93, 0.94 against 0.79, 0.86, 0.86, 0.87, 0.88, 0.88 at n = 75 ... 2000), and the two estimators' projections of the held-out half correlate at 0.96, 0.94, 0.94, 0.94, 0.91, 0.90 -- the instability of the logistic direction is largely geometric",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Reviewer 2's W2 and the mentor's Q9. The 8B shows the same ordering (held-out 0.62 -> 0.76 logistic vs 0.61 -> 0.69 dom; projection correlation 0.93 -> 0.85).",
+   "pointer": {
+    "script": "src/rev3/a2_lowd_control.py",
+    "file": "results/rev3/a2_lowd_qwen36-27b-l43-v2.json",
+    "json_path": "by_dim.full.cells.2000.heldout_acc_logreg.mean",
+    "config": {
+     "by_dim.full.cells.2000.heldout_acc_dom.mean": 0.88355,
+     "by_dim.full.cells.2000.proj_corr_logreg_dom_heldout.mean": 0.9019013462057904
+    }
+   },
+   "expected": 0.9379,
+   "tol": 0.001
+  },
+  {
+   "id": "a2l.8b_lowd",
+   "text": "Low-dimensional control on the 8B (layer 21, top-100 components of the 3,898-item pool): training accuracy falls to 0.90 at n = 1200, the logistic split-half cosine rises 0.32 -> 0.81 (standardised) against difference-of-means 0.29 -> 0.85, and the same-half cosine between the estimators stays at 0.86-0.93 (full width: 0.84 -> 0.46)",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Same regime dependence on the second model.",
+   "pointer": {
+    "script": "src/rev3/a2_lowd_control.py",
+    "file": "results/rev3/a2_lowd_llama3-abl-l21-v2.json",
+    "json_path": "by_dim.100.cells.1200.sh_logreg_std.mean",
+    "config": {
+     "by_dim.100.cells.1200.train_acc_logreg.mean": 0.9039999999999999
+    }
+   },
+   "expected": 0.8095,
+   "tol": 0.001
   }
  ]
 }

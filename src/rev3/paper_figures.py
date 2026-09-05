@@ -70,7 +70,7 @@ def fig3():
         ax.set_title(f"{e}: slope {sl['slope']:+.0f} [{sl['ci'][0]:+.0f}, {sl['ci'][1]:+.0f}]; steps {sh['step_0_to_033']['diff']:+.0f}, {sh['step_067_to_1']['diff']:+.0f}", fontsize=8.5); ax.grid(alpha=.3)
     for ax in axes[1]: ax.set_xlabel("steering dose on A")
     for ax in axes[:, 0]: ax.set_ylabel("B's present-emotion projection")
-    axes[0, 1].legend(fontsize=7.5, loc="lower right"); fig.suptitle("B1c: B's dose-response under ablation of A's span (29 scenarios × 3 reps; bands: scenario-bootstrap 95% CI of the per-dose mean; title steps: paired dose 0→0.33 and 0.67→1 changes)", fontsize=9)
+    axes[0, 1].legend(fontsize=7.5, loc="lower right"); fig.suptitle("B1c: B's dose-response under ablation of A's span (29 scenarios × 3 reps; bands: scenario-bootstrap 95% CIs; steps: paired 0→0.33 and 0.67→1 changes)", fontsize=8.5)
     fig.tight_layout(); fig.savefig(f"{OUT}/fig3_b1c_dose_response.png", dpi=180); fig.savefig(f"{OUT}/fig3_b1c_dose_response.pdf"); plt.close(fig)
 
 

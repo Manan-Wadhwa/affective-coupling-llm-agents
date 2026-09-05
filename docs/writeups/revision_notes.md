@@ -1,24 +1,27 @@
-# Authors' revision notes — claimed fixes in the submitted PDF (for the area chair)
+# Authors' revision notes — claimed fixes in the revised PDF, in response to Reviewers 1–3 (for the area chair)
 
-The submission is the second full version. Between the first draft and this PDF the following fixes were made; each is a claim the AC may spot-check in the PDF.
+Each item names the reviewer point it answers and where in the revised PDF the fix can be checked.
 
-1. Abstract rewritten to state results with numbers and no hedging; no registry identifiers in the abstract.
-2. Introduction restructured: context, single idea, evidence, consequence, and a bulleted contributions list (four items).
-3. "Replicated three times" corrected to "one sampling replication and two bit-identical pipeline reproductions on one pool" (abstract) and "three runs that reproduce each other bit for bit" (introduction/§4).
-4. The none-arm slope range corrected from "+84 to +212" to "+48 to +212" (§4), happy being +48 [+8, +88].
-5. "Depth-specific, never converging" replaced by a proportional-regime statement: no convergence over the reachable range (n ≤ 2000, d = 5120), not an asymptotic claim (§3).
-6. The B1d false-discovery line (q = 0.051) moved from the permuted-subspace-vs-none sentence to the emotion-specific-increment sentence, where it belongs (§5).
-7. The random-control sentence in B1c made descriptive: five of six slopes within 5%, happy +28% with overlapping CIs, no random-vs-none contrast computed (§5).
-8. "Pre-registration before the driver existed (B1c, B1d, B1e)" corrected: B1d and B1e before their drivers and stamped; B1c after its driver, before its run, unstamped (§8/Practice, now in Conclusion).
-9. The abstract's control sentence corrected: a fitted rank-1 label-free direction is inert; only a fitted rank-5 frame blocked; whether rank or footprint matters is untested.
-10. "In the counter-paper's own units" softened to "closer to theirs than our split-half battery, though still not identical" (§3).
-11. "Three penalties spanning 1000×" replaced by "the fixed schedule and C = 0.5, 50 and 500 alike (the two weak arms being one tolerance-limited solution)" (§3).
-12. Rank-5 vs rank-1 reported in both directions (afraid +29.3, angry −60.6) rather than only afraid (§5).
-13. pc1's calm effect labelled knife-edge on an untestable emotion (§5).
-14. "Two interpretive sentences rejected by review" corrected to seven withdrawn (introduction and Conclusion).
-15. "Happy's response is weak and non-monotone" replaced by "the weakest of the five (+48 [+8, +88])" (§4).
-16. "Layers 43–63 add nothing detectable for four emotions" replaced by "changes no dose-response detectably, with the extra blocking bounded under 0.08 for four emotions (driver-declared)" (§5).
-17. Limitations extended with provenance limits, now in Appendix A with a pointer from §7.
-18. Figure captions each open with the takeaway; figure palette changed to a colour-blind-safe one.
-19. A Conclusion section added that states the single idea and the rule for controls; a reproducibility statement added (models, revisions, hardware, software, run times, seed rules, hyperparameters, statistics, data availability).
-20. Every number in the introduction's prior-work paragraph now carries a registry identifier; the unregistered 8B legacy figure (0.22) was dropped.
+1. **Estimator-study pool described** (R1 W1-type, R2 mismatch 6, R3 W1, mentor 1): Section 2 "Two pools" names the 4,253-item (27B) and 3,898-item (8B) generation pools used for the split-half study, separate from the 1,615-item probe pool used for the ablations, and states why n = 2000 per half exists on one and not the other.
+2. **Random-versus-none contrast computed** (R1 W3, R3 W3, R2 mismatch 8): Table 2 row "B1c random direction (rank 1)" and Section 5 B1c: inert for all six emotions, happy +13.5 [−0.1, +28.4], q ≥ 0.26 (`rev.b1c_random_vs_none`).
+3. **Random 5-frame reported** (R2 W3, R1 W2): Table 2 row "B1d random 5-frame", inert (q ≥ 0.51); its footprint (3.1–3.2, 5× the emotion direction) in Table 3.
+4. **Every arm against baseline in one table with one significance standard** (R1 W1, R3 W7, R2 W7ii): Table 2 (blocked fraction of the none slope, * = BH-FDR q < 0.05 within the arm's five testable emotions, · = unadjusted only); Table 1 re-marked with the same convention; Figure 4 redrawn from Table 2 with the marks explained.
+5. **FDR status corrected** (R1 W1, stats audit 6–7): the permuted-label rank-5 frame's blocks clear BH-FDR against baseline (q 0.001 / 0.035 / 0.013); the q = 0.051 belongs to the affect-minus-permuted contrast and is placed there; against baseline sad's rank-1 block does not clear (q 0.115) and this is stated.
+6. **Dose-0 readout shift for every B1d arm and the pc1 arm** (R1 W2, mentor): Table 3 column "dose-0 shift" (affect subspace +0.39/−0.25; permuted ≤ 0.08; random frame ≤ 0.01; pc1 +0.55/−0.28).
+7. **Footprint defined once with one denominator** (mentor 4, R2 mismatch 3, R3 mismatch 3–4): Section 2 "Footprint" and Table 3; all ratios relative to the emotion direction in the same run; the "twice the norm / 1.22" pair reconciled (1.15–1.26 absolute = 2.0×); "0.85×" given with its per-emotion values.
+8. **Other-speaker probe reported** (R2 W4, R3 W2): Section 4 "What the probe measures" gives the other-speaker projection's slopes beside the present ones (`rev.other_probe_rises`) and withdraws the "its own state" construct claim in the abstract and contributions.
+9. **Dose-response shape** (R1 W5, R2 W7iv, R3 W4, mentor 2): Figure 3 now carries scenario-bootstrap bands on every arm and paired dose-step changes in each title; Section 4 reports happy's saturation and calm's reversal (`rev.dose_shape`); the caption no longer asserts separation for calm.
+10. **"Bit for bit" reclassified as a determinism check** (R1 W10, R3 W6): Section 1 and Section 4; the independent sampling replication is the B1 follow-up run.
+11. **Per-layer refitting and "readable layer" defined** (R2 W5, Q1–2): opening paragraph of Section 5.
+12. **Held-out accuracy and projection correlation** (R2 W2, mentor Q9): Section 3 "Is this just n < d, and does it cost anything?": logistic decodes held-out items better (0.93 vs 0.88 at n = 1200) and the two estimators' projections correlate at 0.91–0.96.
+13. **Low-dimensional control** (R2 W1, Q6): same paragraph; projected to d′ = 100 the fits stop separating (training accuracy 0.97 at n = 2000) and logistic reproducibility rises to 0.71 against difference-of-means 0.77 in standardised coordinates (standardised-coordinate cosines; `a2l.lowd_recovers`, `a2l.8b_lowd`).
+14. **Regime-conditional wording** (R1 W9, R2 W1): abstract and Section 3 state the n < d condition explicitly.
+15. **Median with calm and per-emotion values** (R1 W11, R3 W3, stats audit 17): Section 5 B1c gives the five per-emotion values, the median with calm (15%), and labels the interval a scenario bootstrap of the median; the testability rule's pre-registration is cited in Appendix A.
+16. **Numerical mismatches corrected** (all reviewers): tuned-C 8B "0.38 (0.37–0.41 across three depths)"; "hundredfold or thousandfold" with C = 50 and 500 named; related-work range "0.55–0.61 / 0.28–0.38"; 0.63 vs 0.43 explained as two different mean-difference conventions; "27-fold" restricted to the 27B; the rank-5-vs-rank-1 numbers given in slope units with their sign convention; Figure 1's 8B axis ends at 1200; the fixed-penalty anchor is named in every figure and caption.
+17. **Title** now says three pre-registered ablations (R1 W7).
+18. **Captions rewritten from the panels** (mentor 6, R1 W7, R3 W4): Figures 1, 3 and 4.
+19. **Citations** (citation audit): Braun et al. characterised correctly (they do refit; mean-difference vectors converge at 200–500 draws); RAPTOR's robustness quoted as 0.87–0.98; Soudry et al. (implicit bias on separable data), Benjamini–Hochberg, Efron–Tibshirani, and two emotional-contagion papers added; Panickssery/Turner records updated.
+20. **Abstract narrowed** (R3 W5, stats audit 3/5/10): "a fitted, label-free control blocks where the random one is inert" now specifies the rank-5 permuted frame, states that the rank-1 permuted direction and the random 5-frame are inert, and says the rank/footprint question is untested; "at most a third" removed; the 8B afraid caveat added.
+21. **Anonymity** (R2): the submitted PDF still carries the author line; the camera-ready decision is the authors', and the AC is asked to disregard it.
+
+Not done in this revision (stated as limitations): an ablation rerun with the logistic direction; across-draw variability of the direction estimate; a footprint-scaled random 5-frame; cross-experiment multiplicity control; n > d on the full width.
