@@ -34,7 +34,7 @@ def fig1():
             ax.plot(ns, m, style, label=lab, ms=4); ax.fill_between(ns, lo, hi, alpha=.15)
         ax.set_xscale("log"); ax.set_xticks([75, 150, 300, 600, 1200, 2000]); ax.set_xticklabels([75, 150, 300, 600, 1200, 2000], fontsize=8)
         ax.set_title(title, fontsize=10); ax.set_xlabel("n per half"); ax.grid(alpha=.3)
-    axes[0].set_ylabel("split-half cosine (10 disjoint splits)"); axes[0].set_ylim(0.2, 1.0); axes[2].legend(fontsize=8, loc="lower right")
+    axes[0].set_ylabel("split-half cosine (10 disjoint splits)"); axes[0].set_ylim(0.2, 1.0); axes[0].legend(fontsize=7.5, loc="lower right")
     fig.tight_layout(); fig.savefig(f"{OUT}/fig1_splithalf_vs_n.png", dpi=180); fig.savefig(f"{OUT}/fig1_splithalf_vs_n.pdf"); plt.close(fig)
 
 
@@ -48,10 +48,10 @@ def fig2():
             m = [b[str(n)][key]["mean"] for n in ns]; ci = [b[str(n)][key]["ci"] for n in ns]
             ax.plot(ns, m, style, label=lab, ms=4); ax.fill_between(ns, [c[0] for c in ci], [c[1] for c in ci], alpha=.15)
         acc = min(b[str(n)]["lam_train_acc"]["min"] if "min" in b[str(n)]["lam_train_acc"] else b[str(n)]["lam_train_acc"]["mean"] for n in ns)
-        ax.text(0.02, 0.04, f"training accuracy = {acc:.3f} at every n (all fits separate their half)", transform=ax.transAxes, fontsize=7.5)
+        ax.text(0.02, 0.95, f"training accuracy = {acc:.3f} at every n (all fits separate their half)", transform=ax.transAxes, fontsize=7.5, va="top")
         ax.set_xscale("log"); ax.set_xticks(ns); ax.set_xticklabels(ns, fontsize=8); ax.set_ylim(0.2, 1.02); ax.set_title(title, fontsize=10); ax.set_xlabel("n per half"); ax.grid(alpha=.3)
-    axes[0].set_ylabel("cosine"); axes[1].legend(fontsize=7.5, loc="lower left")
-    fig.tight_layout(); fig.savefig(f"{OUT}/fig2_margin_divergence.png", dpi=180); fig.savefig(f"{OUT}/fig2_margin_divergence.pdf"); plt.close(fig)
+    axes[0].set_ylabel("cosine"); h, l = axes[0].get_legend_handles_labels(); fig.legend(h, l, fontsize=8, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.02))
+    fig.tight_layout(rect=(0, 0.12, 1, 1)); fig.savefig(f"{OUT}/fig2_margin_divergence.png", dpi=180); fig.savefig(f"{OUT}/fig2_margin_divergence.pdf"); plt.close(fig)
 
 
 def fig3():
