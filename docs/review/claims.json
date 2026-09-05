@@ -1856,7 +1856,9 @@
   },
   {
    "id": "b1e8.verdict_H3_matched",
-   "text": "B1e's design on Llama-3-8B-abliterated (a replication of PREREG_B1e on a second model; prereg stamped, sha da043b93...; 288 arm-rows, 28 min): verdict H3 with a footprint-MATCHED control -- the permuted-label direction removes 0.96x the norm the emotion direction removes (0.124 vs 0.129 per position, layer mean) and is inert for every emotion (permdir_all vs none within [-12, +14], none significant; shares of readable affect removed <= 0.05; dose-0 shifts <= 0.02); against it the emotion direction blocks sad by 36% (-36.8 [-57.1, -16.7], BH-FDR q 0.002; the secondary readout on B's reply agrees, -0.075, significant) and afraid by 14% (-17.4 [-32.7, -1.7], range 0.01-0.27, q 0.08 -- below the registered 0.05 threshold; secondary null)",
+   "text": [
+    "B1e's design on Llama-3-8B-abliterated (an out-of-prereg replication: PREREG_B1e names the 27B, layer 42 and hs 13-63; here focus 21, hs 6-31; the stamped document does not cover it; 288 arm-rows, 28 min): verdict H3 under the rule -- against the permuted-label direction the emotion direction's contrast is -36.8 [-57.1, -16.7] for sad (36% of the none slope; BH-FDR q 0.002; secondary readout -0.075 [-0.159, -0.0001]) and -17.4 [-32.7, -1.7] for afraid (14%; range 0.01-0.27; q 0.08; secondary null). The permuted-label direction removes 0.96x the emotion direction's norm on average (per emotion: sad 0.86x, afraid 1.17x, calm 0.77x) and is inert (permdir_all vs none diffs within [-4.8, +9.6], CIs within [-22.5, +22.6], none significant; shares of readable affect removed <= 0.051; dose-0 shifts <= 0.02)"
+   ],
    "appears_in": [
     "results/rev3/README.md",
     "docs/review/RESULTS_LOG.md",
@@ -1865,7 +1867,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "This is the matched-footprint comparison the 27B run lacked (report 28's critique): on the 8B the control removes as much as the emotion direction and still does nothing, so for sad the footprint caveat is discharged on this model; afraid passes the pre-registered point rule but not the descriptive FDR line and its range touches 0.01. The pc1 arm is a poor control on the 8B (its top principal direction is unstable across halves, |cos| median 0.08; footprint 1.45x; inert except a small desperate effect). MC-steer 6/6 but the manipulation is half as strong as on the 27B (report 29).",
+   "note": "Read with the delta critique (report 30). (i) The control is not per-emotion matched for sad (0.86x, the 27B's ratio again); (ii) both directions remove close to the isotropic norm (8.7/sqrt(4096) = 0.136) and B1c's random direction on this model removed MORE (0.168) and was equally inert with emo-vs-random -18.1 / -31.5 reproducing B1e's -17.4 / -36.8, so on the 8B B1e adds no discriminating power over B1c and 'footprint discharged' is NOT licensed on this model either; (iii) afraid's emotion direction does not block against baseline here (emo_all vs none -10.2 [-25.0, +4.8]) and the control drifts upward (+7.1 afraid, +9.6 sad), so afraid's H3 pass is a contrast against a raised control, and about a third of sad's -36.8 is control drift over its -27.2 vs none; (iv) the models swap which emotion is strong (27B afraid q 0.001 / sad 0.028; 8B sad 0.002 / afraid 0.08): only sad replicates on both models on both outcomes; afraid is unreplicated; (v) emo_all drives A's readout below the unsteered floor for afraid and sad (shares 1.07, 1.36), and afraid's steering span is the weakest in either model (MC-steer 0.066 [0.012, 0.120]). The bridge arm inherits the 8B B1c run (report 29, instrument_failed); none/emo_all are bit-identical to it.",
    "pointer": {
     "script": "src/rev3/b1e_footprint.py",
     "file": "results/rev3/b1e_footprint_llama3-abl.json",
@@ -1895,7 +1897,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "Companion to b1e.permdir_inert on the 27B, where the control removed less; here it removes 0.96x.",
+   "note": "Companion to b1e.permdir_inert on the 27B. Its inertness is uninformative on this model: the direction removes about the isotropic norm, as B1c's inert random direction did (report 30's critique).",
    "pointer": {
     "script": "src/rev3/b1e_footprint.py",
     "file": "results/rev3/b1e_footprint_llama3-abl.json"

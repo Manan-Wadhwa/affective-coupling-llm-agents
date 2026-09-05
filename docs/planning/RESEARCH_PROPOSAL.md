@@ -72,9 +72,11 @@ Paper C (the Jacobian lens / verbalisation) has not started and is not proposed 
   against it (q 0.001 / 0.028); the top principal direction at 5.8× blocks angry and calm but
   not afraid or sad. **Established under the rule, with the caveat standing (critique, report 28):** the blocking
   survives a fitted label-free control of smaller footprint; a matched-footprint control in the
-  0.85×–5.8× band has not been run on the 27B. On the 8B (report 30, `b1e8.*`) the same control is
-  footprint-matched (0.96×), inert, and sad is blocked 36% against it (afraid 14%, marginal) — so
-  for sad the caveat is discharged on one model. Readable-affect removal dissociates from transfer
+  0.85×–5.8× band has not been run on the 27B. On the 8B (report 30, `b1e8.*`) the same design returns H3, but the control is matched only on
+  average (sad 0.86×), both directions remove about the isotropic norm, and B1c's random direction
+  on that model already reproduced the contrasts, so the caveat is not discharged there either. Across
+  the two models only **sad** replicates on both outcomes; afraid does not block against baseline on
+  the 8B and is unreplicated. Readable-affect removal dissociates from transfer
   blocking.
 - **8B replication (report 29, `b1c8.*`):** the same five emotions transfer and the same two
   reach significance (15%, 31%); the other three are too wide to tell; the manipulation is
