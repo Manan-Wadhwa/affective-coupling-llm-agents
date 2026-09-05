@@ -1520,7 +1520,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "instrument_failed is PREREG §2's own outcome: the readable affect on A's span is not confined to the rank-5 class-mean subspace, and the blocked fractions below are descriptive. Two further instrument facts (report 27): the subspace removes 6.9 units of norm per masked position summed over layers against 0.46-0.66 for the rank-1 direction and 3.1-3.2 for a random 5-frame, and it shifts the readout's dose-0 baseline (desperate 0.108 -> 0.500, calm 0.277 -> 0.024, happy 0.287 -> 0.120), so the §4.2 share (which uses the none-arm floor) is confounded for this arm; shares above 1 mean the readout fell below the none-arm floor. The none and emo_all arms reproduce B1c's slopes bit for bit (all twelve).",
+   "note": "instrument_failed is PREREG §2's own outcome: the readable affect on A's span is not confined to the rank-5 class-mean subspace, and the blocked fractions below are descriptive. Two further instrument facts (report 27): the subspace removes 6.9 units of norm per masked position summed over layers against 0.46-0.66 for the rank-1 direction and 3.1-3.2 for a random 5-frame, and it shifts the readout's dose-0 baseline (desperate 0.108 -> 0.500, calm 0.277 -> 0.024, happy 0.287 -> 0.120), so the §4.2 share (which uses the none-arm floor) is confounded for this arm; shares above 1 mean the readout fell below the none-arm floor. The none and emo_all arms reproduce B1c's slopes bit for bit (all twelve). The critic's recomputation of the §4.2 share with each arm's own dose-0 floor gives 0.58/0.89/0.88/0.67/1.00/0.40 (desperate/afraid/happy/calm/sad/angry): still three failures, so the verdict is robust, but the failing set becomes desperate/calm/angry -- the per-emotion attribution is not. Defects: the permutation_control pointer names ::perm_frame while main uses class_mean_frame on the permuted labels directly; prereg.git_commit is empty (no git on the box). The bit-exact match with B1c is a fresh run (360 arm-rows generated over 6724 s per the log), not reused cells.",
    "pointer": {
     "script": "src/rev3/b1d_subspace.py",
     "file": "results/rev3/b1d_subspace_qwen36-27b.json",
@@ -1548,7 +1548,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "Would have been 'indeterminate' had the instrument passed (H2 needs median >= 0.60 with lower CI >= 0.40; H2' needs median <= 0.35 with upper CI <= 0.50 -- the upper bound 0.286 satisfies H2' numerically, but H2' also requires the instrument check to pass). Significant per-emotion sub_all - perm_all contrasts: sad -25.7 [-49.0, -3.3], angry -33.8 [-65.3, -4.5], afraid +27.0 [+3.8, +48.2] (anti-blocking: the emotion subspace blocks LESS than the permuted one); calm -69.2 [-104.8, -32.6] is untestable (none slope includes zero).",
+   "note": "Would have been 'indeterminate' had the instrument passed (H2 needs median >= 0.60 with lower CI >= 0.40; H2' needs median <= 0.35 with upper CI <= 0.50 -- the upper bound 0.286 satisfies H2' numerically, but H2' also requires the instrument check to pass). Per-emotion sub_all - perm_all contrasts whose unadjusted CI excludes zero (the pre-registered BH-FDR q is 0.0507 for each of afraid, sad and angry -- none clears 0.05, so none is 'significant' under the registered multiplicity rule): sad -25.7 [-49.0, -3.3], angry -33.8 [-65.3, -4.5], afraid +27.0 [+3.8, +48.2] (anti-blocking: the emotion subspace blocks LESS than the permuted one); calm -69.2 [-104.8, -32.6] is untestable (none slope includes zero). The CI is a scenario bootstrap only (one shared draw, the five emotions fixed); the emotion-to-emotion spread (sd 0.13) is not in it, so it is not the interval of a typical emotion's fraction (critique, report 27).",
    "pointer": {
     "script": "src/rev3/b1d_subspace.py",
     "file": "results/rev3/b1d_subspace_qwen36-27b.json",
@@ -1573,7 +1573,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "Derived: number of summary.<emotion>.perm_all_vs_none.sig that are true (3, all negative). The permuted-label class means differ mostly along the data's high-variance axes, so perm_all is close to a top-variance subspace: removing high-variance directions from A's span with a large footprint reduces B's dose-response without any emotion information. B1c's random-direction control had a footprint of 1.2 and could not reveal this; B1c's rank-1 afraid/sad blocking (footprint 0.66) therefore now needs a footprint-matched rank-1 control (e.g. the top principal direction) before it is called emotion-specific.",
+   "note": "Derived: number of summary.<emotion>.perm_all_vs_none.sig that are true (3, all negative). The permuted-label class means differ mostly along the data's high-variance axes, so perm_all is close to a top-variance subspace: removing high-variance directions from A's span with a large footprint reduces B's dose-response without any emotion information. B1c's random direction already removed 1.15-1.26 units, twice the emotion direction's 0.46-0.66, and was inert, so norm alone is not what makes a control bite (critique, report 27): the permuted frame differs from a random frame by being FITTED (65x its variance, see b1d.frame_geometry). What B1c lacks is a fitted, label-free rank-1 control -- the same dom estimator on permuted labels -- which is PREREG_B1e's permdir arm.",
    "pointer": {
     "script": "src/rev3/b1d_subspace.py",
     "file": "results/rev3/b1d_subspace_qwen36-27b.json"
@@ -1673,6 +1673,31 @@
     "json_path": "summary.afraid.emo_all.present_slope.slope"
    },
    "expected": 159.9238,
+   "tol": 0.001
+  },
+  {
+   "id": "b1d.frame_geometry",
+   "text": "B1d frame geometry (post hoc, on the cached probe features with B1d's DIR split and seeds): the rank-5 class-mean affect frame captures 16-21% of the DIR-half variance at hidden states 13/30/43/63 (the top-5 principal components capture 22-24%) and has mean principal-angle cosine 0.71-0.81 to those top-5 components; the permuted-label frames capture 6.8-7.7% of the variance (a random 5-frame: 0.1%), with mean principal cosine 0.38 to the top-5 components, 0.61 to the top-20, and 0.32-0.35 to the affect frame",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/27_rev3_b1d_subspace.md",
+    "docs/planning/RESEARCH_PLAN.md#13"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "So the affect subspace IS largely the pool's top-variance subspace, and the permuted control is a fitted high-variance frame (65x a random frame's variance) that overlaps the affect frame by about a third -- not the same subspace, but not orthogonal to it either, so sub_all - perm_all subtracts part of what it should isolate (biased toward zero). Script src/rev3/b1d_frame_geometry.py, run on box 5 at 09:15Z; the output carries no provenance stamp.",
+   "pointer": {
+    "script": "src/rev3/b1d_frame_geometry.py",
+    "file": "results/rev3/b1d_frame_geometry.json",
+    "json_path": "43.perm_vs_true",
+    "config": {
+     "43.true_vs_pc5": 0.813,
+     "43.var_true": 0.1993,
+     "43.var_perm": 0.0769
+    }
+   },
+   "expected": 0.345,
    "tol": 0.001
   }
  ]

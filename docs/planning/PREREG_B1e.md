@@ -74,3 +74,13 @@ the 8B; layers below 13.
 
 As PREREG_B1d §8, with this document staged next to the driver and its sha and path stamped in
 the result; outputs under `/marimo/results`.
+
+
+## Addendum, 2026-09-05 09:20Z, before launch (after report 27's critique)
+
+The motivation in §1 is corrected: B1c's random direction already removed twice the emotion
+direction's norm and was inert, so "footprint" is not the confound; B1d's permuted frame bites
+because it is *fitted* (65× a random frame's variance, a third overlap with the affect frame,
+`b1d.frame_geometry`). The missing control is therefore a fitted, label-free rank-1 direction —
+exactly `permdir_all` as specified in §3. Hypotheses, arms, rule and thresholds are unchanged.
+The reference to "footprint-matched" in §1 should be read as "fitted, label-free".

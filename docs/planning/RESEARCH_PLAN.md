@@ -842,10 +842,12 @@ the class-mean subspace shifts the readout at dose 0 and passes the §4.2 check 
 emotions, so the readout and the ablation share a target; and the label-permuted control of the
 same footprint (removed norm 6.5–6.9 vs 0.66 for the rank-1 direction) blocks transfer for
 afraid, sad and angry as much as the emotion direction did. The emotion-specific increment over
-that control is 0.14 [−0.03, 0.29]. So: footprint alone blocks; B1c's afraid/sad rank-1 result
-keeps its small footprint and inert random control but now needs a footprint-matched rank-1
-control (top principal direction, or a permuted-label rank-1 direction) before it is called
-emotion-specific. Open for Paper B: that control; an attention-masking arm (PREREG §7); a
+that control is 0.14 [−0.03, 0.29]. The critic's correction: norm alone is not the confound (B1c's random direction removed
+twice the emotion direction's norm and was inert); the permuted frame bites because it is
+*fitted* — 65× a random frame's variance, a third overlap with the affect frame (report 27,
+`b1d.frame_geometry`). B1c's afraid/sad result therefore needs a fitted, label-free rank-1
+control (the same estimator on permuted labels) before it is called emotion-specific; that is
+PREREG_B1e's `permdir_all` arm. Open for Paper B: that control; an attention-masking arm (PREREG §7); a
 manipulation check independent of the ablated subspace; a rewrite design that survives its check.
 
 ### 13.4 Runs launched under this rescope
