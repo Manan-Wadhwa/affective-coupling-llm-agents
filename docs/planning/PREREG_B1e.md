@@ -84,3 +84,20 @@ because it is *fitted* (65× a random frame's variance, a third overlap with the
 `b1d.frame_geometry`). The missing control is therefore a fitted, label-free rank-1 direction —
 exactly `permdir_all` as specified in §3. Hypotheses, arms, rule and thresholds are unchanged.
 The reference to "footprint-matched" in §1 should be read as "fitted, label-free".
+
+## Addendum 2, 2026-09-05 09:40Z, before launch (driver verified)
+
+1. Driver `src/rev3/b1e_footprint.py` passed its selftest locally and on the box and an
+   independent pre-launch review (fidelity, drift, GPU path, forward-pass smoke: mode-none
+   equals unhooked to 0.0; `emo_all` removed-norm 0.617 against B1c's 0.594 grid mean). Three
+   one-line fixes were applied before launch: the MC-steer trigger uses the `passes` flag (sign
+   and significance), the partial-run short-circuit requires all six emotions complete
+   (PREREG_B1d §6), and a note about pc1's sign convention was corrected.
+2. **Measured footprint before the run** (hs 43, DIR half): `permdir` removes 0.74× the norm the
+   emotion direction removes (0.454 vs 0.617 per position summed over 51 layers), `pc1` 5.8×
+   (3.56); cos(permdir, emo) = 0.004, cos(pc1, emo) = −0.32. §3's expectation that the permuted
+   direction would remove *more* was wrong. Consequence, fixed now: an **H3** verdict is
+   confounded with footprint (the control removes less) and must be reported with that caveat;
+   an **H3′** verdict would be strong (a control with a smaller footprint blocking as much).
+   `pc1_all` (5.8×) brackets the footprint from above, descriptively. Hypotheses, rule and
+   thresholds unchanged.

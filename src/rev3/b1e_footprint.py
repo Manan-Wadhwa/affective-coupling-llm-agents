@@ -801,9 +801,9 @@ def _decide(per_emotion, prespec=PRESPEC_EMOTIONS) -> dict:
             "permdir_dose0_shift": (fp.get("dose0_shift") or {}).get("permdir_all"),
             "complete": bool(s.get("_complete")),
         }
-    missing = [e for e in prespec if not ev[e]["complete"]]
+    missing = [e for e in per_emotion if not (per_emotion[e] or {}).get("_complete")]
     bad = [e for e in prespec
-           if (not ev[e]["mc_steer_sig"]) or ev[e]["permdir_dose0_ok"] is False]
+           if (not ev[e]["mc_steer_passes"]) or ev[e]["permdir_dose0_ok"] is False]
     if missing:
         verdict = "indeterminate"
     elif bad:
@@ -1508,8 +1508,8 @@ def main():
     pc1_geometry = {
         "note": "|cos| summaries of the two descriptive quantities of PREREG_B1e §3; "
                 "pc1's sign is fixed by pc1_direction (largest-magnitude component "
-                "positive) in BOTH halves, so a DIR-vs-READ cosine near +1 means the same "
-                "axis. Neither number gates anything.",
+                "positive) per half, which does NOT align the two halves, so read |cos| "
+                "near 1 as the same axis. Neither number gates anything.",
         "pc1_vs_emo_abs_cos": {"min": float(np.min(_pe)), "median": float(np.median(_pe)),
                                "max": float(np.max(_pe))},
         "pc1_dir_read_abs_cos": {"min": float(np.min(_pr)),
