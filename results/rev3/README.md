@@ -442,6 +442,10 @@ should be checked before any per-class claim.
 
 ---
 
+## A2 margin diagnostic — the logistic fits are max-margin separators at every n — **COMPLETE, 2026-09-05 08:14Z**
+
+Files `a2_margin_qwen36-27b-l43.json`, `a2_margin_qwen36-27b-l54.json`, `a2_margin_llama3-abl-l21.json` (script `src/rev3/a2_margin_diag.py`, mirrors the follow-up's fits to 1e-9). Every multinomial logistic fit at n = 75 … 2000 per half, under C_n, C = 0.5 and C = 50, separates its half perfectly (accuracy 1.000, log-loss ≤ 0.005, ≤ 78 iterations). A 100× weaker penalty gives the same direction (cosine ≥ 0.96) and no better split-half (0.52 vs 0.58 on the 27B, 0.29 vs 0.28 on the 8B). The separator departs from difference-of-means as n grows (27B 0.97 → 0.63; 8B 0.91 → 0.43) while difference-of-means becomes reproducible (0.57 → 0.97 / 0.55 → 0.94). Registry `a2m.*` (4); report 26.
+
 ## A2 follow-up — 27B layer 54 at anchors 600 and 2000 — **COMPLETE, 2026-09-05 07:48Z**
 
 Files `a2_followup_qwen36-27b-l54.json`, `a2_followup_qwen36-27b-l54-nref2000.json` (box 6). Raw fixed-penalty logistic: anchor 600 = 0.536 / 0.605 / 0.608 / 0.573 / 0.566 / 0.563, anchor 2000 = 0.533 / 0.596 / 0.588 / 0.561 / 0.550 / 0.554 at n = 75 … 2000 per half — peak at 150–300, one significant drop 300 → 600 (−0.035), flat after (net 150 → 2000 −0.042, 0–1 of 10 positive; layer 16 in the same family rises); plain logreg 0.410 → 0.573 (600) → 0.554; tuned C → 0.585; dom → 0.979. Anchor gap ≤ 0.019. CAA ↔ logreg 0.439. Registry `a2f54.*`; report 25.

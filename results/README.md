@@ -104,6 +104,7 @@ recorded" means the file carries no such field.
 | `a2f_cells_llama3-abl.json` | RAW · checkpoint | per-cell checkpoint of the above |
 | `a2_followup_qwen36-27b-l54.json`, `-l54-nref2000.json` | **RESULT · COMPLETE** | 27B layer 54 at both anchors: fixed-penalty logistic peaks at n = 150–300 then declines; dom 0.98 |
 | `a2f_cells_qwen36-27b-l54*.json` | RAW · checkpoints | per-cell checkpoints of the above |
+| `a2_margin_qwen36-27b-l43.json`, `-l54.json`, `a2_margin_llama3-abl-l21.json` | **RESULT · COMPLETE** | margin diagnostic: every logistic fit is a perfect separator at every n; weak penalty = same direction; separator drifts away from difference-of-means with n |
 | `b1_cells_*`, `b1f_cells_*`, `b1_summary_*`, `b1_partial_summary.json` | CHECKPOINT / DERIVED / SUPERSEDED | per-cell arrays and analyzer outputs |
 | `a2_estimator_qwen36-27b.json` | **RESULT · COMPLETE** | 7 depths; focus dom 0.974 vs logreg 0.566 |
 | `a2_estimator_llama3-abl.json` | **RESULT · COMPLETE** | 7 depths; focus dom 0.941 vs logreg 0.286; n/d ordering reproduces |
