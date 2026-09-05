@@ -444,7 +444,7 @@ should be checked before any per-class claim.
 
 ## A2 follow-up — 27B layer 54 at anchors 600 and 2000 — **COMPLETE, 2026-09-05 07:48Z**
 
-Files `a2_followup_qwen36-27b-l54.json`, `a2_followup_qwen36-27b-l54-nref2000.json` (box 6). Raw fixed-penalty logistic: anchor 600 = 0.536 / 0.605 / 0.608 / 0.573 / 0.566 / 0.563, anchor 2000 = 0.533 / 0.596 / 0.588 / 0.561 / 0.550 / 0.554 at n = 75 … 2000 per half — peak at 150–300, decline to 2000 (paired −0.042, 0–1 of 10 positive); plain logreg 0.410 → 0.573 (600) → 0.554; tuned C → 0.585; dom → 0.979. Anchor gap ≤ 0.019. CAA ↔ logreg 0.439. Registry `a2f54.*`; report 25.
+Files `a2_followup_qwen36-27b-l54.json`, `a2_followup_qwen36-27b-l54-nref2000.json` (box 6). Raw fixed-penalty logistic: anchor 600 = 0.536 / 0.605 / 0.608 / 0.573 / 0.566 / 0.563, anchor 2000 = 0.533 / 0.596 / 0.588 / 0.561 / 0.550 / 0.554 at n = 75 … 2000 per half — peak at 150–300, one significant drop 300 → 600 (−0.035), flat after (net 150 → 2000 −0.042, 0–1 of 10 positive; layer 16 in the same family rises); plain logreg 0.410 → 0.573 (600) → 0.554; tuned C → 0.585; dom → 0.979. Anchor gap ≤ 0.019. CAA ↔ logreg 0.439. Registry `a2f54.*`; report 25.
 
 ## A2 follow-up on Llama-3-8B-abliterated — fixed per-sample penalty, tuned C, both spaces — **COMPLETE (layers 14, 21, 27), 2026-09-05 06:35Z**
 

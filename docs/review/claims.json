@@ -1342,7 +1342,7 @@
   },
   {
    "id": "a2f54.lam_declines_anchor600",
-   "text": "A2 follow-up, 27B layer 54 (the deeper of the two ablation-window depths), anchor 600: the fixed-per-sample-penalty logistic direction's split-half cosine (raw) is 0.536, 0.605, 0.608, 0.573, 0.566, 0.563 at n = 75, 150, 300, 600, 1200, 2000 per half -- it peaks at n = 150-300 and declines from there (150 -> 2000 paired over the 10 shared splits: -0.042, 0 of 10 positive); plain logreg peaks at 600 (0.573) and falls to 0.554; tuned C plateaus at 0.58; difference-of-means climbs 0.77 -> 0.98",
+   "text": "A2 follow-up, 27B layer 54 (the deeper of the two ablation-window depths), anchor 600: the fixed-per-sample-penalty logistic direction's split-half cosine (raw) is 0.536, 0.605, 0.608, 0.573, 0.566, 0.563 at n = 75, 150, 300, 600, 1200, 2000 per half -- it peaks at n = 150-300, drops between 300 and 600 (-0.035 paired over the 10 shared splits, 0 of 10 positive) and is flat after that (600 -> 1200 -0.007, 1200 -> 2000 -0.003, neither significant); net 150 -> 2000 -0.042, 0 of 10 positive; plain logreg peaks at 600 (0.573) and falls to 0.554; tuned C plateaus at 0.58; difference-of-means climbs 0.77 -> 0.98",
    "appears_in": [
     "results/rev3/README.md",
     "docs/review/RESULTS_LOG.md",
@@ -1351,7 +1351,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "The layer-54 shape is the 8B's (report 24), milder: a peak then a monotone decline under a fixed per-sample penalty. Provenance: box 6, 3108 s, code_sha 2a45c175, empty model/model_revision fields as before; the box ran the pre-rank-k acl_core (3da064ad), immaterial to this CPU driver.",
+   "note": "Corrected after the delta critique (report 25): the first wording called this 'the 8B's shape, milder'; it is not -- the 8B declines significantly at every step from 300, layer 54 drops once (300 -> 600) and flattens, and layer 43 dips at the same place. Layer 54 does sit below layer 43 over 300 -> 2000 (slope difference -0.029, 10/10). In the same anchor-600 family layer 16 RISES +0.024 over 300 -> 2000 (10/10), so 'no net rise at every depth' is false; the anchor-robust statement is per depth. The two layer-54 files and the 8B run share code_sha 2a45c175, the two layer-43 files are ae3621bb and ccd27d64: three driver builds across the comparison. Provenance: box 6, 3108 s, empty model/model_revision; pre-rank-k acl_core copy (immaterial).",
    "pointer": {
     "script": "src/rev3/a2_followup.py",
     "file": "results/rev3/a2_followup_qwen36-27b-l54.json",
@@ -1367,7 +1367,7 @@
   },
   {
    "id": "a2f54.anchor2000",
-   "text": "A2 follow-up, 27B layer 54, anchor 2000 (per-sample penalty 1/2000): 0.533, 0.596, 0.588, 0.561, 0.550, 0.554 at the same n -- the same peak-then-decline shape (150 -> 2000: -0.042, 1 of 10 positive), sitting 0.003-0.019 below the 600-anchor curve (32-60 of 60 paired seed x class differences negative); logreg_lam at n = 2000 equals plain logreg at n = 2000 exactly, as the schedule implies",
+   "text": "A2 follow-up, 27B layer 54, anchor 2000 (per-sample penalty 1/2000): 0.533, 0.596, 0.588, 0.561, 0.550, 0.554 at the same n -- the same shape (one drop 300 -> 600, flat after; net 150 -> 2000 -0.042, 1 of 10 positive), sitting 0.003-0.019 below the 600-anchor curve (32-60 of 60 paired seed x class differences negative); logreg_lam at n = 2000 equals plain logreg at n = 2000 exactly, as the schedule implies",
    "appears_in": [
     "results/rev3/README.md",
     "docs/review/RESULTS_LOG.md",
