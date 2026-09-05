@@ -18,9 +18,12 @@ If the critic is right: the weak-penalty ('weak', C = 100x the fixed C) split-ha
 LOW at every n, cos(lam, weak) RISES with n, and cos(lam, dom) FALLS with n. If instead
 cos(lam, weak) is flat, the decline is not the fit drifting toward the MLE.
 
+v2 (2026-09-05, after report 26's critique): ten seeds, a percentile CI over seeds per cell, a second
+weak penalty (C = 500) so 'penalty-independent' rests on three points, and the n_cls assert.
+
 Schedules: lam  -> C_n = 0.5 * N_REF / n  (per-sample penalty fixed at its N_REF value)
            fixedC -> C = 0.5
-           weak -> C = 50 (a proxy for the MLE direction; the true MLE does not exist on
+           weak -> C = 50, weak2 -> C = 500 (proxies for the C -> inf direction; the true MLE does not exist on
                    separable halves, and lbfgs at C -> inf would just run to max_iter)
 """
 from __future__ import annotations
@@ -30,10 +33,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import acl_core as C  # noqa: E402
 
-C_REF, C_WEAK = 0.5, 50.0
+C_REF, C_WEAK, C_WEAK2 = 0.5, 50.0, 500.0
 N_REF = 600
 TARGETS = (75, 150, 300, 600, 1200, 2000)
-SEEDS = tuple(range(5))
+SEEDS = tuple(range(10))
 MAX_ITER = 3000
 
 
@@ -44,6 +47,9 @@ def fit_multinomial(X, y, c, seed):
     Xs = ((X - mu) / sd).astype(np.float64)
     m = LogisticRegression(max_iter=MAX_ITER, C=c, random_state=seed).fit(Xs, y)
     W = np.asarray(m.coef_, dtype=np.float64)
+    n_cls = int(y.max()) + 1
+    assert W.shape[0] == n_cls, (f"fit saw {W.shape[0]} classes, expected {n_cls}: coefficient "
+                                f"rows would misalign with the class index")
     S = m.decision_function(Xs)
     true = S[np.arange(len(y)), y]
     S2 = S.copy(); S2[np.arange(len(y)), y] = -np.inf
@@ -76,7 +82,8 @@ def run_layer(X, y, n_ref, targets=TARGETS, seeds=SEEDS):
             h1, h2 = idx[:n], idx[n:2 * n]
             if len(set(y[h1])) < n_cls or len(set(y[h2])) < n_cls:
                 continue
-            sched = {"lam": C_REF * n_ref / float(n), "fixedC": C_REF, "weak": C_WEAK}
+            sched = {"lam": C_REF * n_ref / float(n), "fixedC": C_REF, "weak": C_WEAK,
+                     "weak2": C_WEAK2}
             fits = {k: [fit_multinomial(X[h], y[h], c, s) for h in (h1, h2)]
                     for k, c in sched.items()}
             dom = [C.fit_direction(X[h], y[h], "dom", seed=s) for h in (h1, h2)]
@@ -89,10 +96,11 @@ def run_layer(X, y, n_ref, targets=TARGETS, seeds=SEEDS):
                              "n_iter", "converged"):
                     cell[f"{k}_{stat}"] = [fits[k][i][stat] for i in (0, 1)]
             cell["sh_dom"] = mean_cos(ddirs[0], ddirs[1])
-            for a, b in (("lam", "weak"), ("lam", "fixedC"), ("weak", "fixedC")):
+            for a, b in (("lam", "weak"), ("lam", "fixedC"), ("weak", "fixedC"),
+                         ("lam", "weak2"), ("weak", "weak2")):
                 cell[f"cos_{a}_{b}"] = float(np.mean([mean_cos(dirs[a][i], dirs[b][i])
                                                        for i in (0, 1)]))
-            for a in ("lam", "weak", "fixedC"):
+            for a in ("lam", "weak", "fixedC", "weak2"):
                 cell[f"cos_{a}_dom"] = float(np.mean([mean_cos(dirs[a][i], ddirs[i])
                                                        for i in (0, 1)]))
             cells.append(cell)
@@ -102,7 +110,9 @@ def run_layer(X, y, n_ref, targets=TARGETS, seeds=SEEDS):
                 continue
             vals = np.array([np.mean(c[key]) if isinstance(c[key], list) else c[key]
                              for c in cells], dtype=float)
-            agg[key] = {"mean": float(vals.mean()), "per_seed": vals.tolist()}
+            agg[key] = {"mean": float(vals.mean()), "per_seed": vals.tolist(),
+                        "ci": [float(x) for x in np.percentile(vals, [2.5, 97.5])],
+                        "min": float(vals.min()), "max": float(vals.max())}
         out[str(n)] = agg
         print(f"[margin] n={n:5d} C_lam={agg['C_lam']:.3f} sh lam/fixedC/weak/dom = "
               f"{agg['sh_lam']['mean']:.3f}/{agg['sh_fixedC']['mean']:.3f}/"
@@ -164,7 +174,8 @@ def main():
     prov = C.Provenance(script="src/rev3/a2_margin_diag.py",
                         config={"feats": a.feats, "layers": layers, "targets": list(targets),
                                 "seeds": list(range(a.seeds)), "n_ref": N_REF, "c_ref": C_REF,
-                                "c_weak": C_WEAK, "max_iter": MAX_ITER, "n_pool": int(len(y))},
+                                "c_weak": C_WEAK, "c_weak2": C_WEAK2, "max_iter": MAX_ITER,
+                                "n_pool": int(len(y))},
                         model_id="", model_revision="", seeds={"splits": list(range(a.seeds))},
                         control_pointers={"fit": "a2_margin_diag.py::fit_multinomial mirrors "
                                           "a2_followup.py::fit_logreg_lam (standardise by sd+1e-6, "
