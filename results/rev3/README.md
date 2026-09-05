@@ -442,6 +442,10 @@ should be checked before any per-class claim.
 
 ---
 
+## A2 follow-up — 27B layer 54 at anchors 600 and 2000 — **COMPLETE, 2026-09-05 07:48Z**
+
+Files `a2_followup_qwen36-27b-l54.json`, `a2_followup_qwen36-27b-l54-nref2000.json` (box 6). Raw fixed-penalty logistic: anchor 600 = 0.536 / 0.605 / 0.608 / 0.573 / 0.566 / 0.563, anchor 2000 = 0.533 / 0.596 / 0.588 / 0.561 / 0.550 / 0.554 at n = 75 … 2000 per half — peak at 150–300, decline to 2000 (paired −0.042, 0–1 of 10 positive); plain logreg 0.410 → 0.573 (600) → 0.554; tuned C → 0.585; dom → 0.979. Anchor gap ≤ 0.019. CAA ↔ logreg 0.439. Registry `a2f54.*`; report 25.
+
 ## A2 follow-up on Llama-3-8B-abliterated — fixed per-sample penalty, tuned C, both spaces — **COMPLETE (layers 14, 21, 27), 2026-09-05 06:35Z**
 
 File `a2_followup_llama3-abl.json` (anchor 600; n = 2000 skipped, pool 3898). Raw-space split-half cosines, focus layer 21: plain logreg 0.267 / 0.297 / 0.306 / 0.306 / 0.286, tuned C 0.302 / 0.352 / 0.379 / 0.372 / 0.384, **fixed penalty 0.363 / 0.369 / 0.325 / 0.306 / 0.276**, dom 0.526 / 0.697 / 0.820 / 0.895 / 0.941 at n = 75 / 150 / 300 / 600 / 1200. Fixed-penalty 150 → 1200 paired: −0.050 (L14), −0.093 (L21), −0.076 (L27); 1, 0, 0 of 10 splits positive. Cross-estimator (subsamples of n = 2000 from the 3898 pool, heavily overlapping): CAA-raw ↔ logreg-raw 0.37 / 0.34 / 0.33, CAA ↔ dom 0.90–0.92. The fixed-penalty curve peaks at n = 150 and falls from there. Registry `a2f8.*`; report 24 with the delta critique.

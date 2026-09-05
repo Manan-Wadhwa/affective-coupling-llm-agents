@@ -1339,6 +1339,75 @@
    },
    "expected": 0.336,
    "tol": 0.002
+  },
+  {
+   "id": "a2f54.lam_declines_anchor600",
+   "text": "A2 follow-up, 27B layer 54 (the deeper of the two ablation-window depths), anchor 600: the fixed-per-sample-penalty logistic direction's split-half cosine (raw) is 0.536, 0.605, 0.608, 0.573, 0.566, 0.563 at n = 75, 150, 300, 600, 1200, 2000 per half -- it peaks at n = 150-300 and declines from there (150 -> 2000 paired over the 10 shared splits: -0.042, 0 of 10 positive); plain logreg peaks at 600 (0.573) and falls to 0.554; tuned C plateaus at 0.58; difference-of-means climbs 0.77 -> 0.98",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/25_rev3_a2_layer54.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "The layer-54 shape is the 8B's (report 24), milder: a peak then a monotone decline under a fixed per-sample penalty. Provenance: box 6, 3108 s, code_sha 2a45c175, empty model/model_revision fields as before; the box ran the pre-rank-k acl_core (3da064ad), immaterial to this CPU driver.",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b-l54.json",
+    "json_path": "by_layer.54.stability.logreg_lam.2000.raw.mean",
+    "config": {
+     "by_layer.54.stability.logreg_lam.150.raw.mean": 0.6049810452652862,
+     "by_layer.54.stability.logreg_lam.300.raw.mean": 0.6077319208420693,
+     "by_layer.54.stability.dom.2000.raw.mean": 0.9789499025116752
+    }
+   },
+   "expected": 0.5634,
+   "tol": 0.001
+  },
+  {
+   "id": "a2f54.anchor2000",
+   "text": "A2 follow-up, 27B layer 54, anchor 2000 (per-sample penalty 1/2000): 0.533, 0.596, 0.588, 0.561, 0.550, 0.554 at the same n -- the same peak-then-decline shape (150 -> 2000: -0.042, 1 of 10 positive), sitting 0.003-0.019 below the 600-anchor curve (32-60 of 60 paired seed x class differences negative); logreg_lam at n = 2000 equals plain logreg at n = 2000 exactly, as the schedule implies",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/25_rev3_a2_layer54.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "plain logreg, tuned C and dom are bit-identical between the two anchor files (same splits, anchor-independent), which is the right invariance. The anchor dependence at layer 54 (max gap 0.019) is smaller than at layer 43 (0.022).",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b-l54-nref2000.json",
+    "json_path": "by_layer.54.stability.logreg_lam.2000.raw.mean",
+    "config": {
+     "by_layer.54.stability.logreg_lam.150.raw.mean": 0.5957371699316818,
+     "by_layer.54.stability.logreg.2000.raw.mean": 0.5541243630621533
+    }
+   },
+   "expected": 0.5541,
+   "tol": 0.001
+  },
+  {
+   "id": "a2f54.cross_estimator",
+   "text": "A2 follow-up, 27B layer 54: CAA-raw vs logreg-raw cosine 0.439 (ten subsamples of n = 2000 from the 4253 pool), against 0.427 at layer 43; CAA vs dom 0.77 (0.72 at layer 43); logreg vs dom 0.59",
+   "appears_in": [
+    "results/rev3/README.md",
+    "docs/review/RESULTS_LOG.md",
+    "results/reports/25_rev3_a2_layer54.md",
+    "docs/planning/RESEARCH_PLAN.md#2"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Same overlap caveat as the 27B focus-layer number (47% of the pool per draw).",
+   "pointer": {
+    "script": "src/rev3/a2_followup.py",
+    "file": "results/rev3/a2_followup_qwen36-27b-l54.json",
+    "json_path": "by_layer.54.cross_estimator.caa_raw|logreg_raw.mean"
+   },
+   "expected": 0.439,
+   "tol": 0.002
   }
  ]
 }
