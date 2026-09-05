@@ -1812,7 +1812,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "Generality of the phenomenon. The pool is smaller (1079 kept of 2160) and the readout floors differ (afraid's A-span readout 0.04 -> 0.12 at the top dose, a weak instrument on this model).",
+   "note": "Generality of the phenomenon, with caveats from the critique (report 29): the pool kept 1079 of 2160 (50% vs 75% on the 27B); the class-mean gate passes at every layer but the desperate class alone is 0.64-0.76 (PREREG §3 requires per-class reporting); the steering manipulation is half as strong and less specific than on the 27B (MC-steer readout gain mean +0.25 vs +0.50); slopes are unnormalised probe scores and are not comparable across models in size.",
    "pointer": {
     "script": "src/rev3/b1c_alllayer.py",
     "file": "results/rev3/b1c_alllayer_llama3-abl.json",
@@ -1827,7 +1827,7 @@
   },
   {
    "id": "b1c8.verdict_and_block",
-   "text": "B1c on the 8B: the pre-registered rule returns instrument_failed because the MC-ablate criterion 'emo_all drop >= emo13_42 drop' fails for 4 of 6 emotions on a tie -- the all-layer and the 6-20 windows produce identical A-span readouts (drops 0.176 vs 0.176, 0.079 vs 0.079 ...), so layers 21-31 add nothing and the >= comparison turns on floating-point noise; the blocked fractions are therefore descriptive: emo_all vs rand_all afraid -18.1 [-28.7, -7.5] (15% of the none slope) and sad -31.5 [-48.2, -14.8] (31%) are significant, desperate, happy and angry null, the random direction inert -- the same two emotions block as on the 27B (21% and 33%); median 0.096 [-0.05, 0.21]",
+   "text": "B1c on the 8B: the pre-registered rule returns instrument_failed because the MC-ablate criterion 'emo_all drop >= emo13_42 drop' fails for 4 of 6 emotions -- on this model the upper window (hs 21-31) is ablated and removes more norm per layer than hs 6-20 (0.165 vs 0.104) yet moves A's readout by nothing measurable (per-emotion mean differences 2e-4 to 1e-3, a scenario bootstrap straddling zero for all six), so a strict >= on nested windows fails each emotion with p ~ 0.5 and reaches 3 failures about two thirds of the time under that null; the blocked fractions are therefore descriptive: emo_all vs rand_all afraid -18.1 [-28.7, -7.5] (15% of the none slope) and sad -31.5 [-48.2, -14.8] (31%) are significant, desperate, happy and angry null (angry's point estimate flips sign, +9), the random direction inert (it removes 0.167 vs the emotion direction's 0.137); median 0.096 [-0.05, 0.21]. The same two emotions reach significance as on the 27B (21%, 33%); the other three are too wide to tell agreement from disagreement",
    "appears_in": [
     "results/rev3/README.md",
     "docs/review/RESULTS_LOG.md",
@@ -1836,7 +1836,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "The tie failure is a defect of the pre-registered criterion, not of the ablation; it is reported as the rule says. The rewrite arms change the transfer on the 8B as well (text and text_keep slopes both far below none) and are uninterpretable.",
+   "note": "Corrected after the blind critique (report 29): the first wording called the failure a floating-point tie; it is a real null of the upper window on the 8B (on the 27B all six upper-window drops are negative with CIs excluding zero) and a defect of a strict >= criterion with no tolerance band, not fp noise and not a pipeline fault (n_layers_ablated 15 vs 26 in every cell, removed_norm larger for emo_all in 72/72). Dose is not comparable across models: MC-steer moves A's readout by half as much on the 8B (mean +0.25 vs +0.50) and less specifically ('desperate' is the modal readout for afraid, sad and angry at the top dose); afraid's readout (0.115) is below the 1/6 chance floor; probe-score slopes are not comparable across models. The rewrite arms: only 3 of 6 fail the §4.4 check here (afraid, calm, sad); text_keep collapses relative to none for 5 of 6, so 'context changed' alone removes most of the transfer. Provenance: the prereg stamp is empty in this file too (the B1c driver's lookup bug); PREREG_B1c §7 lists the 8B as not tested; the windows hs 6-20 / 6-31 come from round(0.2 * n_layers) at run time.",
    "pointer": {
     "script": "src/rev3/b1c_alllayer.py",
     "file": "results/rev3/b1c_alllayer_llama3-abl.json",

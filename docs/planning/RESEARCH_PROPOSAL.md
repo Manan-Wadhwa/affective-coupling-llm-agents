@@ -74,7 +74,9 @@ Paper C (the Jacobian lens / verbalisation) has not started and is not proposed 
   survives a fitted label-free control of smaller footprint; a matched-footprint control in the
   0.85×–5.8× band has not been run. Readable-affect removal dissociates from transfer blocking.
 - **8B replication (report 29, `b1c8.*`):** the same five emotions transfer and the same two
-  block (15%, 31%); the pre-registered MC criterion returned instrument_failed on a tie.
+  reach significance (15%, 31%); the other three are too wide to tell; the manipulation is
+  half as strong there; the MC criterion returned instrument_failed under a null upper window
+  (a strict ≥ with no tolerance band — a defect to fix).
 - **Open, three designs in a row:** the token channel. Every rewrite arm failed its own check
   (the neutral rewrite keeps 67–98% of readable affect; the affect-preserving rewrite changes
   transfer itself). No claim about text vs activation is quotable.

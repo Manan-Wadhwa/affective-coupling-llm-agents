@@ -26,7 +26,7 @@ What the blind critiques changed is in [`docs/review/CRITIQUE_LEDGER.md`](docs/r
 | The rank-1 emotion direction is not the channel (pre-registered H1) | median 9% of the transfer removed at all 51 layers [4%, 25%]; afraid 21%, sad 33% | `b1c.*` · 22 |
 | A rank-5 affect subspace is not a clean instrument, and a fitted label-free control blocks as much as the emotion direction (pre-registered instrument_failed) | permuted control: afraid −49.5, sad −26.7, angry −44.3 vs emotion direction −51.9, −27.7 | `b1d.*` · 27 |
 | A fitted label-free rank-1 control is inert and the emotion direction blocks afraid and sad against it (pre-registered H3); the control's footprint is below the emotion direction's, so the footprint caveat stands | afraid 25% [17%, 33%], sad 29% [7%, 56%]; pc1 (5.8× footprint) blocks angry 61%, not afraid/sad | `b1e.*` · 28 |
-| The transfer and the same two blocked emotions replicate on the 8B (B1c's design; rule returns instrument_failed on a readout tie) | afraid 15%, sad 31% | `b1c8.*` · 29 |
+| The transfer pattern and the same two blocked emotions replicate on the 8B (B1c's design; the strict manipulation-check rule fails under a null upper window) | afraid 15%, sad 31%; the rest too wide to tell | `b1c8.*` · 29 |
 
 Not quotable: anything about the text channel (three rewrite designs failed their own checks); the
 behavioural reach; the earlier headline results listed under "What is retracted" below.
