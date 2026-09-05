@@ -806,7 +806,10 @@ class Ablate:
             d = self.dirs.get(hs_index)
             if d is None:
                 return o
-            proj = (hh @ d).unsqueeze(-1) * d
+            if d.ndim == 2:                       # orthonormal frame [d_model, k]: rank-k
+                proj = (hh @ d) @ d.T             # projection onto span(d); k=1 == below
+            else:
+                proj = (hh @ d).unsqueeze(-1) * d
             self.removed_norm.append(float(proj[self.masks].float().norm(dim=-1).mean()))
             h2 = torch.where(self.masks.unsqueeze(-1), hh - proj, hh)
             return (h2,) + o[1:] if isinstance(o, tuple) else h2
