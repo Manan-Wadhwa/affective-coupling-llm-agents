@@ -1,0 +1,21 @@
+# Critique ledger — what the blind critiques changed (rev 3, 2026-09-04 → 05)
+
+Every rev-3 result has a report in `results/reports/` and an independent blind critique
+appended to it (the critic saw only the driver, the core functions it calls, the
+pre-registration where one exists, and the JSON). This ledger records what each critique
+forced us to change, so the corrections are visible in one place. Reports 01–21 are covered
+in `results/reports/README.md`; this ledger starts where the night of 2026-09-04 did.
+
+| report | result | what the critique found | what changed |
+|---|---|---|---|
+| 22 | B1c all-layer rank-1 ablation, H1 | my "random control within 7%" was false (happy +28%); `emo_all − emo13_42` and `text_keep − none` were driver-declared, not pre-registered; the layer-43–63 null is unpowered for desperate/calm; blocked fraction tracks readable affect removed (r ≈ 0.85–0.91); calm's significant contrast is dropped by the testability filter; afraid's top-dose readout is non-monotone; prereg stamp empty (later shown to be a path bug: the document was on the box) | registry `b1c.random_control_inert`, `b1c.no_gain_beyond_layer42`, `b1c.readout_residual`, `b1c.verdict_H1` reworded; report and plan §13.5 corrected; "resolve the prereg from the driver's directory" adopted |
+| 23 | A2 fixed-penalty anchor 2000, layer 43 | "no rise" is "no net rise" (significant dip and recovery); the anchor gap and counts were misquoted at n = 75 and 1200; stale `c_n_formula` prose | registry `a2f2.*` reworded; to-dos: anchor < 600, prose fix |
+| 24 | A2 8B fixed-penalty arm | "falls with n" holds from n = 150 (peak at 150); cross-estimator n is 2000, not 1200, with 51% overlap; the decline reads as the penalty carrying the small-n fit — untestable from the files | registry `a2f8.*` reworded; the margin diagnostic (report 26) was built to test the reading |
+| 25 | A2 layer 54, both anchors | "layer 54 = the 8B's shape" and "no net rise at every depth" were both wrong (one significant drop 300 → 600 then flat; layer 16 rises); three driver builds across the layer comparison | registry `a2f54.*`, README, log and plan corrected; §2.1 item 2 is now depth-specific |
+| 26 | A2 margin diagnostic | the finding holds (separability everywhere; likelihood never takes over) but "max-margin separator itself" overreaches (one weak C; direction increasingly penalty-sensitive with n); the support-vector mechanism is a story; bounds were seed means | registry `a2m.*` reworded ("upper bound on the C → ∞ value"); Paper A item-2 sentence adopted from the critic; v2 with ten seeds, CIs and C = 500 run (C = 500 ≡ C = 50: tolerance-limited) |
+| 27 | B1d rank-5 subspace, instrument_failed | numbers verified to the digit incl. bit-identity with B1c; "significant" needs the BH-FDR line (q = 0.051 each); the median CI is scenario-only; the confound is *fitted*, not footprint (B1c's random direction already removed 2× the norm and was inert); frame geometry missing | registry `b1d.*` reworded; geometry computed (`b1d_frame_geometry.py`); PREREG_B1e motivation corrected in an addendum before launch |
+
+Pattern worth stating: the critiques never reversed a verdict, but they rejected two of my
+interpretive sentences outright (22: the random-control sentence; 25: the "8B's shape"
+sentence) and narrowed four others. The registry is the place where the corrected wording
+lives; the reports keep the original sentence, the critique and the reconciliation together.
