@@ -852,9 +852,10 @@ twice the emotion direction's norm and was inert); the permuted frame bites beca
 `b1d.frame_geometry`). B1c's afraid/sad result therefore needed a fitted, label-free rank-1
 control; **B1e ran it (report 28) and returned H3**: the control is inert, afraid and sad are
 blocked 25% and 29% against it, and the top principal direction at 5.8× the footprint blocks
-angry but not afraid or sad. B1c's partial blocking is emotion-specific; B1d's permuted frame
-blocked afraid/sad through its overlap with the affect frame and angry through high-variance
-removal. The 8B replication (report 29) shows the same two emotions blocked. Open for Paper B: that control; an attention-masking arm (PREREG §7); a
+angry but not afraid or sad. B1c's partial blocking survives a fitted label-free control under the pre-registered rule;
+the critique (report 28) keeps the footprint caveat standing (the control removes less than
+B1c's inert random direction; the 0.85×–5.8× band is unsampled) and withdraws the overlap
+explanation of B1d. The 8B replication (report 29) shows the same two emotions blocked. Open for Paper B: that control; an attention-masking arm (PREREG §7); a
 manipulation check independent of the ablated subspace; a rewrite design that survives its check.
 
 ### 13.4 Runs launched under this rescope
