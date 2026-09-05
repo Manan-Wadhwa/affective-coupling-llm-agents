@@ -103,3 +103,18 @@ per-layer gates (both), per-arm `removed_norm`, `k` and mask sizes, per-row `gen
 `perm_seed`/`rand_dir_seed`, and this document's sha256 and git commit. The driver resolves
 this document relative to its own directory (B1c's relative lookup failed) and the document is
 staged next to the driver on the box.
+
+## Addendum, 2026-09-05 06:30Z, before launch (driver written and verified, not yet run)
+
+1. Driver `src/rev3/b1d_subspace.py` at commit 940e418 (sha256 864ef287…) passed its selftest
+   locally and on the box, and an independent verifier's pre-launch review (prereg fidelity,
+   drift against B1c, GPU path, a real forward-pass smoke test with a rank-5 frame on the 27B:
+   rank-1 path bit-identical, rank-5 frame loses orthonormality only at the bf16 level,
+   2.5e-4). No code change was requested.
+2. The probe pool is B1c's file (sha 70129f86…); its features are recomputed on this box, so
+   `emo_all` equals B1c's arm up to forward-pass numerics, not bit-exactly.
+3. Outputs, checkpoint and log are written under `/marimo/results` (persists across lease
+   renewals); the pre-registration is staged at `/marimo/acl/docs/planning/PREREG_B1d.md`.
+4. The selftest plants the control arms as identical arrays, so it cannot detect a swapped
+   control in the decision panel; the verifier checked that panel by reading (`("none",
+   "sub_all", "perm_all")`). Recorded so the limitation is on file before the data.
