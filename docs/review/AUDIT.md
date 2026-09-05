@@ -1,5 +1,7 @@
 # Independent Claims Audit
 
+> ⟨2026-09-05⟩ Superseded in part by rev 3: the re-measurements below were repeated with the vendored core, pre-registered where a hypothesis was at stake, and critiqued blind. The current claim set is `docs/planning/RESEARCH_PROPOSAL.md`; the numbers are in `docs/review/claims.json` and `results/reports/`. This file is kept as the record of what was found first.
+
 Every claim in `README.md`, `docs/writeups/paper.html`, `docs/writeups/dossier.html`, `docs/review/NOVELTY_REVIEW.md`, the
 roadmap/spec, and the commit messages, checked against `results/*.json`,
 `results/{estimator,behavioral}/*.json` and the producing code. Data was read before prose to
