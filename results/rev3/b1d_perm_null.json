@@ -1,0 +1,685 @@
+{
+ "ref": "results/rev3/b1d_subspace_qwen36-27b.json",
+ "realisations": {
+  "0": {
+   "meta": {
+    "source": "results/rev3/b1d_subspace_qwen36-27b.json"
+   },
+   "per_emotion": {
+    "desperate": {
+     "diff": -2.2327889949312265,
+     "ci": [
+      -16.56313817178973,
+      12.090311235934532
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.7512,
+     "blocked_fraction": 0.026535167476938824,
+     "blocked_range": [
+      -0.14368506572817455,
+      0.19684154943877996
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": 0.07575547367425213
+    },
+    "afraid": {
+     "diff": -49.523959913389234,
+     "ci": [
+      -70.2184673067155,
+      -27.32708736318976
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0002,
+     "blocked_fraction": 0.23385506604871098,
+     "blocked_range": [
+      0.12904012182010285,
+      0.33157575320247484
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": 0.01623349532625959
+    },
+    "happy": {
+     "diff": 4.927293159962417,
+     "ci": [
+      -22.768358529729507,
+      32.907650877130905
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.7536,
+     "blocked_fraction": -0.10294901926396709,
+     "blocked_range": [
+      -0.6875601418665118,
+      0.47571356215060506
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": -0.08010416372678958
+    },
+    "calm": {
+     "diff": 10.670202007123748,
+     "ci": [
+      -20.74380949994344,
+      40.49653310961802
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.474,
+     "blocked_fraction": -0.2411642328401412,
+     "blocked_range": [
+      -0.9152887015209387,
+      0.46884444182930773
+     ],
+     "sig_negative": false,
+     "testable": false,
+     "dose0_readout_shift": -0.038627251923976175
+    },
+    "sad": {
+     "diff": -26.742416268900897,
+     "ci": [
+      -49.03881009658515,
+      -4.534972523866926
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0212,
+     "blocked_fraction": 0.27423564326825745,
+     "blocked_range": [
+      0.04650481447829295,
+      0.5028786290932888
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": 0.014313727978796757
+    },
+    "angry": {
+     "diff": -44.339182713014765,
+     "ci": [
+      -80.35684525959125,
+      -11.89862709392939
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0052,
+     "blocked_fraction": 0.22622810670983098,
+     "blocked_range": [
+      0.06070937070104872,
+      0.40999801647034323
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": -0.011362723067664761
+    }
+   },
+   "bh_q_over_testable": {
+    "desperate": 0.7536,
+    "afraid": 0.001,
+    "happy": 0.7536,
+    "sad": 0.035333333333333335,
+    "angry": 0.013
+   }
+  },
+  "1": {
+   "meta": {
+    "source": "results/rev3/b1d_subspace_qwen36-27b-perm1.json",
+    "sha256_16": "7b0d059bb1a1e83a",
+    "prereg": "31fde401"
+   },
+   "per_emotion": {
+    "desperate": {
+     "diff": 1.0724515138223296,
+     "ci": [
+      -14.726504848629496,
+      16.279503067631733
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.8748,
+     "blocked_fraction": -0.012745351484074576,
+     "blocked_range": [
+      -0.19347074054987137,
+      0.17501442070676798
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": 0.17745093295590753
+    },
+    "afraid": {
+     "diff": -0.47304372539753103,
+     "ci": [
+      -19.99793971359967,
+      18.29371176384646
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.9788,
+     "blocked_fraction": 0.0022337404327164847,
+     "blocked_range": [
+      -0.08638398828147383,
+      0.09443145339631104
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": 0.04146571960754894
+    },
+    "happy": {
+     "diff": -10.942545736244384,
+     "ci": [
+      -35.05242577392291,
+      13.732099247056423
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.37,
+     "blocked_fraction": 0.22862945540793772,
+     "blocked_range": [
+      -0.28691334248330025,
+      0.7323722658864266
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": 0.012309696679547455
+    },
+    "calm": {
+     "diff": -55.416006907589136,
+     "ci": [
+      -88.34532665762204,
+      -25.70197409992547
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0002,
+     "blocked_fraction": 1.2524935126823515,
+     "blocked_range": [
+      0.5809071714057024,
+      1.996750662655941
+     ],
+     "sig_negative": true,
+     "testable": false,
+     "dose0_readout_shift": -0.10154500397396762
+    },
+    "sad": {
+     "diff": -39.11942990396084,
+     "ci": [
+      -64.37997253961987,
+      -12.954417594502287
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0048,
+     "blocked_fraction": 0.40115829161166233,
+     "blocked_range": [
+      0.13284375676723306,
+      0.6601977549622905
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": 0.0018033750641465937
+    },
+    "angry": {
+     "diff": -32.20079049034558,
+     "ci": [
+      -61.73525101723989,
+      -0.6847727796695687
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0444,
+     "blocked_fraction": 0.16429540242861865,
+     "blocked_range": [
+      0.003493858930006913,
+      0.31498661229916786
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": 0.028583200922492245
+    }
+   },
+   "bh_q_over_testable": {
+    "desperate": 0.9788,
+    "afraid": 0.9788,
+    "happy": 0.6166666666666667,
+    "sad": 0.023999999999999997,
+    "angry": 0.111
+   }
+  },
+  "2": {
+   "meta": {
+    "source": "results/rev3/b1d_subspace_qwen36-27b-perm2.json",
+    "sha256_16": "72a70ebef6835c84",
+    "prereg": "31fde401"
+   },
+   "per_emotion": {
+    "desperate": {
+     "diff": 1.074421277441104,
+     "ci": [
+      -14.879786018881536,
+      17.15503545426416
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.8996,
+     "blocked_fraction": -0.012768760775159768,
+     "blocked_range": [
+      -0.20387584312047544,
+      0.17683606239925775
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": 0.30008800276686054
+    },
+    "afraid": {
+     "diff": -1.462361644862085,
+     "ci": [
+      -18.822737677965772,
+      17.78305293936503
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.8692,
+     "blocked_fraction": 0.006905358126539213,
+     "blocked_range": [
+      -0.08397262712747258,
+      0.08888207991841508
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": -0.010633375931058703
+    },
+    "happy": {
+     "diff": 2.459345986307852,
+     "ci": [
+      -21.80452422457284,
+      26.894794060584022
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.8528,
+     "blocked_fraction": -0.05138465463725288,
+     "blocked_range": [
+      -0.5619297618298423,
+      0.45557556888989903
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": -0.11077816423231887
+    },
+    "calm": {
+     "diff": -42.142282001335744,
+     "ci": [
+      -82.94211998880277,
+      -2.7895636446420187
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.034,
+     "blocked_fraction": 0.9524853514675504,
+     "blocked_range": [
+      0.063048757265298,
+      1.8746292454332332
+     ],
+     "sig_negative": true,
+     "testable": false,
+     "dose0_readout_shift": -0.13778680919314223
+    },
+    "sad": {
+     "diff": -11.399494152100047,
+     "ci": [
+      -29.13303761054481,
+      5.653096384044648
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.2,
+     "blocked_fraction": 0.11689847246037124,
+     "blocked_range": [
+      -0.0579708470523954,
+      0.2987507646710658
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": 0.015228569612749071
+    },
+    "angry": {
+     "diff": -38.508402317606794,
+     "ci": [
+      -75.02867050743986,
+      -3.9084560604685517
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0288,
+     "blocked_fraction": 0.19647820315315678,
+     "blocked_range": [
+      0.01994178874340928,
+      0.3828125156865293
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": -0.013894117530754046
+    }
+   },
+   "bh_q_over_testable": {
+    "desperate": 0.8995999999999998,
+    "afraid": 0.8995999999999998,
+    "happy": 0.8995999999999998,
+    "sad": 0.5,
+    "angry": 0.144
+   }
+  },
+  "3": {
+   "meta": {
+    "source": "results/rev3/b1d_subspace_qwen36-27b-perm3.json",
+    "sha256_16": "27b1a24a3e594958",
+    "prereg": "31fde401"
+   },
+   "per_emotion": {
+    "desperate": {
+     "diff": -3.9704606627336005,
+     "ci": [
+      -22.544012158507073,
+      14.937833439977899
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.678,
+     "blocked_fraction": 0.04718620473560636,
+     "blocked_range": [
+      -0.17752591622955388,
+      0.2679201391560765
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": -0.01104652202177829
+    },
+    "afraid": {
+     "diff": -4.345925708905128,
+     "ci": [
+      -31.035675500433545,
+      22.18298173812952
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.736,
+     "blocked_fraction": 0.020521718083049124,
+     "blocked_range": [
+      -0.10474935099293453,
+      0.14655229421704674
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": 0.01211994573869532
+    },
+    "happy": {
+     "diff": -6.352462579071549,
+     "ci": [
+      -39.81807938485271,
+      27.51199333869572
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.6936,
+     "blocked_fraction": 0.13272597574272507,
+     "blocked_range": [
+      -0.5748252925622804,
+      0.8319440489058781
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": -0.054734415298461514
+    },
+    "calm": {
+     "diff": -25.533624844674517,
+     "ci": [
+      -53.982360540581084,
+      2.0344617472644275
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.0704,
+     "blocked_fraction": 0.5771021994881418,
+     "blocked_range": [
+      -0.045982204103921676,
+      1.2200907309887412
+     ],
+     "sig_negative": false,
+     "testable": false,
+     "dose0_readout_shift": -0.10323819816914168
+    },
+    "sad": {
+     "diff": -33.11028686937594,
+     "ci": [
+      -54.31781242711899,
+      -12.1032075643543
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0024,
+     "blocked_fraction": 0.3395362904801958,
+     "blocked_range": [
+      0.1241148473139206,
+      0.557013251237067
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": -0.011360613543927714
+    },
+    "angry": {
+     "diff": -37.695465458669474,
+     "ci": [
+      -69.2485036068771,
+      -8.477341923036347
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0108,
+     "blocked_fraction": 0.19233042335165756,
+     "blocked_range": [
+      0.04325323327661292,
+      0.353320853135038
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": -0.0033515102144956455
+    }
+   },
+   "bh_q_over_testable": {
+    "desperate": 0.736,
+    "afraid": 0.736,
+    "happy": 0.736,
+    "sad": 0.011999999999999999,
+    "angry": 0.027000000000000003
+   }
+  },
+  "4": {
+   "meta": {
+    "source": "results/rev3/b1d_subspace_qwen36-27b-perm4.json",
+    "sha256_16": "cec51c397e277fc3",
+    "prereg": "31fde401"
+   },
+   "per_emotion": {
+    "desperate": {
+     "diff": -14.458032682751295,
+     "ci": [
+      -30.99879264614119,
+      1.9633096796139327
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.0828,
+     "blocked_fraction": 0.17182381295088642,
+     "blocked_range": [
+      -0.02333259043999161,
+      0.3683994127145867
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": 0.09805696424873721
+    },
+    "afraid": {
+     "diff": -28.86512578886618,
+     "ci": [
+      -51.85734283312044,
+      -6.058791495109514
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.012,
+     "blocked_fraction": 0.13630283017886582,
+     "blocked_range": [
+      0.028609971572187184,
+      0.24487343812083495
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": -0.008926733994192415
+    },
+    "happy": {
+     "diff": 17.689049883402177,
+     "ci": [
+      -8.4977218219063,
+      44.20067613670547
+     ],
+     "sig": false,
+     "n_blocks": 29,
+     "p_boot": 0.1768,
+     "blocked_fraction": -0.3695883882057336,
+     "blocked_range": [
+      -0.9235123852693128,
+      0.17754821950759225
+     ],
+     "sig_negative": false,
+     "testable": true,
+     "dose0_readout_shift": -0.026690556951765698
+    },
+    "calm": {
+     "diff": -62.98732286826062,
+     "ci": [
+      -112.52089245196649,
+      -10.855463751668967
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0208,
+     "blocked_fraction": 1.4236177898072464,
+     "blocked_range": [
+      0.24535145501906955,
+      2.5431584789631643
+     ],
+     "sig_negative": true,
+     "testable": false,
+     "dose0_readout_shift": -0.1414674560308141
+    },
+    "sad": {
+     "diff": -34.374814334109814,
+     "ci": [
+      -59.68904283243643,
+      -8.87360968080235
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0056,
+     "blocked_fraction": 0.35250364912253906,
+     "blocked_range": [
+      0.09099626729526948,
+      0.6120936452647826
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": -0.008256522330435834
+    },
+    "angry": {
+     "diff": -39.48682941665743,
+     "ci": [
+      -73.28772379648557,
+      -7.93929365470599
+     ],
+     "sig": true,
+     "n_blocks": 29,
+     "p_boot": 0.0144,
+     "blocked_fraction": 0.20147034997743385,
+     "blocked_range": [
+      0.040507994559636044,
+      0.3739298287671267
+     ],
+     "sig_negative": true,
+     "testable": true,
+     "dose0_readout_shift": 0.0031183635808543914
+    }
+   },
+   "bh_q_over_testable": {
+    "desperate": 0.1035,
+    "afraid": 0.023999999999999997,
+    "happy": 0.1768,
+    "sad": 0.023999999999999997,
+    "angry": 0.023999999999999997
+   }
+  }
+ },
+ "across": {
+  "desperate": {
+   "n": 5,
+   "median": 0.026535167476938824,
+   "min": -0.012768760775159768,
+   "max": 0.17182381295088642,
+   "n_sig_negative": 0,
+   "n_sig_negative_fresh": 0,
+   "n_fresh": 4
+  },
+  "afraid": {
+   "n": 5,
+   "median": 0.020521718083049124,
+   "min": 0.0022337404327164847,
+   "max": 0.23385506604871098,
+   "n_sig_negative": 2,
+   "n_sig_negative_fresh": 1,
+   "n_fresh": 4
+  },
+  "happy": {
+   "n": 5,
+   "median": -0.05138465463725288,
+   "min": -0.3695883882057336,
+   "max": 0.22862945540793772,
+   "n_sig_negative": 0,
+   "n_sig_negative_fresh": 0,
+   "n_fresh": 4
+  },
+  "calm": {
+   "n": 5,
+   "median": 0.9524853514675504,
+   "min": -0.2411642328401412,
+   "max": 1.4236177898072464,
+   "n_sig_negative": 3,
+   "n_sig_negative_fresh": 3,
+   "n_fresh": 4
+  },
+  "sad": {
+   "n": 5,
+   "median": 0.3395362904801958,
+   "min": 0.11689847246037124,
+   "max": 0.40115829161166233,
+   "n_sig_negative": 4,
+   "n_sig_negative_fresh": 3,
+   "n_fresh": 4
+  },
+  "angry": {
+   "n": 5,
+   "median": 0.19647820315315678,
+   "min": 0.16429540242861865,
+   "max": 0.22622810670983098,
+   "n_sig_negative": 5,
+   "n_sig_negative_fresh": 4,
+   "n_fresh": 4
+  }
+ },
+ "reading": {
+  "n_fresh": 4,
+  "fresh_realisations_blocking_afraid_sad_angry": 1,
+  "rule": "addendum 3: 'estimator' if >= 3 of 4 fresh realisations block afraid, sad and angry (unadjusted CI below zero); 'unlucky draw' if <= 1; else 'mixed'",
+  "reading": "unlucky draw"
+ }
+}

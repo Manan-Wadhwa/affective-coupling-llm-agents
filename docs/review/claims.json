@@ -1,5 +1,5 @@
 {
- "_readme": "Provenance registry (RESEARCH_PLAN rev 3, \u00a70.2/\u00a70.3). One entry per reported number. `category` is the \u00a70.2 provenance class; `claim_status` is whether the SENTENCE built on the number may still be quoted, which is a separate question from whether the number resolves. Checked by tools/check_provenance.py.",
+ "_readme": "Provenance registry (RESEARCH_PLAN rev 3, §0.2/§0.3). One entry per reported number. `category` is the §0.2 provenance class; `claim_status` is whether the SENTENCE built on the number may still be quoted, which is a separate question from whether the number resolves. Checked by tools/check_provenance.py.",
  "_categories": {
   "a": "reproducible from committed files",
   "b": "run, but the artifact was lost (lease expiry) -- re-run and commit",
@@ -143,7 +143,7 @@
    ],
    "category": "a",
    "claim_status": "retracted",
-   "note": "Same defect as e3.affect_removed, and this is the sentence \u00a71.2 says has no experiment behind it in any reading. Superseded by B1 (the E4 rerun), which does regenerate B under the intervention.",
+   "note": "Same defect as e3.affect_removed, and this is the sentence §1.2 says has no experiment behind it in any reading. Superseded by B1 (the E4 rerun), which does regenerate B under the intervention.",
    "pointer": {
     "script": "src/representation/coupling_e3_ablate.py",
     "file": "results/representation/e3v2_qwen36-27b.json",
@@ -203,7 +203,7 @@
    ],
    "category": "a",
    "claim_status": "retracted",
-   "note": "The scramble is broken by construction: coupling_e5_actpass.py:185 permutes vA WITHIN one emotion, so it preserves the emotion component and cannot test emotion specificity at all. \u00a76: a permutation null must permute across the variable it tests.",
+   "note": "The scramble is broken by construction: coupling_e5_actpass.py:185 permutes vA WITHIN one emotion, so it preserves the emotion component and cannot test emotion specificity at all. §6: a permutation null must permute across the variable it tests.",
    "pointer": {
     "script": "src/representation/coupling_e5_actpass.py",
     "file": "results/representation/e5actpass_qwen36-b03.json",
@@ -370,7 +370,7 @@
    ],
    "category": "d",
    "claim_status": "retracted",
-   "note": "AUDIT 11. Every Llama artifact in this repo is llama3- (Llama-3, instruct or abliterated). No Llama-3.1-8B result file exists anywhere. Correct the identity claim whether or not the numbers are re-derived (\u00a70.2).",
+   "note": "AUDIT 11. Every Llama artifact in this repo is llama3- (Llama-3, instruct or abliterated). No Llama-3.1-8B result file exists anywhere. Correct the identity claim whether or not the numbers are re-derived (§0.2).",
    "pointer": {
     "script": null,
     "file": null
@@ -455,7 +455,7 @@
    ],
    "category": "c",
    "claim_status": "retracted",
-   "note": "AUDIT 14. The repo holds 300 E0 dialogues plus 200 multi-turn transcripts; the README itself calls the dataset private; and three different counts (~13k / 12,333 / ~12k) appear across documents. \u00a70.6 makes publishing the dataset a Phase 0 deliverable precisely because it is the only thing that lets anyone outside the team check the ablation. Archaeology 2026-09-04: all three counts entered together at c976a8e (2026-07-25, the initial commit) -- README '~12k', dossier '12,333', paper '\u224813k' -- none tied to a file, and no later commit introduced or reconciled them.",
+   "note": "AUDIT 14. The repo holds 300 E0 dialogues plus 200 multi-turn transcripts; the README itself calls the dataset private; and three different counts (~13k / 12,333 / ~12k) appear across documents. §0.6 makes publishing the dataset a Phase 0 deliverable precisely because it is the only thing that lets anyone outside the team check the ablation. Archaeology 2026-09-04: all three counts entered together at c976a8e (2026-07-25, the initial commit) -- README '~12k', dossier '12,333', paper '≈13k' -- none tied to a file, and no later commit introduced or reconciled them.",
    "pointer": {
     "script": null,
     "file": null
@@ -1062,7 +1062,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "The driver's own prereg stamp is EMPTY (prereg.found=false). The document WAS on the box before launch: /marimo/acl/docs/planning/PREREG_B1c.md, sha256 5368b835..., byte-identical to the committed cc2dc32 version, mtime 19:32:17Z against runner start 19:32:18Z and _provenance.started_utc 19:32:20Z (verified on the box at 22:40Z); the driver's relative lookup did not resolve it from the runner's working directory. Ordering evidence: git commit times (122af4c 19:02Z, cc2dc32 19:22Z), the box file's mtime, and started_utc. H1 is the prereg's 'rank-1 insufficiency' outcome: it says the single direction does not carry the transfer, not what does (PREREG \u00a77). The MC-ablate criterion (emo_all drop >= emo13_42 drop, rand drop < 0.02) passes, but the affect stays largely READABLE on A's span after ablation for four emotions (see b1c.readout_residual). Under-reported by the rule: calm's emo_all vs rand_all contrast (-41.6 [-74.9, -10.7]) is the largest and significant but calm is untestable (none slope +44 [-3, +99]); afraid's A-span readout under none is non-monotone in dose (0.25/0.49/0.58/0.40) and afraid alone has mc_ablate.separated = false. BH-FDR ran over 5 testable emotions, PREREG says six. probe_n 1615 vs PREREG \u00a73's 2160 (B1's pool after its degeneracy filter). The prereg header date is IST, provenance is UTC.",
+   "note": "The driver's own prereg stamp is EMPTY (prereg.found=false). The document WAS on the box before launch: /marimo/acl/docs/planning/PREREG_B1c.md, sha256 5368b835..., byte-identical to the committed cc2dc32 version, mtime 19:32:17Z against runner start 19:32:18Z and _provenance.started_utc 19:32:20Z (verified on the box at 22:40Z); the driver's relative lookup did not resolve it from the runner's working directory. Ordering evidence: git commit times (122af4c 19:02Z, cc2dc32 19:22Z), the box file's mtime, and started_utc. H1 is the prereg's 'rank-1 insufficiency' outcome: it says the single direction does not carry the transfer, not what does (PREREG §7). The MC-ablate criterion (emo_all drop >= emo13_42 drop, rand drop < 0.02) passes, but the affect stays largely READABLE on A's span after ablation for four emotions (see b1c.readout_residual). Under-reported by the rule: calm's emo_all vs rand_all contrast (-41.6 [-74.9, -10.7]) is the largest and significant but calm is untestable (none slope +44 [-3, +99]); afraid's A-span readout under none is non-monotone in dose (0.25/0.49/0.58/0.40) and afraid alone has mc_ablate.separated = false. BH-FDR ran over 5 testable emotions, PREREG says six. probe_n 1615 vs PREREG §3's 2160 (B1's pool after its degeneracy filter). The prereg header date is IST, provenance is UTC.",
    "pointer": {
     "script": "src/rev3/b1c_alllayer.py",
     "file": "results/rev3/b1c_alllayer_qwen36-27b.json",
@@ -1114,7 +1114,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "This contrast was declared in the driver (CONTRASTS, b1c_alllayer.py L109-110) but is NOT among PREREG \u00a75's four contrasts; treat as driver-declared, not pre-registered. Derived: number of summary.<emotion>.emo_all_vs_emo13_42.sig that are true.",
+   "note": "This contrast was declared in the driver (CONTRASTS, b1c_alllayer.py L109-110) but is NOT among PREREG §5's four contrasts; treat as driver-declared, not pre-registered. Derived: number of summary.<emotion>.emo_all_vs_emo13_42.sig that are true.",
    "pointer": {
     "script": "src/rev3/b1c_alllayer.py",
     "file": "results/rev3/b1c_alllayer_qwen36-27b.json"
@@ -1196,7 +1196,7 @@
   },
   {
    "id": "b1c.text_arms_uninterpretable",
-   "text": "B1c: both rewrite arms are uninterpretable under the pre-registered \u00a74.4 check for all six emotions -- the neutral rewrite keeps 67-98% of A's readable affect (threshold 50%), and the affect-preserving control rewrite itself shifts the transfer significantly for desperate (+31), happy (-51), calm (-66) and sad (-69), in both directions; afraid additionally loses 26%/20% of rewrites to refusals or degenerate output",
+   "text": "B1c: both rewrite arms are uninterpretable under the pre-registered §4.4 check for all six emotions -- the neutral rewrite keeps 67-98% of A's readable affect (threshold 50%), and the affect-preserving control rewrite itself shifts the transfer significantly for desperate (+31), happy (-51), calm (-66) and sad (-69), in both directions; afraid additionally loses 26%/20% of rewrites to refusals or degenerate output",
    "appears_in": [
     "results/rev3/README.md",
     "docs/review/RESULTS_LOG.md",
@@ -1520,7 +1520,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "instrument_failed is PREREG \u00a72's own outcome: the readable affect on A's span is not confined to the rank-5 class-mean subspace, and the blocked fractions below are descriptive. Two further instrument facts (report 27): the subspace removes 6.9 units of norm per masked position summed over layers against 0.46-0.66 for the rank-1 direction and 3.1-3.2 for a random 5-frame, and it shifts the readout's dose-0 baseline (desperate 0.108 -> 0.500, calm 0.277 -> 0.024, happy 0.287 -> 0.120), so the \u00a74.2 share (which uses the none-arm floor) is confounded for this arm; shares above 1 mean the readout fell below the none-arm floor. The none and emo_all arms reproduce B1c's slopes bit for bit (all twelve). The critic's recomputation of the \u00a74.2 share with each arm's own dose-0 floor gives 0.58/0.89/0.88/0.67/1.00/0.40 (desperate/afraid/happy/calm/sad/angry): still three failures, so the verdict is robust, but the failing set becomes desperate/calm/angry -- the per-emotion attribution is not. Defects: the permutation_control pointer names ::perm_frame while main uses class_mean_frame on the permuted labels directly; prereg.git_commit is empty (no git on the box). The bit-exact match with B1c is a fresh run (360 arm-rows generated over 6724 s per the log), not reused cells.",
+   "note": "instrument_failed is PREREG §2's own outcome: the readable affect on A's span is not confined to the rank-5 class-mean subspace, and the blocked fractions below are descriptive. Two further instrument facts (report 27): the subspace removes 6.9 units of norm per masked position summed over layers against 0.46-0.66 for the rank-1 direction and 3.1-3.2 for a random 5-frame, and it shifts the readout's dose-0 baseline (desperate 0.108 -> 0.500, calm 0.277 -> 0.024, happy 0.287 -> 0.120), so the §4.2 share (which uses the none-arm floor) is confounded for this arm; shares above 1 mean the readout fell below the none-arm floor. The none and emo_all arms reproduce B1c's slopes bit for bit (all twelve). The critic's recomputation of the §4.2 share with each arm's own dose-0 floor gives 0.58/0.89/0.88/0.67/1.00/0.40 (desperate/afraid/happy/calm/sad/angry): still three failures, so the verdict is robust, but the failing set becomes desperate/calm/angry -- the per-emotion attribution is not. Defects: the permutation_control pointer names ::perm_frame while main uses class_mean_frame on the permuted labels directly; prereg.git_commit is empty (no git on the box). The bit-exact match with B1c is a fresh run (360 arm-rows generated over 6724 s per the log), not reused cells.",
    "pointer": {
     "script": "src/rev3/b1d_subspace.py",
     "file": "results/rev3/b1d_subspace_qwen36-27b.json",
@@ -1618,7 +1618,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "The readout discriminates emotions along the very subspace the arm removes, so the instrument and the intervention share a target; this is why the \u00a74.2 share is not interpretable for sub_all (it exceeds 1 for three emotions and reads 0.11 for desperate, whose readout is biased toward 'desperate' at every dose). Numbers from summary.<e>.<arm>.ctx_readout_by_dose['0.0']. Pointer resolves desperate's sub_all share (0.11), the value this baseline shift explains; the dose-0 readouts sit under summary.<e>.<arm>.ctx_readout_by_dose['0.0'], which the checker's dotted path cannot address.",
+   "note": "The readout discriminates emotions along the very subspace the arm removes, so the instrument and the intervention share a target; this is why the §4.2 share is not interpretable for sub_all (it exceeds 1 for three emotions and reads 0.11 for desperate, whose readout is biased toward 'desperate' at every dose). Numbers from summary.<e>.<arm>.ctx_readout_by_dose['0.0']. Pointer resolves desperate's sub_all share (0.11), the value this baseline shift explains; the dose-0 readouts sit under summary.<e>.<arm>.ctx_readout_by_dose['0.0'], which the checker's dotted path cannot address.",
    "pointer": {
     "script": "src/rev3/b1d_subspace.py",
     "file": "results/rev3/b1d_subspace_qwen36-27b.json",
@@ -1812,7 +1812,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "Generality of the phenomenon, with caveats from the critique (report 29): the pool kept 1079 of 2160 (50% vs 75% on the 27B); the class-mean gate passes at every layer but the desperate class alone is 0.64-0.76 (PREREG \u00a73 requires per-class reporting); the steering manipulation is half as strong and less specific than on the 27B (MC-steer readout gain mean +0.25 vs +0.50); slopes are unnormalised probe scores and are not comparable across models in size.",
+   "note": "Generality of the phenomenon, with caveats from the critique (report 29): the pool kept 1079 of 2160 (50% vs 75% on the 27B); the class-mean gate passes at every layer but the desperate class alone is 0.64-0.76 (PREREG §3 requires per-class reporting); the steering manipulation is half as strong and less specific than on the 27B (MC-steer readout gain mean +0.25 vs +0.50); slopes are unnormalised probe scores and are not comparable across models in size.",
    "pointer": {
     "script": "src/rev3/b1c_alllayer.py",
     "file": "results/rev3/b1c_alllayer_llama3-abl.json",
@@ -1836,7 +1836,7 @@
    ],
    "category": "a",
    "claim_status": "quotable",
-   "note": "Corrected after the blind critique (report 29): the first wording called the failure a floating-point tie; it is a real null of the upper window on the 8B (on the 27B all six upper-window drops are negative with CIs excluding zero) and a defect of a strict >= criterion with no tolerance band, not fp noise and not a pipeline fault (n_layers_ablated 15 vs 26 in every cell, removed_norm larger for emo_all in 72/72). Dose is not comparable across models: MC-steer moves A's readout by half as much on the 8B (mean +0.25 vs +0.50) and less specifically ('desperate' is the modal readout for afraid, sad and angry at the top dose); afraid's readout (0.115) is below the 1/6 chance floor; probe-score slopes are not comparable across models. The rewrite arms: only 3 of 6 fail the \u00a74.4 check here (afraid, calm, sad); text_keep collapses relative to none for 5 of 6, so 'context changed' alone removes most of the transfer. Provenance: the prereg stamp is empty in this file too (the B1c driver's lookup bug); PREREG_B1c \u00a77 lists the 8B as not tested; the windows hs 6-20 / 6-31 come from round(0.2 * n_layers) at run time.",
+   "note": "Corrected after the blind critique (report 29): the first wording called the failure a floating-point tie; it is a real null of the upper window on the 8B (on the 27B all six upper-window drops are negative with CIs excluding zero) and a defect of a strict >= criterion with no tolerance band, not fp noise and not a pipeline fault (n_layers_ablated 15 vs 26 in every cell, removed_norm larger for emo_all in 72/72). Dose is not comparable across models: MC-steer moves A's readout by half as much on the 8B (mean +0.25 vs +0.50) and less specifically ('desperate' is the modal readout for afraid, sad and angry at the top dose); afraid's readout (0.115) is below the 1/6 chance floor; probe-score slopes are not comparable across models. The rewrite arms: only 3 of 6 fail the §4.4 check here (afraid, calm, sad); text_keep collapses relative to none for 5 of 6, so 'context changed' alone removes most of the transfer. Provenance: the prereg stamp is empty in this file too (the B1c driver's lookup bug); PREREG_B1c §7 lists the 8B as not tested; the windows hs 6-20 / 6-31 come from round(0.2 * n_layers) at run time.",
    "pointer": {
     "script": "src/rev3/b1c_alllayer.py",
     "file": "results/rev3/b1c_alllayer_llama3-abl.json",
@@ -2168,6 +2168,39 @@
     }
    },
    "expected": 4
+  },
+  {
+   "id": "b1dperm.reading",
+   "text": "B1d addendum 3 (PREREG_B1d.md addendum 3, written 10:20Z 2026-09-06 before launch; four fresh label permutations of the rank-5 permuted-label frame, --perm-seed 1..4, arm perm_all only, boxes A-D, contrasted against the B1d run's stored none arm with the scenario-blocked, dose-paired bootstrap of paper_revision_stats): afraid, sad and angry are all blocked (unadjusted CI below zero) in 1 of the 4 fresh realisations; over the 5 realisations (original seed 0 included) median blocked fractions afraid 0.02 [0.00, 0.23], sad 0.34 [0.12, 0.40], angry 0.20 [0.16, 0.23]; contrast below zero in afraid 2/5, sad 4/5, angry 5/5, desperate 0/5, happy 0/5; dose-0 readout shifts at most 0.300. Fixed reading: 'unlucky draw' (three-emotion pattern downgraded to a single-realisation observation; angry 5/5, sad 4/5, afraid 2/5 stated).",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Descriptive permutation null for the B1d control; no decision verdict attached (addendum 3). Contrasts recomputed from rows by src/rev3/b1d_perm_null.py; the none arm is the B1d run's stored one, bit-identical by construction (same generation seeds). Fresh-run file sha256 prefixes: perm1 7b0d059bb1a1e83a, perm2 72a70ebef6835c84, perm3 27b1a24a3e594958, perm4 cec51c397e277fc3. Permutation seeds 1-4 and the arm perm_all are recorded in each run file's _provenance.config.",
+   "pointer": {
+    "script": "src/rev3/b1d_perm_null.py",
+    "file": "results/rev3/b1d_perm_null.json",
+    "json_path": "reading.reading"
+   },
+   "expected": "unlucky draw"
+  },
+  {
+   "id": "b1dperm.counts",
+   "text": "Across the five permuted-label rank-5 realisations, the perm_all - none contrast is significantly negative (unadjusted, scenario-blocked, dose-paired CI) in afraid 2/5, sad 4/5, angry 5/5; all three together in 1 of the 4 fresh realisations.",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Same file as b1dperm.reading; the table docs/writeups/table_perm_null.tex is written by the same script.",
+   "pointer": {
+    "script": "src/rev3/b1d_perm_null.py",
+    "file": "results/rev3/b1d_perm_null.json",
+    "json_path": "reading.fresh_realisations_blocking_afraid_sad_angry"
+   },
+   "expected": 1
   }
  ]
 }
