@@ -1,0 +1,26 @@
+{
+ "p_emo_vs_rand": {
+  "desperate": 0.5792,
+  "afraid": 0.0002,
+  "happy": 0.8028,
+  "calm": 0.0036,
+  "sad": 0.0148,
+  "angry": 0.062
+ },
+ "q_five_family": {
+  "desperate": 0.7240000000000001,
+  "afraid": 0.001,
+  "happy": 0.8027999999999998,
+  "sad": 0.037000000000000005,
+  "angry": 0.10333333333333333
+ },
+ "q_six_family": {
+  "desperate": 0.69504,
+  "afraid": 0.0012000000000000001,
+  "happy": 0.8028,
+  "calm": 0.0108,
+  "sad": 0.0296,
+  "angry": 0.093
+ },
+ "note": "B1c decision contrast emo_all - rand_all, two-sided scenario bootstrap p (5000 draws), BH over five testable emotions (paper) and over all six (pre-registered family incl. calm)"
+}

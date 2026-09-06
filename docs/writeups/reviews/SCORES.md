@@ -31,6 +31,8 @@ Audits: all nine original citations real (two stale records fixed; two misstatem
 | R3 (agents / workshop fit) | 4/10, conf 4 | 6/10, conf 4 | poster | not about agent behaviour: no transcript-level outcome on B |
 | citation validator | 14/14 real; 1 mischaracterised, 2 imprecise, 1 decorative; 6 missing needed | | | |
 | claims-and-numbers checker | 162 items; 5 precision mismatches, 8 inconsistencies, 5 overclaims; no headline number wrong | | | |
-| area chair | (see below) | | | |
+| area chair | reject, 4/10 | poster, 6/10 (spotlight if conditions 2, 3, 12 met) | poster | fitted-control mechanism untested against a covariance-matched frame; rank-5 control is one draw; no transcript-level outcome |
 
 All reviewers scored the same bundle (commit c8e1ea5). Fixes applied after the round: revision note 25.
+
+Area chair conditions 1, 4–11 met from committed data (revision note 26); 2, 3, 12 need GPU runs. Final manuscript: `docs/writeups/final/paper_final_2026-09-06.pdf`.

@@ -1,0 +1,22 @@
+\begin{tabular}{llrrrrr}
+\toprule
+run & arm & words & degenerate & refusal & distinct-2 & perplexity \\
+\midrule
+B1c & none (baseline) & 46 & 0.3\% & 0.3\% & 1.00 & 14.92 \\
+B1c & emotion direction (hs 13--63) & 46 & 0.5\% & 0.5\% & 1.00 & 15.19 \\
+B1c & emotion direction (hs 13--42) & 46 & 0.5\% & 0.5\% & 1.00 & 15.42$^{\cdot}$ \\
+B1c & random direction & 46 & 0.3\% & 0.3\% & 1.00 & 14.72 \\
+\midrule
+B1d & none (baseline) & 46 & 0.3\% & 0.3\% & 1.00 & 14.92 \\
+B1d & affect subspace (rank 5) & 45$^{\cdot}$ & 0.5\% & 0.5\% & 1.00 & 15.02 \\
+B1d & permuted-label subspace (rank 5) & 45$^{\cdot}$ & 0.3\% & 0.3\% & 1.00$^{\cdot}$ & 15.05 \\
+B1d & random 5-frame & 46$^{\cdot}$ & 0.4\% & 0.4\% & 1.00 & 14.46$^{\cdot}$ \\
+\midrule
+B1e & none (baseline) & 46 & 0.3\% & 0.3\% & 1.00 & 14.92 \\
+B1e & permuted-label direction (rank 1) & 46 & 0.4\% & 0.4\% & 1.00 & 14.87 \\
+B1e & top principal direction & 48$^{\cdot}$ & 0.0\%$^{\cdot}$ & 0.0\%$^{\cdot}$ & 1.00$^{\cdot}$ & 11.23$^{\cdot}$ \\
+\midrule
+B1d-23 & none (baseline) & 46 & 0.3\% & 0.3\% & 1.00 & 14.92 \\
+B1d-23 & random 23-frame, footprint-matched & 46 & 0.3\% & 0.3\% & 1.00 & 14.80 \\
+\bottomrule
+\end{tabular}
