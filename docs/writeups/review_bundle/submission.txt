@@ -51,7 +51,7 @@ moving target: the direction does not reproduce across independent fits, and the
 sample size or the penalty but separability, so the fitted row is a tie-break rather than an estimate
 [9, 12]. Intervene with the reproducible direction and the standard control, a norm-matched random
 vector, stays inert, while a rank-5 subspace fitted by the same estimator with the labels destroyed
-blocks transfer as strongly as the affect subspace itself.
+blocks the response as strongly as the affect subspace itself.
      The evidence is an estimator study across two models and three depths and three pre-registered
 experiments on the channel, each critiqued blind before its wording entered this paper. The response
 itself is robust to sampling: five of six emotions on each model. The channel is not what the linear
@@ -63,8 +63,8 @@ inert while a rank-5 permuted-label frame is not.
 direction: beside the random direction, run the same estimator on permuted labels at the rank of
 the intervention, report every arm’s footprint, and check the manipulation with an instrument that
 does not share the ablation’s target. The scientific consequence is narrower than we hoped: the
-response exists, the rank-1 direction carries part of it for two emotions, only sad’s part replicates
-across models, and the rest is open.
+receiver’s response exists, the rank-1 direction carries part of it for two emotions, only sad’s part
+replicates across models, and the rest is open.
 
 Contributions.
 
@@ -247,13 +247,13 @@ for difference-of-means (a2l.8b_lowd). The mechanism is therefore the n < d regi
 recommendation holds because probe pools in this literature are small relative to model width.
 
 
-4   Transfer
+4    The receiver’s response
 B’s present-emotion projection rises with A’s dose for desperate, afraid, happy, sad and angry, with
-none-arm slopes from +48 to +212 and CIs excluding zero; calm’s (+44 [−3, +99]) does not, so
-calm is untestable under the pre-registered rule (b1c.verdict_H1; Figure 3). The slope is a poor
-summary for two emotions: happy rises +71 [+50, +94] over the first dose step and +0 [−24, +25]
-over the last, calm +38 [−3, +78] then −34 [−77, +13], while desperate, sad and angry rise at both
-steps (rev.dose_shape). The transfer is robust to sampling: the B1 follow-up run, with independently
+none-arm slopes from +48 to +212 and CIs excluding zero; calm’s (+44 [−3, +99]) does not, so calm
+is untestable under the pre-registered rule (b1c.verdict_H1; Figure 3). The slope is a poor summary
+for two emotions: happy rises +71 [+50, +94] over the first dose step and +0 [−24, +25] over the
+last, calm +38 [−3, +78] then −34 [−77, +13], while desperate, sad and angry rise at both steps
+(rev.dose_shape). The response is robust to sampling: the B1 follow-up run, with independently
 sampled replies, gives the same five testable emotions and afraid/sad as the blocked ones (b1f.*);
 B1c, B1d and B1e share the pool, the directions and the seed recipe and agree bit for bit on
 their shared arms, which is a determinism check, not a replication (b1d.replicates_b1c_arms). The
@@ -380,7 +380,7 @@ norm random direction, removing twice the norm, is inert against baseline for al
 (largest happy +13.5 [−0.1, +28.4], q ≥ 0.26; rev.b1c_random_vs_none). Across the five testable
 emotions the blocked fraction rises with the share of readable affect the ablation removes (r ≈ 0.85
 on five points, p ≈ 0.07, descriptive; b1c.readout_residual): the rank-1 direction is insuﬀicient to
-carry the transfer.
+carry the response.
 
 B1d: the rank-5 subspace (verdict instrument_failed). Projecting out the rank-5 class-
 mean affect subspace (16–21% of the pool’s variance, cosine 0.71–0.81 to the top-5 principal compo-
@@ -530,7 +530,7 @@ Each item below is in the registry note of the claim it qualifies.
       (19:32Z) in the repository history. The pool has 1,615 items against the registered 2,160; the
       false-discovery rate ran over five emotions rather than six.
     • B1d. The permuted-label subspace removed only 6.5% of afraid’s readable affect and still
-      blocked its transfer, so overlap with the readable-affect direction does not explain its blocking;
+      blocked its response, so overlap with the readable-affect direction does not explain its blocking;
       recomputing the instrument share with each arm’s own floor keeps three failures but changes
       which emotions fail. The median’s confidence interval resamples scenarios only.
     • B1e. The control removes less norm than the emotion direction and less than B1c’s inert
