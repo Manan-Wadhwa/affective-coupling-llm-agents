@@ -101,3 +101,16 @@ The reference to "footprint-matched" in §1 should be read as "fitted, label-fre
    an **H3′** verdict would be strong (a control with a smaller footprint blocking as much).
    `pc1_all` (5.8×) brackets the footprint from above, descriptively. Hypotheses, rule and
    thresholds unchanged.
+
+## Addendum 3, 2026-09-06 08:00Z, before the runs — direction-resampling spread (camera-ready condition 3)
+
+Asked for by Reviewer 1 and the area chair: every 27B ablation rests on one draw of the
+direction estimate. Ten additional runs of the B1e design, each with the probe pool re-split by a
+different seed (split seeds 1–10; the original run used 0), so that the steering direction, the
+per-layer ablation directions, the permuted-label control and the readout probe are all
+re-estimated; restricted to the two pre-specified emotions (afraid, sad) and the arms `none`,
+`emo_all`, `permdir_all`; otherwise identical (doses, three reps, 29 scenarios, generation seeds).
+Reported: for each draw the blocked fraction of `emo_all − permdir_all` and of `emo_all − none`
+for afraid and sad with their CIs; across draws the median, range and the number of draws whose
+decision contrast is significantly negative. No new hypothesis; the quantity reported is the
+across-draw spread the paper currently lacks. Draws run in parallel on three boxes.

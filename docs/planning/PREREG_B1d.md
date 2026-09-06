@@ -118,3 +118,18 @@ staged next to the driver on the box.
 4. The selftest plants the control arms as identical arrays, so it cannot detect a swapped
    control in the decision panel; the verifier checked that panel by reading (`("none",
    "sub_all", "perm_all")`). Recorded so the limitation is on file before the data.
+
+## Addendum 2, 2026-09-06 08:00Z, before the run — footprint-matched random frame (camera-ready condition 4)
+
+Asked for by all three reviewers and the area chair of the deadline manuscript. One new arm-row
+set, run with the B1d driver restricted to arms `none` and `randsub_all`, with the random frame's
+rank set to 23 so that its expected removed norm matches the permuted-label frame's (the rank-5
+random frame removed 3.1–3.2 per position; the permuted frame 6.5–6.9; a random frame's removed
+norm scales as the square root of its rank, so 5 × (6.7/3.15)² ≈ 23). Same pool, doses, reps,
+seeds and contrasts as B1d. Reported: the footprint actually removed, the six blocked fractions of
+`randsub_all − none` with scenario-blocked, dose-paired CIs and BH-FDR over the testable
+emotions, and the dose-0 readout shift. Reading fixed in advance: if the matched random frame
+blocks afraid, sad or angry at the false-discovery threshold, footprint is what makes B1d's
+permuted frame bite and the paper's controls rule becomes "match the control's footprint"; if it
+is inert, fitting by the estimator is what bites. No decision verdict is attached; this is a
+descriptive control for Table 2.
