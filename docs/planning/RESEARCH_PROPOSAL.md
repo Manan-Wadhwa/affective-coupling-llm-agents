@@ -31,6 +31,7 @@ Paper C (the Jacobian lens / verbalisation) has not started and is not proposed 
   300 → 600 then flat (`a2f54.*`, report 25); layer 16 rises. 8B layer 21: peaks at 150 and
   falls to 0.276 at 1200 (`a2f8.lam_declines`, report 24). **Established as depth-specific;
   "no rise at every depth" is false (report 25's critique).**
+- **Regime and cost (review cycle, `a2l.*`):** the separator tie-break is the n < d regime itself — projected onto 100 principal components the fits stop separating and the logistic direction reproduces at 0.90 (difference-of-means 0.94); and the instability is largely geometric, since the two estimators' held-out projections correlate at 0.90–0.96 and logistic decodes held-out items better (0.94 vs 0.88). Paper A's claim is therefore regime-conditional and about directions, not readouts.
 - **Why: every logistic fit at every n used is a perfect separator.** Training accuracy 1.000
   in every cell, arm and seed; loss saturated; the direction is the penalty's tie-break among
   separating hyperplanes, a 100× (and 1000×) weaker penalty gives the same direction and no
@@ -54,6 +55,7 @@ Paper C (the Jacobian lens / verbalisation) has not started and is not proposed 
   1/(K−1) floor).
 
 ### 2.2 Affect transfer and its channel (Paper B)
+- **Construct narrowed (review cycle, `rev.other_probe_rises`):** the receiver's other-speaker projection rises with dose as much as its present-emotion projection, so the probe does not separate the receiver's own state from its model of the sender's; the paper now claims a dose-responsive, probe-readable affect signal in the receiver, not affect transfer into its own state. Against baseline with FDR only afraid's rank-1 block clears on the 27B (`rev.b1c_emo_vs_none_fdr`); the permuted rank-5 frame's blocks do (`rev.b1d_controls_vs_none`).
 - **Transfer exists and is dose-dependent** in B's present-emotion projection for five of six
   emotions (calm never excludes zero), reproduced three times with identical directions
   (B1 follow-up, B1c, B1d; reports 20/22/27). **Established** (representation level; the

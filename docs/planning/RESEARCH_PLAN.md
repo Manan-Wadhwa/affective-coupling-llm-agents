@@ -185,8 +185,10 @@ substitution.
    directions share a non-emotion component (within-present cosine 0.12 above the 1/(K−1)
    floor), so reproducibility is not validity.
 2. *Non-convergence with n* — **no material convergence over the reachable range, with the
-   schedule controlled, on both models; mechanism measured** ⟨reports 21, 23–26; wording in §12's
-   2026-09-05 note⟩. Superseding the sentence below: the 8B's fixed-penalty curve peaks at 150
+   schedule controlled, on both models; mechanism measured and shown to be the n < d regime**
+   ⟨reports 21, 23–26; low-d control `a2l.*` 2026-09-05: projected to 100 PCs the fits stop
+   separating and the logistic direction reproduces at 0.90; the cost is largely geometric,
+   held-out projections of the two estimators correlate 0.90–0.96 and logistic decodes better⟩. Superseding the sentence below: the 8B's fixed-penalty curve peaks at 150
    and falls to 0.28; layer 54 drops once then flattens; layer 16 rises; every fit is a perfect
    separator, so the direction is the penalty's tie-break and drifts from the mean difference.
    Earlier text ⟨A2 follow-up + report 21⟩: With the per-sample
