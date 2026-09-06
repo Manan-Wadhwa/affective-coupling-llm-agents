@@ -493,15 +493,11 @@ agree only as far as their tie-breaks do; and a control direction is informative
 the way the intervention direction was. Random vectors are decided by nothing, which is why
 they are inert and miss what a fitted control catches. Such a study should report disjoint-half
 reproducibility, estimate with an average rather than an extremum, and run its ablations against a
-control fitted by the same estimator on permuted labels at the intervention’s rank. For affect: the
-
-
+control fitted by the same estimator on permuted labels. For affect: the rank-1 direction carries a
+fifth to a third of the response for two emotions, one replicating; whose state the probe reads, and
+whether footprint or rank makes a control bite, remain open.
                                                   9
-rank-1 direction carries a fifth to a third of the response for two emotions, one replicating; whose
-state the probe reads, and whether footprint or rank makes a control bite, remain open.
-
-
-A Reproducibility statement
+A Reproducibility statement
 Code, pre-registrations, result files and the claim registry are in the accompanying repository
 (research-use licence). Models: Qwen3.6-27B revision 6a9e13bd and Llama-3-8B-Instruct-abliterated
 revision dd67dd05, run with torch 2.11.0+cu130 and transformers 5.14.1 on one NVIDIA RTX
@@ -523,6 +519,7 @@ the results.
 
 B     Details and defects recorded under review
 Each item below is in the registry note of the claim it qualifies.
+
     • B1c. The contrast between the 30-layer and 51-layer windows was declared in the driver,
       not in the pre-registration; its null is unpowered for desperate and calm. The testability
       rule (none-arm CI excludes zero) is pre-registered (PREREG_B1c §5). Calm’s contrast is
@@ -543,11 +540,12 @@ Each item below is in the registry note of the claim it qualifies.
       (0.004) was measured by the pre-launch verifier and is not stamped in the result file.
     • 8B replications. Both are out-of-pre-registration replications (the documents name the 27B
       and its layers). The steering manipulation is half as strong and less specific on the 8B, afraid’s
+      readout sits below chance, and slopes are unnormalised probe scores, so only patterns are
+      compared. In B1e on the 8B the control is matched on average only (sad 0.86×), both
+
 
                                                    10
-     readout sits below chance, and slopes are unnormalised probe scores, so only patterns are
-     compared. In B1e on the 8B the control is matched on average only (sad 0.86×), both
-     directions remove about the isotropic norm, and B1c’s random direction already reproduced
+     directions remove about the isotropic norm, and B1c’s random direction already reproduced
      the contrasts; afraid does not block against baseline there.
   • Estimator study. The weak-penalty arms (C = 50 and 500) give the same solution to three
     decimals, so they are tolerance-limited and bound nothing about the C → ∞ limit. Cross-
@@ -560,49 +558,37 @@ References
  [1] Yoav Benjamini and Yosef Hochberg. Controlling the false discovery rate: A practical and
      powerful approach to multiple testing. Journal of the Royal Statistical Society: Series B, 57
      (1):289–300, 1995.
-
  [2] Joschka Braun, Carsten Eickhoff, David Krueger, Seyed Ali Bahrainian, and Dmitrii
      Krasheninnikov. Understanding (Un)Reliability of steering vectors in language models. arXiv
      preprint arXiv:2505.22637, 2025.
-
  [3] Funda Durupinar. How affect propagates among LLM agents: Emergent emotional contagion
      in crowd simulation. arXiv preprint arXiv:2607.25140, 2026.
-
  [4] Bradley Efron and Robert J. Tibshirani. An Introduction to the Bootstrap. Chapman and Hall,
      1993.
-
  [5] Ziqi Gao, Yaotian Zhu, Qingcheng Zeng, Xu Zhao, Ziqing Wang, Feng Ruan, and Kaize Ding.
      RAPTOR: Ridge-adaptive logistic probes. arXiv preprint arXiv:2602.00158, 2026.
-
  [6] Niklas Herbster, Martin Zborowski, Alberto Tosato, Gauthier Gidel, and Tommaso Tosato.
      Activation steering for aligned open-ended generation without sacrificing coherence. arXiv
      preprint arXiv:2604.08169, 2026.
-
  [7] Kenneth Li, Oam Patel, Fernanda Viégas, Hanspeter Pfister, and Martin Wattenberg.
      Inference-time intervention: Eliciting truthful answers from a language model. arXiv preprint
      arXiv:2306.03341, 2023.
-
  [8] Yunbo Long, Liming Xu, Lukas Beckenbauer, Yuhan Liu, and Alexandra Brintrup. EvoEmo:
      Towards evolved emotional policies for adversarial LLM agents in multi-turn price negotiation.
      arXiv preprint arXiv:2509.04310, 2025.
-
  [9] Samuel Marks and Max Tegmark. The geometry of truth: Emergent linear structure in large
      language model representations of true/false datasets. arXiv preprint arXiv:2310.06824, 2023.
-
 [10] Nina Panickssery, Nick Gabrieli, Julian Schulz, Meg Tong, Evan Hubinger, and Alexander Matt
      Turner. Steering Llama 2 via contrastive activation addition. arXiv preprint arXiv:2312.06681,
      2023.
-
 [11] Prashant C. Raju. Geometric stability: The missing axis of representations. arXiv preprint
      arXiv:2601.09173, 2026.
-
-
-                                                11
-[12] Daniel Soudry, Elad Hoffer, Mor Shpigel Nacson, Suriya Gunasekar, and Nathan Srebro. The
+[12] Daniel Soudry, Elad Hoffer, Mor Shpigel Nacson, Suriya Gunasekar, and Nathan Srebro. The
      implicit bias of gradient descent on separable data. Journal of Machine Learning Research, 19
      (70):1–57, 2018. arXiv:1710.10345.
 
-[13] Alexander Matt Turner, Lisa Thiergart, Gavin Leech, David Udell, Juan J. Vazquez, Ulisse
+                                                11
+[13] Alexander Matt Turner, Lisa Thiergart, Gavin Leech, David Udell, Juan J. Vazquez, Ulisse
      Mini, and Monte MacDiarmid. Steering language models with activation engineering. arXiv
      preprint arXiv:2308.10248, 2023.
 
@@ -613,5 +599,5 @@ References
 
 
 
-                                               12
+                                             12
 
