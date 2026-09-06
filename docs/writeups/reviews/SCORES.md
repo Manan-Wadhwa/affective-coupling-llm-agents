@@ -38,3 +38,7 @@ All reviewers scored the same bundle (commit c8e1ea5). Fixes applied after the r
 Area chair conditions 1, 4–11 met from committed data (revision note 26); 2, 3, 12 need GPU runs. Final manuscript: `docs/writeups/final/paper_final_2026-09-06.pdf`.
 
 Update 10:50Z: condition 3 met by the permutation null (revision note 27; reading 'unlucky draw'). Conditions 2 and 12 still need runs.
+
+| final independent reviewer (all angles, after condition 3) | 4/10, conf 4 | 6/10, conf 3 | poster | covariance-matched random frame still the discriminating control; five permutations too few to serve as a null for the affect subspace; abstract's "same threshold as the affect subspace" overclaimed (fixed) |
+
+Final reviewer (`reviews/round2/final_review.md`, on commit 9727837): 18 wording fixes proposed, 13 applied (revision note 28); title change and the 8B-choice sentence declined; two fixes need runs.
