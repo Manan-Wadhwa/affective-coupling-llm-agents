@@ -20,3 +20,17 @@ Audits: all nine original citations real (two stale records fixed; two misstatem
 ## Camera-ready conditions, status 2026-09-06 09:00Z
 - Condition 4 (footprint-scaled random frame): **run and added** (Tables 2–3, §5, §6, abstract; `b1d23.*`). Result: inert for all five testable emotions; the fitted control bites because it is fitted.
 - Condition 3 (across-draw spread of B1e on afraid and sad): **run and added** (appendix Table, §5, abstract, intro, Limitations; `b1e10.*`). Sad's block holds in 10/10 draws (median 35%); afraid's manipulation check passes in 4/10, so the affect-specific claim is narrowed to sad.
+
+
+## Round 2 (2026-09-06, after camera-ready conditions 3 and 4; both venues scored; reviews in `reviews/round2/`)
+
+| reviewer | NeurIPS main track | IAB workshop | format | top weakness |
+|---|---|---|---|---|
+| R1 (statistics) | 4/10, conf 4 | 7/10, conf 4 | poster (spotlight if the permuted control is run as a distribution) | permuted-label control is one realisation; "as strongly" contradicted by Table 1 |
+| R2 (interpretability) | 4/10, conf 4 | 6/10, conf 3 | poster | "bites because it is fitted" not licensed: covariance-matched random frame never run |
+| R3 (agents / workshop fit) | 4/10, conf 4 | 6/10, conf 4 | poster | not about agent behaviour: no transcript-level outcome on B |
+| citation validator | 14/14 real; 1 mischaracterised, 2 imprecise, 1 decorative; 6 missing needed | | | |
+| claims-and-numbers checker | 162 items; 5 precision mismatches, 8 inconsistencies, 5 overclaims; no headline number wrong | | | |
+| area chair | (see below) | | | |
+
+All reviewers scored the same bundle (commit c8e1ea5). Fixes applied after the round: revision note 25.
