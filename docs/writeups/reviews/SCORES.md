@@ -19,4 +19,4 @@ Audits: all nine original citations real (two stale records fixed; two misstatem
 
 ## Camera-ready conditions, status 2026-09-06 09:00Z
 - Condition 4 (footprint-scaled random frame): **run and added** (Tables 2–3, §5, §6, abstract; `b1d23.*`). Result: inert for all five testable emotions; the fitted control bites because it is fitted.
-- Condition 3 (across-draw spread of B1e on afraid and sad): ten draws running on three boxes; six of ten in at 09:00Z; to be added before submission.
+- Condition 3 (across-draw spread of B1e on afraid and sad): **run and added** (appendix Table, §5, abstract, intro, Limitations; `b1e10.*`). Sad's block holds in 10/10 draws (median 35%); afraid's manipulation check passes in 4/10, so the affect-specific claim is narrowed to sad.

@@ -2123,6 +2123,51 @@
    },
    "expected": 6.7915598528057926,
    "tol": 0.001
+  },
+  {
+   "id": "b1e10.sad_stable",
+   "text": "B1e addendum 3 (PREREG_B1e.md addendum 3, sha 4cb36929 stamped in all ten files, found = true; ten draws with split seeds 1-10 on the same pool sha 70129f86, run 07:39-09:15Z 2026-09-06 on boxes A-D): sad's emo_all - permdir_all blocked fraction is significantly negative in 10/10 draws, median 0.35, range 0.24-0.56 (original draw 0.29); emo_all - none 0.35, 0.23-0.44, 10/10; permdir_all - none never significant (0/10, within -0.13..+0.09); MC-steer passes 10/10.",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "Descriptive spread; no verdict attached to the ensemble (addendum 3). Each draw's numbers are the driver's own summary (src/rev3/b1e_draws_aggregate.py recomputes nothing).",
+   "pointer": {
+    "script": "src/rev3/b1e_draws_aggregate.py",
+    "file": "results/rev3/b1e_draws_summary.json",
+    "json_path": "across_draws.sad.emo_all_vs_permdir_all.n_sig_negative",
+    "config": {
+     "n_draws": 10,
+     "across_draws.sad.n_mc_steer_sig": 10,
+     "across_draws.sad.emo_all_vs_permdir_all.median_blocked_fraction": 0.3514088147547203
+    }
+   },
+   "expected": 10
+  },
+  {
+   "id": "b1e10.afraid_gate_fragile",
+   "text": "Across the ten draws afraid's emo_all - permdir_all blocked fraction is significantly negative in 9/10 (median 0.18, range 0.07-0.23; original draw 0.25, the top of the spread) and emo_all - none in 10/10 (0.19, 0.08-0.23), but afraid's MC-steer gate (A-span readout slope CI excludes zero) passes in only 4/10 draws (seeds 1, 4, 9, 10), so the per-draw verdict is H3 in 4 and instrument_failed in 6; permdir_all - none is within -0.04..+0.07 and significant in 1/10 (draw 6).",
+   "appears_in": [
+    "docs/writeups/paper_rev3.tex",
+    "docs/review/RESULTS_LOG.md"
+   ],
+   "category": "a",
+   "claim_status": "quotable",
+   "note": "The failing gates are marginal (slopes -0.02..+0.09, two intervals include zero by < 0.01). The paper's affect-specific claim is narrowed to sad accordingly.",
+   "pointer": {
+    "script": "src/rev3/b1e_draws_aggregate.py",
+    "file": "results/rev3/b1e_draws_summary.json",
+    "json_path": "across_draws.afraid.n_mc_steer_sig",
+    "config": {
+     "n_draws": 10,
+     "across_draws.afraid.emo_all_vs_permdir_all.n_sig_negative": 9,
+     "across_draws.afraid.emo_all_vs_permdir_all.median_blocked_fraction": 0.17546211238761705,
+     "across_draws.afraid.permdir_all_vs_none.n_sig_negative": 1
+    }
+   },
+   "expected": 4
   }
  ]
 }

@@ -9,7 +9,10 @@ representation — and does it reach its behavior?
 Llama-3.1-8B was wrong.* Emotion probing, activation injection, the
 Jacobian lens, and information-theoretic coupling.
 
-## Where we stand — rev 3, 2026-09-05
+## Where we stand
+
+**2026-09-06 (deadline day):** two camera-ready conditions run and folded into `docs/writeups/paper_rev3.tex`: a footprint-matched rank-23 random frame is inert (footprint does not make B1d's permuted frame bite; `b1d23.*`, report 31), and ten direction-resampling draws of B1e show sad's block stable (10/10) and afraid's manipulation check split-sensitive (4/10), narrowing the affect claim to sad (`b1e10.*`, report 32). Round-2 simulated review in `docs/writeups/reviews/round2/`.
+ — rev 3, 2026-09-05
 
 The forward-looking summary is [`docs/planning/RESEARCH_PROPOSAL.md`](docs/planning/RESEARCH_PROPOSAL.md);
 the operative plan with its status board is [`docs/planning/RESEARCH_PLAN.md`](docs/planning/RESEARCH_PLAN.md);
