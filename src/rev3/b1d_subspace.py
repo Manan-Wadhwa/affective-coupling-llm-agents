@@ -560,9 +560,13 @@ def analyze(rows, doses, emos, arms=ARMS, n_boot: int = 5000, seed: int = 0,
         ns = (s.get("none") or {}).get("present_slope")
         # the decision fraction, its naive-control twin, the rank-1 bridge and the
         # extra-rank readout of §5's last bullet
-        s["blocked_fraction"] = {n: blocked_fraction(s.get(n), ns) for n in
-                                 ("sub_all_vs_perm_all", "sub_all_vs_randsub_all",
-                                  "emo_all_vs_perm_all", "sub_all_vs_emo_all")}
+        # (an entry is None, rather than "undefined", when one of its arms was not run)
+        s["blocked_fraction"] = {f"{x}_vs_{y}": (blocked_fraction(s.get(f"{x}_vs_{y}"), ns)
+                                                 if x in arms and y in arms else None)
+                                 for x, y in (("sub_all", "perm_all"),
+                                              ("sub_all", "randsub_all"),
+                                              ("emo_all", "perm_all"),
+                                              ("sub_all", "emo_all"))}
         s["detectable_effect"] = {f"{x}_vs_{y}": detectable_effect(s.get(f"{x}_vs_{y}"))
                                   for x, y in CONTRASTS}
 
@@ -789,7 +793,7 @@ def print_summary(res):
         mc = s.get("mc_subspace", {})
         sh = mc.get("share_removed", {})
         c = s.get(DECISION_CONTRAST)
-        bf = s.get("blocked_fraction", {}).get(DECISION_CONTRAST, {}).get("point")
+        bf = (s.get("blocked_fraction", {}).get(DECISION_CONTRAST) or {}).get("point")
         de = s.get("detectable_effect", {}).get(DECISION_CONTRAST, {}).get("half_width")
         txt = (f"{c['diff']:+.3f} CI[{c['ci'][0]:+.3f},{c['ci'][1]:+.3f}]"
                if c else "--")
@@ -1182,6 +1186,13 @@ def main():
     ap.add_argument("--workdir", default="/marimo/work")
     ap.add_argument("--gen-bs", type=int, default=48)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--arms", default=",".join(ARMS),
+                    help="comma-separated subset of ARMS to run (default: all five); the "
+                         "analysis tolerates the arms not run and reports 'indeterminate' "
+                         "when the decision contrast cannot be formed")
+    ap.add_argument("--randsub-k", type=int, default=SUB_K,
+                    help=f"rank of the randsub_all random frame (default SUB_K={SUB_K}); "
+                         f"raise it to footprint-match a wider removal")
     ap.add_argument("--selftest", action="store_true",
                     help="run analyze() and the frame algebra on synthetic data and exit; "
                          "loads no model")
@@ -1190,15 +1201,23 @@ def main():
         sys.exit(selftest())
     if not a.model or not a.tag:
         ap.error("--model and --tag are required (or pass --selftest)")
+    arms = tuple(x.strip() for x in a.arms.split(",") if x.strip())
+    unknown = [x for x in arms if x not in ARMS]
+    if not arms or unknown or len(set(arms)) != len(arms):
+        ap.error(f"--arms must be a non-empty, duplicate-free subset of {ARMS}; got "
+                 f"{a.arms!r}" + (f" (unknown: {unknown})" if unknown else ""))
+    if a.randsub_k < 1:
+        ap.error(f"--randsub-k must be >= 1; got {a.randsub_k}")
     os.makedirs(a.outdir, exist_ok=True); os.makedirs(a.workdir, exist_ok=True)
 
     pool_path = os.path.join(a.workdir, f"probe_{a.tag}.jsonl")
     prov = C.Provenance(
         script="src/rev3/b1d_subspace.py",
-        config={"doses": DOSES, "arms": ARMS, "emotions": EMOS, "reps": a.reps,
+        config={"doses": DOSES, "arms": arms, "emotions": EMOS, "reps": a.reps,
                 "driver": "b1d", "estimator": a.estimator, "probe_k": PROBE_K,
                 "stability_gate": STABILITY_GATE, "subspace_gate": SUB_GATE,
-                "sub_k": SUB_K, "max_new_A": 110, "max_new_B": 110,
+                "sub_k": SUB_K, "randsub_k": a.randsub_k,
+                "max_new_A": 110, "max_new_B": 110,
                 "temp": 0.9, "top_p": 0.95,
                 "n_scenarios": len(C.SCENARIOS),
                 "contrasts": [f"{x}_vs_{y}" for x, y in CONTRASTS],
@@ -1277,7 +1296,7 @@ def main():
                                    f"row as perm_seed",
             "random_subspace_control": f"b1d_subspace.py::random_frame "
                                        f"({fn_lines('random_frame')}) -> QR of a Gaussian "
-                                       f"[d_model, {SUB_K}], assembled in main's "
+                                       f"[d_model, {a.randsub_k}], assembled in main's "
                                        f"::randsub_dirs_for "
                                        f"({fn_lines('randsub_dirs_for')}), a FRESH frame "
                                        f"per (emotion, rep) AND per ablated layer, seeded "
@@ -1496,14 +1515,14 @@ def main():
         return _perm_cache[key]
 
     def randsub_dirs_for(e, rep):
-        """`randsub_all`: a FRESH Gaussian orthonormal 5-frame per (emotion, rep) AND per
-        ablated layer, from one generator per cell (the rand_dir_seed rule B1c used for its
-        rank-1 random control, unchanged)."""
+        """`randsub_all`: a FRESH Gaussian orthonormal rank-`--randsub-k` frame (default
+        SUB_K = 5) per (emotion, rep) AND per ablated layer, from one generator per cell
+        (the rand_dir_seed rule B1c used for its rank-1 random control, unchanged)."""
         key = (e, rep)
         if key not in _rand_cache:
             s = rand_dir_seed(a.seed, e, rep)
             rr = np.random.default_rng(s)
-            _rand_cache[key] = ({L: tt(random_frame(d_model, SUB_K, rr))
+            _rand_cache[key] = ({L: tt(random_frame(d_model, a.randsub_k, rr))
                                  for L in abl_hs_all}, s)
         return _rand_cache[key]
 
@@ -1520,10 +1539,10 @@ def main():
     S = C.SCENARIOS
     rlog = C.ResponseLog(os.path.join(a.workdir, f"responses_b1d_{a.tag}.jsonl"))
     ck = C.Checkpoint(os.path.join(a.workdir, f"b1d_cells_{a.tag}.json"),
-                      {"doses": DOSES, "arms": ARMS, "emos": EMOS, "reps": a.reps,
+                      {"doses": DOSES, "arms": arms, "emos": EMOS, "reps": a.reps,
                        "est": a.estimator, "n": N, "focus": focus, "probe_k": PROBE_K,
                        "abl_hs_all": abl_hs_all, "sub_k": SUB_K,
-                       "driver": "b1d"})
+                       "randsub_k": a.randsub_k, "driver": "b1d"})
 
     def gen_A(e, alpha, rep):
         """A's steered message. Unchanged from b1c_alllayer.py / b1_followup.py, seed
@@ -1572,7 +1591,7 @@ def main():
             return d, {"k": SUB_K, "perm_seed": s}
         if arm == "randsub_all":
             d, s = randsub_dirs_for(e, rep)
-            return d, {"k": SUB_K, "rand_dir_seed": s}
+            return d, {"k": a.randsub_k, "rand_dir_seed": s}
         raise ValueError(f"unknown arm {arm!r}")
 
     def gen_B(ctx, arm, e, alpha, rep, bs=30):
@@ -1702,7 +1721,7 @@ def main():
                 # MC-steer: did steering actually put the emotion into A's TEXT?
                 a_read = readout(ctx, "none", e, alpha, rep)
                 cell = []
-                for arm in ARMS:
+                for arm in arms:
                     breps, removed, hit, gseed, npos = gen_B(ctx, arm, e, alpha, rep)
                     pres, oth = score_B(ctx, breps)
                     # MC-subspace: is the affect still readable from the intervened context?
@@ -1752,16 +1771,17 @@ def main():
                       flush=True)
 
     # ---------------- analysis -----------------------------------------------------------
-    res = analyze(rows, DOSES, EMOS)
+    res = analyze(rows, DOSES, EMOS, arms=arms)
     print_summary(res)
 
     out = {
         "model": a.model, "tag": a.tag, "focus": focus, "steer_layer": steer_layer,
         "n_layers": h.n_layers,
         "abl_hs_all": abl_hs_all, "n_abl_blocks_all": len(abl_hs_all), "sub_k": SUB_K,
+        "randsub_k": a.randsub_k,
         "probe_n": N, "dir_half_n": len(DIR), "read_half_n": len(READ),
         "probe_pool_path": pool_path, "probe_pool_sha256": pool_sha,
-        "estimator": a.estimator, "rms": rms, "doses": list(DOSES), "arms": list(ARMS),
+        "estimator": a.estimator, "rms": rms, "doses": list(DOSES), "arms": list(arms),
         "prereg": prereg_stamp(),
         "predecessors": ["results/rev3/b1_e4rerun_qwen36-27b.json",
                          "results/rev3/b1_followup_qwen36-27b.json",
