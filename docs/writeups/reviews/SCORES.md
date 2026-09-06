@@ -15,3 +15,8 @@ The three adversarial reviews and the mentor review were written cold on the fir
 What moved the scores, in the reviewers' own words: the random-versus-none contrast and the random 5-frame now exist and are inert; every arm sits against baseline under one significance standard; the footprint is defined once; the low-dimensional control turned the "n < d" objection into a result; the other-speaker probe withdrew the "receiver's own state" construct claim and the paper says so. What did not move: R1's request for direction-resampling spread, which remains a stated limitation.
 
 Audits: all nine original citations real (two stale records fixed; two misstatements corrected; Soudry et al., Benjamini–Hochberg, Efron–Tibshirani and two contagion papers added); the statistical-consistency audit's 17 items are addressed in the revision or moved to Appendix B as stated limits.
+
+
+## Camera-ready conditions, status 2026-09-06 09:00Z
+- Condition 4 (footprint-scaled random frame): **run and added** (Tables 2–3, §5, §6, abstract; `b1d23.*`). Result: inert for all five testable emotions; the fitted control bites because it is fitted.
+- Condition 3 (across-draw spread of B1e on afraid and sad): ten draws running on three boxes; six of ten in at 09:00Z; to be added before submission.

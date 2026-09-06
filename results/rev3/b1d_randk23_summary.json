@@ -1,0 +1,526 @@
+{
+ "file": "results/rev3/b1d_subspace_qwen36-27b-randk23.json",
+ "file_sha256_16": "046a1d8bb60ebe6e",
+ "ref": "results/rev3/b1d_subspace_qwen36-27b.json",
+ "ref_sha256_16": "bdd2b25cce3484a9",
+ "randsub_k": 23,
+ "ref_sub_k": 5,
+ "arms": [
+  "none",
+  "randsub_all"
+ ],
+ "verdict_in_file": "indeterminate",
+ "per_emotion": {
+  "desperate": {
+   "none_slope": 84.14452242940234,
+   "none_slope_ci": [
+    58.546080387485816,
+    111.3441952186389
+   ],
+   "testable": true,
+   "randsub_vs_none": {
+    "diff": -5.218248853947188,
+    "ci": [
+     -17.802619301125304,
+     7.666832124940885
+    ],
+    "sig": false,
+    "n_blocks": 29,
+    "p_boot": 0.4188,
+    "n_scen": 29,
+    "blocked_fraction": 0.06201531250385696,
+    "blocked_range": [
+     -0.09111504710687963,
+     0.21157193346794245
+    ]
+   },
+   "driver_contrast": {
+    "diff": -5.218248853947202,
+    "ci": [
+     -17.802619301125304,
+     7.666832124940885
+    ],
+    "sig": false
+   },
+   "dose0_readout_shift": 0.005075892282839459,
+   "removed_norm": {
+    "randsub_k": 6.719722051636066,
+    "ref_perm_all": 6.753865230706782,
+    "ref_randsub_5": 3.0983708044087965,
+    "ref_sub_all": 6.873313802324868
+   },
+   "mc_subspace": {
+    "dose": 1.0,
+    "floor_dose": 0.0,
+    "threshold_sub": 0.8,
+    "threshold_control": 0.2,
+    "none": {
+     "mean": 0.9550316046024191,
+     "ci": [
+      0.9220499458241052,
+      0.9813991052494652
+     ],
+     "n": 87
+    },
+    "randsub_all": {
+     "mean": 0.9521296986903267,
+     "ci": [
+      0.9192138887856198,
+      0.9785974784144039
+     ],
+     "n": 87
+    },
+    "none_at_floor": 0.10839943401331445,
+    "steering_span": 0.8466321705891047,
+    "share_removed": {
+     "randsub_all": 0.003427587579235474
+    },
+    "drop_by_arm": {
+     "randsub_all": 0.002901905912092384
+    },
+    "sub_pass": null,
+    "randsub_inert": true,
+    "separated": false,
+    "passes": null
+   },
+   "ref_perm_vs_none": {
+    "diff": -2.2327889949312265,
+    "ci": [
+     -16.56313817178973,
+     12.090311235934529
+    ],
+    "sig": false
+   },
+   "ref_none_slope": 84.14452242940234
+  },
+  "afraid": {
+   "none_slope": 211.77202080827965,
+   "none_slope_ci": [
+    169.17762429894495,
+    252.7912329563622
+   ],
+   "testable": true,
+   "randsub_vs_none": {
+    "diff": 6.036410107073124,
+    "ci": [
+     -6.835933372090851,
+     19.402585202846982
+    ],
+    "sig": false,
+    "n_blocks": 29,
+    "p_boot": 0.3892,
+    "n_scen": 29,
+    "blocked_fraction": -0.028504285334926164,
+    "blocked_range": [
+     -0.09162015420541522,
+     0.032279681451779334
+    ]
+   },
+   "driver_contrast": {
+    "diff": 6.036410107073124,
+    "ci": [
+     -6.835933372090859,
+     19.40258520284698
+    ],
+    "sig": false
+   },
+   "dose0_readout_shift": 0.0024237449227225982,
+   "removed_norm": {
+    "randsub_k": 6.7915598528057926,
+    "ref_perm_all": 6.559762711423676,
+    "ref_randsub_5": 3.1816252713499504,
+    "ref_sub_all": 6.937067266772775
+   },
+   "mc_subspace": {
+    "dose": 1.0,
+    "floor_dose": 0.0,
+    "threshold_sub": 0.8,
+    "threshold_control": 0.2,
+    "none": {
+     "mean": 0.3974918941522687,
+     "ci": [
+      0.3259099173699128,
+      0.47118800584488374
+     ],
+     "n": 87
+    },
+    "randsub_all": {
+     "mean": 0.37898462852692694,
+     "ci": [
+      0.309902701791054,
+      0.4502898678287447
+     ],
+     "n": 87
+    },
+    "none_at_floor": 0.24999193269302675,
+    "steering_span": 0.14749996145924196,
+    "share_removed": {
+     "randsub_all": 0.125473020075709
+    },
+    "drop_by_arm": {
+     "randsub_all": 0.018507265625341773
+    },
+    "sub_pass": null,
+    "randsub_inert": true,
+    "separated": false,
+    "passes": null
+   },
+   "ref_perm_vs_none": {
+    "diff": -49.523959913389234,
+    "ci": [
+     -70.21846730671551,
+     -27.327087363189776
+    ],
+    "sig": true
+   },
+   "ref_none_slope": 211.77202080827965
+  },
+  "happy": {
+   "none_slope": 47.861487124307224,
+   "none_slope_ci": [
+    8.219533971127092,
+    87.51630662705993
+   ],
+   "testable": true,
+   "randsub_vs_none": {
+    "diff": -1.2819219449338988,
+    "ci": [
+     -20.75374450146287,
+     17.64418802211295
+    ],
+    "sig": false,
+    "n_blocks": 29,
+    "p_boot": 0.9008,
+    "n_scen": 29,
+    "blocked_fraction": 0.026783997363150343,
+    "blocked_range": [
+     -0.3686510612653334,
+     0.4336209706054609
+    ]
+   },
+   "driver_contrast": {
+    "diff": -1.2819219449338988,
+    "ci": [
+     -20.75374450146287,
+     17.644188022112953
+    ],
+    "sig": false
+   },
+   "dose0_readout_shift": 0.0027221621406108842,
+   "removed_norm": {
+    "randsub_k": 6.822931554971956,
+    "ref_perm_all": 6.669015892385658,
+    "ref_randsub_5": 3.240085390852947,
+    "ref_sub_all": 6.94070818435912
+   },
+   "mc_subspace": {
+    "dose": 1.0,
+    "floor_dose": 0.0,
+    "threshold_sub": 0.8,
+    "threshold_control": 0.2,
+    "none": {
+     "mean": 0.7444220534576828,
+     "ci": [
+      0.6693287988060673,
+      0.8187502592568547
+     ],
+     "n": 87
+    },
+    "randsub_all": {
+     "mean": 0.7491709347091221,
+     "ci": [
+      0.6746893456742901,
+      0.822420344487048
+     ],
+     "n": 87
+    },
+    "none_at_floor": 0.2874794288636996,
+    "steering_span": 0.45694262459398316,
+    "share_removed": {
+     "randsub_all": -0.010392729843618715
+    },
+    "drop_by_arm": {
+     "randsub_all": -0.004748881251439352
+    },
+    "sub_pass": null,
+    "randsub_inert": true,
+    "separated": false,
+    "passes": null
+   },
+   "ref_perm_vs_none": {
+    "diff": 4.92729315996241,
+    "ci": [
+     -22.768358529729507,
+     32.907650877130905
+    ],
+    "sig": false
+   },
+   "ref_none_slope": 47.861487124307224
+  },
+  "calm": {
+   "none_slope": 44.2445460566975,
+   "none_slope_ci": [
+    -3.0929489944840163,
+    98.9068089741954
+   ],
+   "testable": false,
+   "randsub_vs_none": {
+    "diff": -30.30377889085083,
+    "ci": [
+     -55.38848908624371,
+     -4.257085401061697
+    ],
+    "sig": true,
+    "n_blocks": 29,
+    "p_boot": 0.024,
+    "n_scen": 29,
+    "blocked_fraction": 0.6849155792449046,
+    "blocked_range": [
+     0.09621717884971456,
+     1.2518715643565586
+    ]
+   },
+   "driver_contrast": {
+    "diff": -30.30377889085083,
+    "ci": [
+     -55.388489086243716,
+     -4.2570854010616985
+    ],
+    "sig": true
+   },
+   "dose0_readout_shift": 0.00020977188741339026,
+   "removed_norm": {
+    "randsub_k": 6.87316958966598,
+    "ref_perm_all": 6.485627284236981,
+    "ref_randsub_5": 3.199026742402245,
+    "ref_sub_all": 6.928420756766999
+   },
+   "mc_subspace": {
+    "dose": 1.0,
+    "floor_dose": 0.0,
+    "threshold_sub": 0.8,
+    "threshold_control": 0.2,
+    "none": {
+     "mean": 0.7639410285206897,
+     "ci": [
+      0.7041483723599633,
+      0.8208948965633659
+     ],
+     "n": 87
+    },
+    "randsub_all": {
+     "mean": 0.7470173386699017,
+     "ci": [
+      0.6878641919878207,
+      0.8043906888871014
+     ],
+     "n": 87
+    },
+    "none_at_floor": 0.27728292601093224,
+    "steering_span": 0.48665810250975744,
+    "share_removed": {
+     "randsub_all": 0.03477531713437082
+    },
+    "drop_by_arm": {
+     "randsub_all": 0.01692368985078796
+    },
+    "sub_pass": null,
+    "randsub_inert": true,
+    "separated": false,
+    "passes": null
+   },
+   "ref_perm_vs_none": {
+    "diff": 10.670202007123748,
+    "ci": [
+     -20.74380949994344,
+     40.496533109618014
+    ],
+    "sig": false
+   },
+   "ref_none_slope": 44.2445460566975
+  },
+  "sad": {
+   "none_slope": 97.51619428529737,
+   "none_slope_ci": [
+    64.45468952858603,
+    132.0722841792204
+   ],
+   "testable": true,
+   "randsub_vs_none": {
+    "diff": -6.85099746268358,
+    "ci": [
+     -24.077136376727562,
+     10.651026719445793
+    ],
+    "sig": false,
+    "n_blocks": 29,
+    "p_boot": 0.4284,
+    "n_scen": 29,
+    "blocked_fraction": 0.07025497162696917,
+    "blocked_range": [
+     -0.10922315824061707,
+     0.2469039789051499
+    ]
+   },
+   "driver_contrast": {
+    "diff": -6.85099746268358,
+    "ci": [
+     -24.077136376727562,
+     10.651026719445795
+    ],
+    "sig": false
+   },
+   "dose0_readout_shift": -0.0013362766502629936,
+   "removed_norm": {
+    "randsub_k": 6.79955587589663,
+    "ref_perm_all": 6.888666787957834,
+    "ref_randsub_5": 3.1954047591273302,
+    "ref_sub_all": 6.906264731307435
+   },
+   "mc_subspace": {
+    "dose": 1.0,
+    "floor_dose": 0.0,
+    "threshold_sub": 0.8,
+    "threshold_control": 0.2,
+    "none": {
+     "mean": 0.5450880913595447,
+     "ci": [
+      0.4701312522842889,
+      0.6174428220824562
+     ],
+     "n": 87
+    },
+    "randsub_all": {
+     "mean": 0.5239991972887964,
+     "ci": [
+      0.45097648344179153,
+      0.5957231147967622
+     ],
+     "n": 87
+    },
+    "none_at_floor": 0.038775444601482384,
+    "steering_span": 0.5063126467580623,
+    "share_removed": {
+     "randsub_all": 0.04165192042067535
+    },
+    "drop_by_arm": {
+     "randsub_all": 0.02108889407074832
+    },
+    "sub_pass": null,
+    "randsub_inert": true,
+    "separated": false,
+    "passes": null
+   },
+   "ref_perm_vs_none": {
+    "diff": -26.742416268900897,
+    "ci": [
+     -49.03881009658515,
+     -4.534972523866925
+    ],
+    "sig": true
+   },
+   "ref_none_slope": 97.51619428529737
+  },
+  "angry": {
+   "none_slope": 195.9932537024939,
+   "none_slope_ci": [
+    154.93346673768428,
+    235.439037982517
+   ],
+   "testable": true,
+   "randsub_vs_none": {
+    "diff": 0.03040853906819052,
+    "ci": [
+     -22.327012030883147,
+     22.363435094849837
+    ],
+    "sig": false,
+    "n_blocks": 29,
+    "p_boot": 0.9952,
+    "n_scen": 29,
+    "blocked_fraction": -0.0001551509477685843,
+    "blocked_range": [
+     -0.11410308606232031,
+     0.11391724770677171
+    ]
+   },
+   "driver_contrast": {
+    "diff": 0.03040853906819052,
+    "ci": [
+     -22.327012030883147,
+     22.363435094849844
+    ],
+    "sig": false
+   },
+   "dose0_readout_shift": 0.005640769709502828,
+   "removed_norm": {
+    "randsub_k": 6.672502743262869,
+    "ref_perm_all": 6.616360207983091,
+    "ref_randsub_5": 3.208856034025647,
+    "ref_sub_all": 6.899360856783936
+   },
+   "mc_subspace": {
+    "dose": 1.0,
+    "floor_dose": 0.0,
+    "threshold_sub": 0.8,
+    "threshold_control": 0.2,
+    "none": {
+     "mean": 0.5983364718211451,
+     "ci": [
+      0.5125749246245823,
+      0.6803989250091558
+     ],
+     "n": 87
+    },
+    "randsub_all": {
+     "mean": 0.5915884957600359,
+     "ci": [
+      0.5062259662245814,
+      0.6724847612871072
+     ],
+     "n": 87
+    },
+    "none_at_floor": 0.03807082931731352,
+    "steering_span": 0.5602656425038316,
+    "share_removed": {
+     "randsub_all": 0.012044243924993257
+    },
+    "drop_by_arm": {
+     "randsub_all": 0.006747976061109218
+    },
+    "sub_pass": null,
+    "randsub_inert": true,
+    "separated": false,
+    "passes": null
+   },
+   "ref_perm_vs_none": {
+    "diff": -44.339182713014765,
+    "ci": [
+     -80.35684525959125,
+     -11.898627093929395
+    ],
+    "sig": true
+   },
+   "ref_none_slope": 195.9932537024939
+  }
+ },
+ "testable": [
+  "desperate",
+  "afraid",
+  "happy",
+  "sad",
+  "angry"
+ ],
+ "bh_q_over_testable": {
+  "desperate": 0.714,
+  "afraid": 0.714,
+  "happy": 0.9952,
+  "sad": 0.714,
+  "angry": 0.9952
+ },
+ "reading": {
+  "rule": "PREREG_B1d addendum 2: 'footprint' if the matched random frame blocks afraid, sad or angry at BH-FDR q<0.05 (negative contrast); else 'fitting'",
+  "blocks_at_fdr": [],
+  "reading": "fitting"
+ }
+}

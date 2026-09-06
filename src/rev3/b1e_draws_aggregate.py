@@ -82,12 +82,13 @@ def main():
     def f(v):
         if v is None: return "--"
         s = f"{v:.2f}"; return "0.00" if s == "-0.00" else s
-    lab = {"emo_all_vs_permdir_all": r"\texttt{emo\_all} $-$ \texttt{permdir\_all}", "emo_all_vs_none": r"\texttt{emo\_all} $-$ \texttt{none}", "permdir_all_vs_none": r"\texttt{permdir\_all} $-$ \texttt{none}"}
-    L = [r"\begin{tabular}{llrrrr}", r"\toprule", r"Emotion & Contrast & Draw 0 & Median & Range & Sig.\ neg. \\", r"\midrule"]
+    lab = {"emo_all_vs_permdir_all": "emotion $-$ permuted-label", "emo_all_vs_none": "emotion $-$ none", "permdir_all_vs_none": "permuted-label $-$ none"}
+    L = [r"\begin{tabular}{llrrrrr}", r"\toprule", r"Emotion & Contrast & Draw 0 & Median & Range & Sig.\ neg. & Gate passes \\", r"\midrule"]
     for e in EMOS:
         for i, cn in enumerate(CONTRASTS):
             x = out["across_draws"][e][cn]
-            L.append(f"{e if i == 0 else ''} & {lab[cn]} & {f(x['reference_blocked_fraction'])} & {f(x['median_blocked_fraction'])} & [{f(x['min'])}, {f(x['max'])}] & {x['n_sig_negative']}/{x['n']} \\\\")
+            gate = f"{out['across_draws'][e]['n_mc_steer_sig']}/{len(draws)}" if i == 0 else ""
+            L.append(f"{e if i == 0 else ''} & {lab[cn]} & {f(x['reference_blocked_fraction'])} & {f(x['median_blocked_fraction'])} & [{f(x['min'])}, {f(x['max'])}] & {x['n_sig_negative']}/{x['n']} & {gate} \\\\")
     L += [r"\bottomrule", r"\end{tabular}"]
     os.makedirs(os.path.dirname(a.tex), exist_ok=True); open(a.tex, "w").write("\n".join(L) + "\n")
     print("wrote", a.out, a.tex)
