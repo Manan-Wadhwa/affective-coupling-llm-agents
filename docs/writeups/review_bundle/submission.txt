@@ -490,15 +490,15 @@ with the logistic direction.
 The idea to take away is that the two failures we found are the same failure seen twice. A logistic
 direction on separable activations is decided by the penalty’s tie-break, so two independent fits
 agree only as far as their tie-breaks do; and a control direction is informative only if it is decided
-the way the intervention direction was. Random vectors are decided by nothing, which is why they
-are inert and why they miss what a fitted control catches. Such a study should report disjoint-half
+the way the intervention direction was. Random vectors are decided by nothing, which is why
+they are inert and miss what a fitted control catches. Such a study should report disjoint-half
 reproducibility, estimate with an average rather than an extremum, and run its ablations against a
 control fitted by the same estimator on permuted labels at the intervention’s rank. For affect: the
 
 
                                                   9
 rank-1 direction carries a fifth to a third of the response for two emotions, one replicating; whose
-state the probe reads, and whether footprint or rank makes a control bite, are the open questions.
+state the probe reads, and whether footprint or rank makes a control bite, remain open.
 
 
 A Reproducibility statement
