@@ -29,8 +29,11 @@ the two non-ASCII glyphs, "-" for the minus sign and "H3'" for H3-prime)
     `permdir_all` shifts the dose-0 A-span readout by more than 0.15 from the `none` arm
     for either (the control then disturbs the readout the way B1d's subspace did and the
     comparison is not clean).
+  - **not_run:** a pre-specified emotion is absent from the run (`--emotions` subset), so
+    the §2 rule has no input and nothing is claimed.
 
-  The verdict string is one of: "H3", "H3prime", "indeterminate", "instrument_failed".
+  The verdict string is one of: "H3", "H3prime", "indeterminate", "instrument_failed",
+  "not_run".
 
 DECISION RULE, fixed in advance (PREREG_B1e §2 and §5)
 
@@ -527,6 +530,11 @@ def analyze(rows, doses, emos, arms=ARMS, n_boot: int = 5000, seed: int = 0,
     doses = [float(d) for d in doses]
     arms = tuple(arms)
     rows = [r for r in rows if r.get("scenario")]
+    # an emotion with NO rows (a `--emotions` subset run) is skipped rather than carried as
+    # an all-None entry; `_decide` reports an absent pre-specified emotion as "not_run"
+    present = {r["emotion"] for r in rows}
+    emos_absent = [e for e in emos if e not in present]
+    emos = [e for e in emos if e in present]
 
     qual = quality_flags(rows, doses, emos)
     excluded = sorted(k for k, v in qual.items() if v["fail"])
@@ -652,7 +660,7 @@ def analyze(rows, doses, emos, arms=ARMS, n_boot: int = 5000, seed: int = 0,
                       f"{list(PRESPEC_EMOTIONS)} only"}
     return {"per_emotion": per_emotion, "counts": counts, "decision": decision,
             "verdict": verdict, "doses": doses, "emotions": list(emos),
-            "arms": list(arms), "n_boot": n_boot,
+            "emotions_absent": emos_absent, "arms": list(arms), "n_boot": n_boot,
             "footprint": footprint_summary(rows, arms),
             "quality": {"per_cell": {"/".join(map(str, k)): v for k, v in qual.items()},
                         "excluded_cells": [list(k) for k in excluded],
@@ -777,9 +785,16 @@ def _decide(per_emotion, prespec=PRESPEC_EMOTIONS) -> dict:
     which B1e inherits, says the decision applies only with the full grid; without this
     guard an unfinished run would report "instrument_failed", which is a claim about the
     instrument rather than about the missing data.
+
+    A pre-specified emotion that is ABSENT from `per_emotion` altogether (a `--emotions`
+    subset run) is reported as "not_run", ahead of the incomplete check: there is no
+    data to be incomplete about. Contrasts whose arms were not run are None and read as
+    not significant, the same as an underpowered one.
     """
+    present = [e for e in prespec if e in per_emotion]
+    not_run = [e for e in prespec if e not in per_emotion]
     ev = {}
-    for e in prespec:
+    for e in present:
         s = per_emotion.get(e) or {}
         c = s.get(DECISION_CONTRAST)
         pn = s.get("permdir_all_vs_none")
@@ -802,9 +817,12 @@ def _decide(per_emotion, prespec=PRESPEC_EMOTIONS) -> dict:
             "complete": bool(s.get("_complete")),
         }
     missing = [e for e in per_emotion if not (per_emotion[e] or {}).get("_complete")]
-    bad = [e for e in prespec
+    bad = [e for e in present
            if (not ev[e]["mc_steer_passes"]) or ev[e]["permdir_dose0_ok"] is False]
-    if missing:
+    # below the not_run branch, present == list(prespec), so the §2 loops are unchanged
+    if not_run:
+        verdict = "not_run"
+    elif missing:
         verdict = "indeterminate"
     elif bad:
         verdict = "instrument_failed"
@@ -818,7 +836,9 @@ def _decide(per_emotion, prespec=PRESPEC_EMOTIONS) -> dict:
         verdict = "indeterminate"
     return {"prespec_emotions": list(prespec), "per_emotion": ev, "verdict": verdict,
             "instrument_failures": bad, "incomplete_emotions": missing,
-            "rule": f"indeterminate if either of {list(prespec)} is incomplete; else "
+            "not_run_emotions": not_run,
+            "rule": f"not_run if either of {list(prespec)} is absent from the run; else "
+                    f"indeterminate if either of {list(prespec)} is incomplete; else "
                     f"instrument_failed if MC-steer is not significant for either of "
                     f"{list(prespec)} or |dose-0 readout shift of permdir_all| > "
                     f"{DOSE0_SHIFT_MAX} for either; else H3 if {DECISION_CONTRAST} is "
@@ -1298,6 +1318,18 @@ def main():
     ap.add_argument("--workdir", default="/marimo/work")
     ap.add_argument("--gen-bs", type=int, default=48)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--split-seed", type=int, default=None,
+                    help="seed of the DIR/READ permutation of the probe pool (default: "
+                         "--seed). A different value re-estimates the steering direction, "
+                         "every ablation direction and the readout probe on a different "
+                         "split of the SAME pool; gen_seed, doses and gates are unchanged")
+    ap.add_argument("--emotions", default=None,
+                    help=f"comma-separated subset of {','.join(EMOS)} to sweep "
+                         f"(default: all six); the verdict is not_run unless both "
+                         f"{','.join(PRESPEC_EMOTIONS)} are included")
+    ap.add_argument("--arms", default=None,
+                    help=f"comma-separated subset of {','.join(ARMS)} to sweep (default: "
+                         f"all four); contrasts whose arms are absent are reported as None")
     ap.add_argument("--selftest", action="store_true",
                     help="run analyze() and the direction algebra on synthetic data and "
                          "exit; loads no model")
@@ -1306,6 +1338,20 @@ def main():
         sys.exit(selftest())
     if not a.model or not a.tag:
         ap.error("--model and --tag are required (or pass --selftest)")
+    split_seed = a.seed if a.split_seed is None else int(a.split_seed)
+
+    def _subset(arg, allowed, name):
+        if arg is None:
+            return tuple(allowed)
+        req = [x.strip() for x in arg.split(",") if x.strip()]
+        unknown = [x for x in req if x not in allowed]
+        if unknown or not req:
+            ap.error(f"--{name}: unknown {unknown or 'empty list'}; choose from "
+                     f"{list(allowed)}")
+        return tuple(x for x in allowed if x in req)      # canonical order, deduplicated
+
+    emos = _subset(a.emotions, EMOS, "emotions")
+    arms = _subset(a.arms, ARMS, "arms")
     if a.estimator != "dom":
         # PREREG_B1e §3 fixes `dom` for both `emo_all` and `permdir_all`; a different
         # --estimator would fit the two arms with different estimators and destroy the
@@ -1317,7 +1363,8 @@ def main():
     pool_path = os.path.join(a.workdir, f"probe_{a.tag}.jsonl")
     prov = C.Provenance(
         script="src/rev3/b1e_footprint.py",
-        config={"doses": DOSES, "arms": ARMS, "emotions": EMOS, "reps": a.reps,
+        config={"doses": DOSES, "arms": arms, "emotions": emos, "reps": a.reps,
+                "split_seed": split_seed, "arms_all": ARMS, "emotions_all": EMOS,
                 "driver": "b1e", "estimator": a.estimator, "probe_k": PROBE_K,
                 "stability_gate": STABILITY_GATE,
                 "max_new_A": 110, "max_new_B": 110,
@@ -1341,7 +1388,8 @@ def main():
                 "probe_pool_path": pool_path,
                 "predecessors": ["results/rev3/b1c_alllayer_qwen36-27b.json",
                                  "results/rev3/b1d_subspace_qwen36-27b.json"]},
-        model_id=a.model, model_revision="", seeds={"pool": a.seed, "run": a.seed},
+        model_id=a.model, model_revision="",
+        seeds={"pool": a.seed, "run": a.seed, "split": split_seed},
         code_sha=C.code_hash(os.path.abspath(__file__), os.path.abspath(C.__file__)),
         control_pointers={
             # Every span below is read out of THIS file's AST at import time by fn_lines /
@@ -1480,11 +1528,11 @@ def main():
     feats, yp, yo = C.pool_features(h, items, hs_needed,
                                     cache=os.path.join(a.workdir, f"probefeat_{a.tag}.npz"))
     N = len(items)
-    rs = np.random.default_rng(a.seed).permutation(N)
+    rs = np.random.default_rng(split_seed).permutation(N)
     DIR, READ = rs[:N // 2], rs[N // 2:]
     pool_sha = file_sha256(pool_path)
-    print(f"[B1E] probe pool n={N}: DIR half {len(DIR)}, READ half {len(READ)}; "
-          f"sha256 {pool_sha[:16]}...", flush=True)
+    print(f"[B1E] probe pool n={N}: DIR half {len(DIR)}, READ half {len(READ)} "
+          f"(split seed {split_seed}); sha256 {pool_sha[:16]}...", flush=True)
 
     dir_dec = {L: C.fit_direction(feats[L][DIR], yp[DIR], a.estimator, seed=a.seed,
                                   pair_on=yo[DIR]) for L in hs_needed}
@@ -1631,7 +1679,8 @@ def main():
     S = C.SCENARIOS
     rlog = C.ResponseLog(os.path.join(a.workdir, f"responses_b1e_{a.tag}.jsonl"))
     ck = C.Checkpoint(os.path.join(a.workdir, f"b1e_cells_{a.tag}.json"),
-                      {"doses": DOSES, "arms": ARMS, "emos": EMOS, "reps": a.reps,
+                      {"doses": DOSES, "arms": arms, "emos": emos, "reps": a.reps,
+                       "split_seed": split_seed,
                        "est": a.estimator, "n": N, "focus": focus, "probe_k": PROBE_K,
                        "abl_hs_all": abl_hs_all,
                        "driver": "b1e"})
@@ -1801,7 +1850,7 @@ def main():
 
     rows = []
     t_start = time.time()
-    for e in EMOS:
+    for e in emos:
         ei = C.EMOTIONS.index(e)
         for alpha in DOSES:
             for rep in range(a.reps):
@@ -1812,7 +1861,7 @@ def main():
                 # MC-steer: did steering actually put the emotion into A's TEXT?
                 a_read = readout(ctx, "none", e, alpha, rep)
                 cell = []
-                for arm in ARMS:
+                for arm in arms:
                     breps, removed, hit, gseed, npos = gen_B(ctx, arm, e, alpha, rep)
                     pres, oth = score_B(ctx, breps)
                     # MC-footprint: is the affect still readable from the intervened
@@ -1862,7 +1911,7 @@ def main():
                       flush=True)
 
     # ---------------- analysis -----------------------------------------------------------
-    res = analyze(rows, DOSES, EMOS)
+    res = analyze(rows, DOSES, emos, arms=arms)
     print_summary(res)
 
     out = {
@@ -1871,7 +1920,8 @@ def main():
         "abl_hs_all": abl_hs_all, "n_abl_blocks_all": len(abl_hs_all),
         "probe_n": N, "dir_half_n": len(DIR), "read_half_n": len(READ),
         "probe_pool_path": pool_path, "probe_pool_sha256": pool_sha,
-        "estimator": a.estimator, "rms": rms, "doses": list(DOSES), "arms": list(ARMS),
+        "estimator": a.estimator, "rms": rms, "doses": list(DOSES), "arms": list(arms),
+        "emotions": list(emos), "split_seed": split_seed,
         "prespec_emotions": list(PRESPEC_EMOTIONS),
         "prereg": prereg_stamp(),
         "predecessors": ["results/rev3/b1c_alllayer_qwen36-27b.json",
@@ -1900,7 +1950,7 @@ def main():
           f"{_f(fp['mean_removed_norm'].get('pc1_all'), 2)}; permdir/emo "
           f"{_f(fp['ratio_permdir_over_emo'], 2)} pc1/emo "
           f"{_f(fp['ratio_pc1_over_emo'], 2)}; MC-steer pass "
-          f"{res['counts']['n_mc_steer_pass']}/{len(EMOS)}; permdir dose-0 shifts too far "
+          f"{res['counts']['n_mc_steer_pass']}/{len(emos)}; permdir dose-0 shifts too far "
           f"{res['counts']['n_permdir_dose0_bad']}", flush=True)
     print(f"VERDICT: {res['verdict']}", flush=True)
     print("B1E_DONE", flush=True)
