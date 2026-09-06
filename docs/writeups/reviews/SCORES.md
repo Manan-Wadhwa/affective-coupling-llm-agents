@@ -10,7 +10,7 @@ The three adversarial reviews and the mentor review were written cold on the fir
 | R2 | machinery, confounds, controls | 4/10, conf 4, reject | **7/10, conf 4, accept** | retitle so the title does not assert the construct Section 4 withdraws — **done** |
 | R3 | construct validity, calibration, figures | 5/10, conf 4, reject | **8/10, conf 4, accept (long paper)** | retitle to what the probe licenses — **done** |
 | mentor (author-facing, not shown to the AC) | developmental | 6/10, conf 4 | **8/10, conf 4** | carry the withdrawn construct claim into title and abstract — **done** |
-| area chair | metareview on R1–R3 + revision notes | pending | pending | — |
+| area chair | metareview on R1–R3 + revision notes (+ recalibrations) | — | **accept (poster), 6/10** | nine camera-ready conditions (`metareview.md`); the editorial ones (abstract 85% → 91%/83%, cosine conventions, subtitle, pool description, CI-implied ranges, clipped whiskers, Fig 3 caption, direction-variability statement) applied 2026-09-06; the experimental ones (footprint-scaled random 5-frame; direction-resampling spread) need GPU time and are stated limitations |
 
 What moved the scores, in the reviewers' own words: the random-versus-none contrast and the random 5-frame now exist and are inert; every arm sits against baseline under one significance standard; the footprint is defined once; the low-dimensional control turned the "n < d" objection into a result; the other-speaker probe withdrew the "receiver's own state" construct claim and the paper says so. What did not move: R1's request for direction-resampling spread, which remains a stated limitation.
 
