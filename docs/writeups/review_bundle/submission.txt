@@ -23,16 +23,16 @@
       estimator on permuted labels blocks three emotions at BH-FDR q < 0.05 where the affect
       subspace blocks two (at half to two-thirds of its size on those two, and more than it on afraid),
       while a random 5-frame of half its footprint, a random 23-frame matched to its footprint and
-      a permuted-label rank-1 direction are inert on every testable emotion: the control that bites is
-      the one built from the pool’s activations, not the one that removes the most (whether its labels
-      matter is untested). Four further label permutations of that control block angry in all four
-      and sad in three (unadjusted intervals), but all three emotions together in only one: the three-
-      emotion pattern is one permutation’s, the bite on angry and sad is not. Re-estimating every
-      direction on ten re-splits of the probe pool, sad’s block against the permuted control holds in all
-      ten draws (median 35%, range 24–56%); afraid’s is smaller (18%, 7–23%) and its manipulation
-      check passes in only four, so the affect-specific claim rests on sad, the one emotion that also
-      replicates across models. The receiver’s “other-speaker” projection also rises with dose, so the
-      probe does not separate the receiver’s state from its model of the sender’s.
+      a permuted-label rank-1 direction are inert on every testable emotion: the control that bites
+      is the one built from the pool’s activations, not the one that removes the most (whether its
+      labels matter is untested). Four further label permutations of that control block angry in all
+      four and sad in three (unadjusted intervals), but all three emotions together in only one, so the
+      three-emotion pattern belongs to one permutation while the block on angry and sad recurs. Re-
+      estimating every direction on ten re-splits of the probe pool, sad’s block against the permuted
+      control holds in all ten draws (median 35%, range 24–56%); afraid’s is smaller (18%, 7–23%)
+      and its manipulation check passes in only four, so the affect-specific claim rests on sad, the one
+      emotion that also replicates across models. The receiver’s “other-speaker” projection also rises
+      with dose, so the probe does not separate the receiver’s state from its model of the sender’s.
 
 
 1    Introduction
@@ -446,7 +446,7 @@ is (µ+ − µ− )/σ 2 , the frames spans of raw class means); the matched ran
 footprint alone (b1d23.inert), and rank and metric remain confounded. The affect subspace and
 the permuted-label frame leave B’s replies within 1.2 words and 0.13 perplexity units of baseline;
 the top principal direction lengthens replies by two words and lowers perplexity by 3.7 (Table 6).
-The arms that block are all estimated from the pool’s activations; the inert ones are not.
+Every arm that blocks is estimated from the pool’s activations, and every inert arm is not.
 
 Replication on the 8B. B1c’s design blocks the same two emotions on the 8B by unadjusted
 CIs (afraid 15%, sad 31% against the random direction; b1c8.verdict_and_block), the other three
@@ -461,17 +461,17 @@ reproduced the contrasts there, so the run adds no discriminating power. Only sa
 models on both outcomes (b1e8.verdict_H3_matched).
 
 
-6   What the controls teach
+6    What the controls teach
 Table 2 puts every arm on one scale (the CI-implied range is the contrast’s interval divided by
 the none-arm slope). The random direction, the random 5-frame and the permuted-label rank-1
 direction are inert; the permuted-label rank-5 frame blocks three emotions at the false-discovery
 threshold, at half to two-thirds of the affect subspace’s size on the two it also blocks; the top
 principal direction blocks angry, one of those three, and neither of the rank-1 direction’s pair. Over
-five label permutations the permuted control blocks angry in five, sad in four, afraid in two and
-all three together in two (Table 7): the three-emotion pattern is one permutation’s, the bite on
-angry and sad recurs. A random frame scaled to the permuted frame’s footprint (rank 23) is
-inert on the five testable emotions (b1d23.inert; it moves calm, the untestable one), so matching a
-control’s footprint is not enough: the arms that bite are the ones built from the pool’s activations.
+five label permutations the permuted control blocks angry in five, sad in four, afraid in two and all
+three together in two (Table 7), so the three-emotion pattern belongs to one permutation while the
+block on angry and sad recurs. A random frame scaled to the permuted frame’s footprint (rank 23)
+is inert on the five testable emotions (b1d23.inert; it moves calm, the untestable one), so matching
+a control’s footprint is not enough: the arms that bite are the ones built from the pool’s activations.
 Whether label-fitting adds anything beyond covariance shaping is untested (a random frame inside
 the pool’s top principal subspace would tell). The rule is procedural: beside the random direction,
 run the same estimator on permuted labels at the intervention’s rank, report every arm’s footprint
@@ -479,7 +479,7 @@ and dose-0 readout shift, and check the manipulation with an instrument that doe
 ablation’s target.
 
 
-7   Limitations and what is not claimed
+7    Limitations and what is not claimed
 The present-emotion projection does not separate B’s own state from B’s representation of A’s; the
 other-speaker projection moves comparably. One probe pool underlies all 27B ablations; direction
 sampling variability is measured by ten re-splits for B1e’s two emotions only (Table 4), not for B1c
@@ -494,7 +494,7 @@ manipulation check; b1c.text_arms_uninterpretable), the behavioural reach, layer
 ablation rerun with the logistic direction.
 
 
-8   Conclusion
+8    Conclusion
 The two failures we found are the same failure seen twice. A logistic direction on separable ac-
 tivations is decided by the penalty’s tie-break, so two independent fits agree only as far as their
 tie-breaks do; and a control direction is informative only if it is decided the way the intervention
