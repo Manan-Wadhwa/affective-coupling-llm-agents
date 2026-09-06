@@ -133,3 +133,18 @@ blocks afraid, sad or angry at the false-discovery threshold, footprint is what 
 permuted frame bite and the paper's controls rule becomes "match the control's footprint"; if it
 is inert, fitting by the estimator is what bites. No decision verdict is attached; this is a
 descriptive control for Table 2.
+
+## Addendum 3, 2026-09-06 10:20Z, before the runs — permutation null for the permuted-label frame (camera-ready condition 3)
+
+Asked for by Reviewer 1 and the area chair of the round-2 review: the permuted-label rank-5 frame that
+blocks afraid, sad and angry is one realisation (one label permutation per (emotion, rep), seeded from
+`--seed 0`). Four further realisations are run, `--perm-seed 1..4`, one per box, with the arm `perm_all`
+only; generation seeds, doses, reps, scenarios and the pool are unchanged, so each run's contrast is taken
+against the B1d run's stored `none` arm, which is bit-identical (verified for the rank-23 run). Reported:
+for each realisation the six `perm_all − none` blocked fractions with scenario-blocked, dose-paired CIs and
+the dose-0 readout shift; across the five realisations (including the original) the median and range per
+emotion and the count whose contrast is significantly negative. Reading fixed in advance: if afraid, sad and
+angry are blocked (unadjusted CI below zero) in at least three of the four fresh realisations, the control's
+blocking is a property of the estimator on this pool, not of one permutation, and the paper's rule stands
+as written; if in at most one, the original frame was an unlucky draw and the rule is downgraded to a
+single-realisation observation in the abstract and Section 6. No decision verdict is attached.

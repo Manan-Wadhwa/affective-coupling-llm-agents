@@ -1190,6 +1190,9 @@ def main():
                     help="comma-separated subset of ARMS to run (default: all five); the "
                          "analysis tolerates the arms not run and reports 'indeterminate' "
                          "when the decision contrast cannot be formed")
+    ap.add_argument("--perm-seed", type=int, default=None,
+                    help="seed base for the label permutation of perm_all only (default: --seed); "
+                         "generation and random-frame seeds are untouched, so the none arm stays bit-identical")
     ap.add_argument("--randsub-k", type=int, default=SUB_K,
                     help=f"rank of the randsub_all random frame (default SUB_K={SUB_K}); "
                          f"raise it to footprint-match a wider removal")
@@ -1216,7 +1219,7 @@ def main():
         config={"doses": DOSES, "arms": arms, "emotions": EMOS, "reps": a.reps,
                 "driver": "b1d", "estimator": a.estimator, "probe_k": PROBE_K,
                 "stability_gate": STABILITY_GATE, "subspace_gate": SUB_GATE,
-                "sub_k": SUB_K, "randsub_k": a.randsub_k,
+                "sub_k": SUB_K, "randsub_k": a.randsub_k, "perm_seed_base": (a.perm_seed if a.perm_seed is not None else a.seed),
                 "max_new_A": 110, "max_new_B": 110,
                 "temp": 0.9, "top_p": 0.95,
                 "n_scenarios": len(C.SCENARIOS),
@@ -1507,7 +1510,7 @@ def main():
         """
         key = (e, rep)
         if key not in _perm_cache:
-            s = perm_seed(a.seed, e, rep)
+            s = perm_seed(a.perm_seed if a.perm_seed is not None else a.seed, e, rep)
             rr = np.random.default_rng(s)
             yperm = rr.permutation(yp[DIR])
             _perm_cache[key] = ({L: tt(class_mean_frame(feats[L][DIR], yperm, SUB_K))
@@ -1542,7 +1545,7 @@ def main():
                       {"doses": DOSES, "arms": arms, "emos": EMOS, "reps": a.reps,
                        "est": a.estimator, "n": N, "focus": focus, "probe_k": PROBE_K,
                        "abl_hs_all": abl_hs_all, "sub_k": SUB_K,
-                       "randsub_k": a.randsub_k, "driver": "b1d"})
+                       "randsub_k": a.randsub_k, "perm_seed_base": (a.perm_seed if a.perm_seed is not None else a.seed), "driver": "b1d"})
 
     def gen_A(e, alpha, rep):
         """A's steered message. Unchanged from b1c_alllayer.py / b1_followup.py, seed
@@ -1778,7 +1781,7 @@ def main():
         "model": a.model, "tag": a.tag, "focus": focus, "steer_layer": steer_layer,
         "n_layers": h.n_layers,
         "abl_hs_all": abl_hs_all, "n_abl_blocks_all": len(abl_hs_all), "sub_k": SUB_K,
-        "randsub_k": a.randsub_k,
+        "randsub_k": a.randsub_k, "perm_seed_base": (a.perm_seed if a.perm_seed is not None else a.seed),
         "probe_n": N, "dir_half_n": len(DIR), "read_half_n": len(READ),
         "probe_pool_path": pool_path, "probe_pool_sha256": pool_sha,
         "estimator": a.estimator, "rms": rms, "doses": list(DOSES), "arms": list(arms),
