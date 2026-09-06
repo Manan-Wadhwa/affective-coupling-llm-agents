@@ -491,15 +491,14 @@ The idea to take away is that the two failures we found are the same failure see
 direction on separable activations is decided by the penalty’s tie-break, so two independent fits
 agree only as far as their tie-breaks do; and a control direction is informative only if it is decided
 the way the intervention direction was. Random vectors are decided by nothing, which is why they
-are inert and why they miss what a fitted control catches. Such a study should report disjoint-half
-reproducibility, estimate with an average rather than an extremum, and run its ablations against a
-control fitted by the same estimator on permuted labels at the intervention’s rank. For affect: the
-rank-1 direction carries a fifth to a third of the response for two emotions, one of which replicates;
+are inert and why they miss what a fitted control catches. Such a study should report disjoint-
+half reproducibility, estimate with an average rather than an extremum, and run its ablations
+against a control fitted by the same estimator on permuted labels at the intervention’s rank. For
+affect: the rank-1 direction carries a fifth to a third of the response for two emotions, one of which
 
                                                   9
-the probe cannot yet say whose state it reads; and two experiments would settle what is open, a
-footprint-scaled random frame and an intervention that separates re-reading the sender’s tokens
-from reading the sender’s residual stream.
+replicates; the probe cannot yet say whose state it reads; a footprint-scaled random frame and an
+attention-masking arm would settle what is open.
 
 
 A Reproducibility statement
@@ -524,7 +523,6 @@ the results.
 
 B     Details and defects recorded under review
 Each item below is in the registry note of the claim it qualifies.
-
     • B1c. The contrast between the 30-layer and 51-layer windows was declared in the driver,
       not in the pre-registration; its null is unpowered for desperate and calm. The testability
       rule (none-arm CI excludes zero) is pre-registered (PREREG_B1c §5). Calm’s contrast is
@@ -543,15 +541,14 @@ Each item below is in the registry note of the claim it qualifies.
       tests the point fraction and sad’s range starts at 0.07. The secondary readout on B’s reply
       contradicts afraid’s block and agrees for sad. The control’s cosine to the emotion direction
       (0.004) was measured by the pre-launch verifier and is not stamped in the result file.
-
+    • 8B replications. Both are out-of-pre-registration replications (the documents name the 27B
+      and its layers). The steering manipulation is half as strong and less specific on the 8B, afraid’s
 
                                                    10
-  • 8B replications. Both are out-of-pre-registration replications (the documents name the 27B
-    and its layers). The steering manipulation is half as strong and less specific on the 8B, afraid’s
-    readout sits below chance, and slopes are unnormalised probe scores, so only patterns are
-    compared. In B1e on the 8B the control is matched on average only (sad 0.86×), both
-    directions remove about the isotropic norm, and B1c’s random direction already reproduced
-    the contrasts; afraid does not block against baseline there.
+     readout sits below chance, and slopes are unnormalised probe scores, so only patterns are
+     compared. In B1e on the 8B the control is matched on average only (sad 0.86×), both
+     directions remove about the isotropic norm, and B1c’s random direction already reproduced
+     the contrasts; afraid does not block against baseline there.
   • Estimator study. The weak-penalty arms (C = 50 and 500) give the same solution to three
     decimals, so they are tolerance-limited and bound nothing about the C → ∞ limit. Cross-
     estimator cosines use subsamples that overlap by about half the pool, so their intervals over-
@@ -596,13 +593,12 @@ References
      Turner. Steering Llama 2 via contrastive activation addition. arXiv preprint arXiv:2312.06681,
      2023.
 
-
-
-                                                 11
-[11] Prashant C. Raju. Geometric stability: The missing axis of representations. arXiv preprint
+[11] Prashant C. Raju. Geometric stability: The missing axis of representations. arXiv preprint
      arXiv:2601.09173, 2026.
 
-[12] Daniel Soudry, Elad Hoffer, Mor Shpigel Nacson, Suriya Gunasekar, and Nathan Srebro. The
+
+                                                11
+[12] Daniel Soudry, Elad Hoffer, Mor Shpigel Nacson, Suriya Gunasekar, and Nathan Srebro. The
      implicit bias of gradient descent on separable data. Journal of Machine Learning Research, 19
      (70):1–57, 2018. arXiv:1710.10345.
 
