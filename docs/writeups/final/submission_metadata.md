@@ -18,7 +18,7 @@ When one language-model agent is steered into an emotion and talks to another, a
 
 **Title:** Steered affect moves a partner agent's activations, and the logistic probe that reads it returns a tie-break, not an estimate
 
-**Authors:** Manan Wadhwa\* , Shivam Dubey\* , Debojeet Ghosh, Shreyansh Kumar, Ayushman Garg (Redarc Labs; \*co-first authors). Contact: manan@redarclabs.com, shivam@redarclabs.com
+**Authors:** Manan Wadhwa\* , Shivam Dubey\* , Debojeet Ghosh, Shreyansh Kumar, Ayushman Garg (all Redarc Labs; \*co-first authors). Correspondence: manan@redarclabs.com, shivam@redarclabs.com
 
 **TL;DR:** Steering one LLM agent moves a probe's reading inside its partner, but the logistic probe direction does not reproduce across disjoint halves (0.57/0.29 vs 0.97/0.94 for difference of means) because every fit separates its data, rank-1 erasure leaves most of the response, and a shuffled-label control blocks where random controls are inert.
 
